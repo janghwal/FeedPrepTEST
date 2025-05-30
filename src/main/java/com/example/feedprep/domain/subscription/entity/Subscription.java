@@ -15,7 +15,7 @@ import lombok.Getter;
 @Entity
 @Table(name = "Subscriptions")
 @Getter
-public class Subscriptions extends BaseTimeEntity {
+public class Subscription extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long subscriptionId;

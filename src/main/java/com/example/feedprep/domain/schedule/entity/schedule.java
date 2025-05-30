@@ -18,7 +18,7 @@ import lombok.Getter;
 @Entity
 @Table(name = "Schedules")
 @Getter
-public class Schedules extends BaseTimeEntity {
+public class schedule extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long scheduleId;
