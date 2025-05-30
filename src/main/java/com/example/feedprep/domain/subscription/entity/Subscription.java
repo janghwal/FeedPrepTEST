@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 
 @Entity
-@Table(name = "Subscriptions")
+@Table(name = "Subscription")
 @Getter
 public class Subscription extends BaseTimeEntity {
 	@Id

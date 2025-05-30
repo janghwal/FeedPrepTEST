@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 
 @Entity
-@Table(name = "Schedules")
+@Table(name = "Schedule")
 @Getter
 public class schedule extends BaseTimeEntity {
 	@Id
