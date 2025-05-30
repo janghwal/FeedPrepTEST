@@ -4,15 +4,16 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
 import com.example.feedprep.common.entity.BaseTimeEntity;
+import com.example.feedprep.domain.user.entity.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name = "Schedules")
@@ -25,6 +26,7 @@ public class Schedules extends BaseTimeEntity {
 	private LocalDateTime endTime;
 	private DayOfWeek dayOfWeek;
 
-/*	@ManyToOne
-	private Users user;*/
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 }
