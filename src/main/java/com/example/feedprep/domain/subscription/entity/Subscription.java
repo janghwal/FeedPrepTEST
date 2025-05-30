@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 
 @Entity
-@Table(name = "Subscriptions")
+@Table(name = "subscription")
 @Getter
 public class Subscription extends BaseTimeEntity {
 	@Id
@@ -21,10 +21,11 @@ public class Subscription extends BaseTimeEntity {
 	private Long subscriptionId;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "sender_id")  // 외래키 이름 다르게 지정
 	private User sender;
+
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "receiver_id")  // 외래키 이름 다르게 지정
 	private User receiver;
 
 }
