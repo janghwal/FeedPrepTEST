@@ -11,10 +11,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "subscription")
 @Getter
+@NoArgsConstructor
 public class Subscription extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,4 +30,8 @@ public class Subscription extends BaseTimeEntity {
 	@JoinColumn(name = "receiver_id")  // 외래키 이름 다르게 지정
 	private User receiver;
 
+	public Subscription(User sender, User receiver){
+		this.sender = sender;
+		this.receiver = receiver;
+	}
 }
