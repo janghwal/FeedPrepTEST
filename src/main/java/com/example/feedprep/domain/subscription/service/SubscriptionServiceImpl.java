@@ -30,11 +30,8 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 
 		// UserRepository findByIdOrElseThrow 정의되면 수정
 		Optional<User> sender = userRepository.findById(senderId);
-		if(sender.isEmpty()){
-			throw new CustomException(ErrorCode.USER_NOT_FOUND);
-		}
 		Optional<User> receiver = userRepository.findById(userId);
-		if(receiver.isEmpty()){
+		if(sender.isEmpty() || receiver.isEmpty()){
 			throw new CustomException(ErrorCode.USER_NOT_FOUND);
 		}
 
