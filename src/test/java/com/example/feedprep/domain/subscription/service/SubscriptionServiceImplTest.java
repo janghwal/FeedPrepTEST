@@ -60,7 +60,7 @@ class SubscriptionServiceImplTest {
 		Long senderId = 1L;
 		Long receiverId = 2L;
 
-		when(userRepository.findById(senderId)).thenReturn(Optional.ofNullable(null));
+		when(userRepository.findById(senderId)).thenReturn(Optional.empty());
 
 		CustomException exception = assertThrows(CustomException.class, () -> {
 			subscriptionService.subscribe(senderId, receiverId);
