@@ -75,10 +75,4 @@ public class SubscriptionController {
 		}
 		return null;
 	}
-
-	// 발생한 MethodArgumentTypeMismatchException 을 CustomException 으로 바꿔주는 로직 필요
-	// @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-	// public void changeException(MethodArgumentTypeMismatchException e) {
-	// 	throw new CustomException(ErrorCode.INVALID_ENUM_GETTYPE);
-	// }
 }
