@@ -19,7 +19,7 @@ public enum ErrorCode {
     TUTOR_NOT_FOUND(HttpStatus.NOT_FOUND, "튜터 정보를 찾을 수 없습니다."),
     INVALID_DOCUMENT(HttpStatus.NOT_FOUND, "존재하지 않는 문서입니다."),
     SELF_FEEDBACK_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "자신에게는 피드백을 요청할 수 없습니다."),
-
+    CANNOT_EDIT_COMPLETED_REQUEST(HttpStatus.BAD_REQUEST, "이미 완료된 피드백은 수정할 수 없습니다."),
     // 요청 취소 관련
     CANNOT_CANCEL_COMPLETED(HttpStatus.BAD_REQUEST, "이미 완료된 피드백은 취소할 수 없습니다."),
     UNAUTHORIZED_CANCEL(HttpStatus.FORBIDDEN, "이 피드백 요청을 취소할 권한이 없습니다."),
