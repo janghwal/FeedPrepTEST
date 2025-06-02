@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
@@ -39,5 +40,15 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 
 		Subscription subscription = new Subscription(sender.get(), receiver.get());
 		subscriptionRepository.save(subscription);
+	}
+
+	@Transactional
+	@Override
+	public void unsubscribe(Long senderId, Long subscriptionId) {
+		Subscription subscription = subscriptionRepository.findByIdOrElseThrow(subscriptionId);
+		if(!subscription.getSender().getUserId().equals(senderId)) {
+			throw new CustomException(ErrorCode.UNAUTHORIZED_SUBSCRIPTION_ACCESS);
+		}
+		subscriptionRepository.delete(subscription);
 	}
 }
