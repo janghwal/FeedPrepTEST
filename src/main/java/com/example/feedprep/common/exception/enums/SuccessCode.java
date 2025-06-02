@@ -10,6 +10,10 @@ public enum SuccessCode {
 
     // 회원가입 및 로그인 성공
     LOGIN_SUCCESS(HttpStatus.OK, "로그인에 성공하였습니다."),
+    GETTUTORLIST_SUCCESS(HttpStatus.OK, "튜터 목록 조회를 성공하였습니다."),
+    GETMYINFO_SUCCESS(HttpStatus.OK,"내 정보 불러오기에 성공하였습니다."),
+    PUTMYINFO_SUCCESS(HttpStatus.OK,"내 정보 수정이 완료 되었습니다."),
+    PATCHPASSWORD_SUCCESS(HttpStatus.OK,"비밀번호 수정을 성공하였습니다."),
 
 
 

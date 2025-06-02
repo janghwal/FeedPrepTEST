@@ -1,7 +1,105 @@
 package com.example.feedprep.domain.user.service;
 
+import com.example.feedprep.common.exception.base.CustomException;
+import com.example.feedprep.common.exception.enums.ErrorCode;
+import com.example.feedprep.domain.user.dto.request.NewPasswordRequestDto;
+import com.example.feedprep.domain.user.dto.request.UpdateMyInfoRequestDto;
+import com.example.feedprep.domain.user.dto.response.PasswordModifiedAtResponseDto;
+import com.example.feedprep.domain.user.dto.response.TutorResponseDto;
+import com.example.feedprep.domain.user.dto.response.UserResponseDto;
+import com.example.feedprep.domain.user.entity.User;
+import com.example.feedprep.domain.user.enums.UserRole;
+import com.example.feedprep.domain.user.repository.UserRepository;
+import java.util.List;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserServiceImpl implements UserService{
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+
+    @Override
+    public List<TutorResponseDto> getTutorList(UserRole role) {
+
+        List<User> tutorList = userRepository.findAllByRole(role);
+
+        if(tutorList.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_TUTOR);
+        }
+
+        List<TutorResponseDto> responseDtoList = tutorList.stream()
+            .map(user -> new TutorResponseDto(
+                user.getUserId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRole()
+            )).toList();
+
+        return responseDtoList;
+    }
+
+    @Override
+    public UserResponseDto getMyInfo(Long tokenMyId) {
+
+        User user = userRepository.findByIdOrElseThrow(tokenMyId);
+
+        UserResponseDto responseDto = new UserResponseDto(
+            user.getUserId(),
+            user.getName(),
+            user.getEmail(),
+            user.getRole(),
+            user.getCreatedAt(),
+            user.getModifiedAt()
+        );
+
+        return responseDto;
+    }
+
+    @Override
+    @Transactional
+    public UserResponseDto putMyInfo(Long tokenMyId, UpdateMyInfoRequestDto requestDto) {
+
+        User user = userRepository.findByIdOrElseThrow(tokenMyId);
+
+        Optional.ofNullable(requestDto.getName()).ifPresent(user::setName);
+        Optional.ofNullable(requestDto.getAddress()).ifPresent(user::setAddress);
+        Optional.ofNullable(requestDto.getIntroduction()).ifPresent(user::setIntroduction);
+
+        UserResponseDto responseDto = new UserResponseDto(
+            user.getUserId(),
+            user.getName(),
+            user.getEmail(),
+            user.getRole(),
+            user.getCreatedAt(),
+            user.getModifiedAt()
+        );
+
+        return responseDto;
+    }
+
+    @Override
+    @Transactional
+    public PasswordModifiedAtResponseDto patchPassword(Long tokenMyId, NewPasswordRequestDto requestDto) {
+
+        User user = userRepository.findByIdOrElseThrow(tokenMyId);
+
+        if(!passwordEncoder.matches(requestDto.getOldPassword(), user.getPassword())) {
+            throw new CustomException(ErrorCode.NOT_MATCH_PASSWORD);
+        }
+
+        user.setPassword(passwordEncoder.encode(requestDto.getNewPassword()));
+
+        PasswordModifiedAtResponseDto responseDto = new PasswordModifiedAtResponseDto(
+            user.getModifiedAt());
+
+        return responseDto;
+    }
 }
