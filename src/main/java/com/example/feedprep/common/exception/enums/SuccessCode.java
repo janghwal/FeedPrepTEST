@@ -18,6 +18,8 @@ public enum SuccessCode {
     CHANGE_PASSWORD_SUCCESS(HttpStatus.OK,"비밀번호 수정을 성공하였습니다."),
 
     // 문서
+    CREATE_DOCUMENT_SUCCESS(HttpStatus.CREATED, "문서 작성에 성공하였습니다."),
+
 
     // 구독 모듈
     SUBSCRIBED(HttpStatus.CREATED, "구독하였습니다."),

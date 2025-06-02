@@ -37,7 +37,7 @@ public class UserController {
         @RequestParam(name = "role") String role
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-            .body(ApiResponseDto.success(GETTUTORLIST_SUCCESS,userService.getTutorList(UserRole.of(role))
+            .body(ApiResponseDto.success(GET_TUTORLIST_SUCCESS,userService.getTutorList(UserRole.of(role))
                 .stream().toList()));
     }
 
@@ -47,7 +47,7 @@ public class UserController {
         Long tokenMyId = tokenInfo.getTokenInfo(authheader);
 
         return ResponseEntity.status(HttpStatus.OK)
-            .body(ApiResponseDto.success(GETMYINFO_SUCCESS,userService.getMyInfo(tokenMyId)));
+            .body(ApiResponseDto.success(GET_MYINFO_SUCCESS,userService.getMyInfo(tokenMyId)));
     }
 
     @PutMapping("/me")
@@ -58,7 +58,7 @@ public class UserController {
         Long tokenMyId = tokenInfo.getTokenInfo(authheader);
 
         return ResponseEntity.status(HttpStatus.OK)
-            .body(ApiResponseDto.success(PUTMYINFO_SUCCESS,userService.updateMyInfo(tokenMyId,requestDto)));
+            .body(ApiResponseDto.success(UPDATE_MYINFO_SUCCESS,userService.updateMyInfo(tokenMyId,requestDto)));
     }
 
     @PatchMapping("/password-update")
@@ -68,6 +68,6 @@ public class UserController {
         Long tokenMyId = tokenInfo.getTokenInfo(authheader);
 
         return ResponseEntity.status(HttpStatus.OK)
-            .body(ApiResponseDto.success(PATCHPASSWORD_SUCCESS,userService.changePassword(tokenMyId,requestDto)));
+            .body(ApiResponseDto.success(CHANGE_PASSWORD_SUCCESS,userService.changePassword(tokenMyId,requestDto)));
     }
 }

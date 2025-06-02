@@ -32,6 +32,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
     implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
+    implementation platform('software.amazon.awssdk:bom:2.20.90')
+    implementation 'software.amazon.awssdk:s3:2.20.46'
+    implementation 'software.amazon.awssdk:auth:2.20.46'
+    implementation 'software.amazon.awssdk:regions:2.20.46'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
