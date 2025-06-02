@@ -23,9 +23,9 @@ import com.example.feedprep.domain.user.repository.UserRepository;
 @Repository
 @RequiredArgsConstructor
 public class FeedbackServiceImpl implements FeedbackService{
-	private FeedBackRepository feedBackRepository;
-	private UserRepository userRepository;
-	private DocumentRepository documentRepository;
+	private final FeedBackRepository feedBackRepository;
+	private final UserRepository userRepository;
+	private final DocumentRepository documentRepository;
 
 	@Transactional
 	@Override
