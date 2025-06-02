@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
+import com.example.feedprep.domain.subscription.entity.Subscription;
 import com.example.feedprep.domain.subscription.repository.SubscriptionRepository;
 import com.example.feedprep.domain.user.entity.User;
 import com.example.feedprep.domain.user.repository.UserRepository;
@@ -67,5 +68,21 @@ class SubscriptionServiceImplTest {
 		});
 
 		assertEquals(ErrorCode.USER_NOT_FOUND, exception.getErrorCode());
+	}
+
+	@Test
+	void unsubscribe_성공() {
+		Long senderId = 1L;
+		Long subscriptionId = 1L;
+
+		User sender = mock(User.class);
+		Subscription subscription = mock(Subscription.class);
+
+		when(subscriptionRepository.findByIdOrElseThrow(subscriptionId)).thenReturn(subscription);
+		when(subscription.getSender()).thenReturn(sender);
+		when(sender.getUserId()).thenReturn(senderId);
+
+		assertDoesNotThrow(() -> subscriptionService.unsubscribe(senderId, subscriptionId));
+		verify(subscriptionRepository, times(1)).delete(any());
 	}
 }
