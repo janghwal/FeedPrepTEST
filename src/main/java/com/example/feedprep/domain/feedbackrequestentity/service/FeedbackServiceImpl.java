@@ -1,6 +1,13 @@
 package com.example.feedprep.domain.feedbackrequestentity.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import javax.swing.text.html.Option;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,18 +37,15 @@ public class FeedbackServiceImpl implements FeedbackService{
 	@Transactional
 	@Override
 	public FeedbackRequestEntityResponseDto saveRequest(FeedbackRequestDto dto, Long userId) {
-		//유저 본인 확인
-		User user =  userRepository.findById(dto.getTutorId()).orElseThrow(()-> new CustomException(ErrorCode.INVALID_TUTOR));
-		if(!user.getUserId().equals(userId)){
-			//예외 반환
-		}
-		//필수 확인
-		User tutor = userRepository.findById(dto.getTutorId()).orElseThrow(()-> new CustomException(ErrorCode.INVALID_TUTOR));
+		//유저, 튜터 동시 조회.
+		List<User> users = userRepository.findByIds(userId,dto.getTutorId());
+		//아무것도 없다면 빈 map
+		Map<Long, User> userMap = users.stream()
+			.collect(Collectors.toMap(User::getUserId, Function.identity()));
+        //검증은 여기서 부터
+		User user = Optional.ofNullable(userMap.get(userId)).orElseThrow(()-> new CustomException(ErrorCode. UNAUTHORIZED_REQUESTER_ACCESS));
+		User tutor = Optional.ofNullable(userMap.get(dto.getTutorId())).orElseThrow(()->new CustomException(ErrorCode.TUTOR_NOT_FOUND));
 		Document document = documentRepository.findById(dto.getDocumentId()).orElseThrow(()-> new CustomException(ErrorCode.INVALID_DOCUMENT));
-		if(tutor.getUserId().equals(userId))
-		{
-			//본인애게 요청하는 경우는 없음
-		}
 
 		//확인 후 요청 생성
 		FeedbackRequestEntity request = new FeedbackRequestEntity(dto, tutor, document);
