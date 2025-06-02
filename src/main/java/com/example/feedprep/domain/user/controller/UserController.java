@@ -51,23 +51,23 @@ public class UserController {
     }
 
     @PutMapping("/me")
-    public ResponseEntity<ApiResponseDto<UserResponseDto>> putMyInfo(
+    public ResponseEntity<ApiResponseDto<UserResponseDto>> updateMyInfo(
         @RequestBody UpdateMyInfoRequestDto requestDto
     ) {
 
         Long tokenMyId = tokenInfo.getTokenInfo(authheader);
 
         return ResponseEntity.status(HttpStatus.OK)
-            .body(ApiResponseDto.success(PUTMYINFO_SUCCESS,userService.putMyInfo(tokenMyId,requestDto)));
+            .body(ApiResponseDto.success(PUTMYINFO_SUCCESS,userService.updateMyInfo(tokenMyId,requestDto)));
     }
 
     @PatchMapping("/password-update")
-    public ResponseEntity<ApiResponseDto<PasswordModifiedAtResponseDto>> patchPassword(
+    public ResponseEntity<ApiResponseDto<PasswordModifiedAtResponseDto>> changePassword(
         @Valid @RequestBody NewPasswordRequestDto requestDto) {
 
         Long tokenMyId = tokenInfo.getTokenInfo(authheader);
 
         return ResponseEntity.status(HttpStatus.OK)
-            .body(ApiResponseDto.success(PATCHPASSWORD_SUCCESS,userService.patchPassword(tokenMyId,requestDto)));
+            .body(ApiResponseDto.success(PATCHPASSWORD_SUCCESS,userService.changePassword(tokenMyId,requestDto)));
     }
 }

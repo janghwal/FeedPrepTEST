@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponseDto putMyInfo(Long tokenMyId, UpdateMyInfoRequestDto requestDto) {
+    public UserResponseDto updateMyInfo(Long tokenMyId, UpdateMyInfoRequestDto requestDto) {
 
         User user = userRepository.findByIdOrElseThrow(tokenMyId);
 
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public PasswordModifiedAtResponseDto patchPassword(Long tokenMyId, NewPasswordRequestDto requestDto) {
+    public PasswordModifiedAtResponseDto changePassword(Long tokenMyId, NewPasswordRequestDto requestDto) {
 
         User user = userRepository.findByIdOrElseThrow(tokenMyId);
 

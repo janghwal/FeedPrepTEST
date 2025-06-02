@@ -14,7 +14,7 @@ public interface UserService {
 
     UserResponseDto getMyInfo(Long tokenMyId);
 
-    UserResponseDto putMyInfo(Long tokenMyId, UpdateMyInfoRequestDto requestDto);
+    UserResponseDto updateMyInfo(Long tokenMyId, UpdateMyInfoRequestDto requestDto);
 
-    PasswordModifiedAtResponseDto patchPassword(Long tokenMyId, NewPasswordRequestDto requestDto);
+    PasswordModifiedAtResponseDto changePassword(Long tokenMyId, NewPasswordRequestDto requestDto);
 }
