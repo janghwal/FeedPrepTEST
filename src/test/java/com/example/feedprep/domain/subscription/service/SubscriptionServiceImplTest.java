@@ -3,6 +3,8 @@ package com.example.feedprep.domain.subscription.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpStatus;
 
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
+import com.example.feedprep.domain.subscription.dto.SubscriptionResponseDto;
 import com.example.feedprep.domain.subscription.entity.Subscription;
 import com.example.feedprep.domain.subscription.repository.SubscriptionRepository;
 import com.example.feedprep.domain.user.entity.User;
@@ -58,7 +61,7 @@ class SubscriptionServiceImplTest {
 	}
 
 	@Test
-	void subscribe_실패_sender가_존재하지_않음() {
+	void subscribe_실패_User가_존재하지_않음() {
 		Long senderId = 1L;
 		Long receiverId = 2L;
 
@@ -121,5 +124,87 @@ class SubscriptionServiceImplTest {
 		});
 
 		assertEquals(ErrorCode.UNAUTHORIZED_SUBSCRIPTION_ACCESS, exception.getErrorCode());
+	}
+
+	@Test
+	void getSubscribers_성공() {
+		Long requesterId = 1L;
+
+		User requester = mock(User.class);
+		User subscriber1 = mock(User.class);
+		User subscriber2 = mock(User.class);
+		User subscriber3 = mock(User.class);
+		Subscription subscriptionInfo1 = mock(Subscription.class);
+		Subscription subscriptionInfo2 = mock(Subscription.class);
+		Subscription subscriptionInfo3 = mock(Subscription.class);
+
+		List<Subscription> getSubscribers = new ArrayList<>();
+		getSubscribers.add(subscriptionInfo1);
+		getSubscribers.add(subscriptionInfo2);
+		getSubscribers.add(subscriptionInfo3);
+
+		when(userRepository.findById(requesterId)).thenReturn(Optional.of(requester));
+		when(subscriptionRepository.findByReceiver(requester)).thenReturn(getSubscribers);
+		when(subscriptionInfo1.getSender()).thenReturn(subscriber1);
+		when(subscriptionInfo2.getSender()).thenReturn(subscriber2);
+		when(subscriptionInfo3.getSender()).thenReturn(subscriber3);
+		when(subscriber1.getUserId()).thenReturn(1L);
+		when(subscriber1.getName()).thenReturn("name1");
+		when(subscriber1.getEmail()).thenReturn("email1");
+		when(subscriber2.getUserId()).thenReturn(2L);
+		when(subscriber2.getName()).thenReturn("name1");
+		when(subscriber2.getEmail()).thenReturn("email1");
+		when(subscriber3.getUserId()).thenReturn(3L);
+		when(subscriber3.getName()).thenReturn("name1");
+		when(subscriber3.getEmail()).thenReturn("email1");
+
+		List<SubscriptionResponseDto> result = subscriptionService.getSubscribers(requesterId);
+
+		assertEquals(1L, result.get(0).getUserId());
+		assertEquals(2L, result.get(1).getUserId());
+		assertEquals(3L, result.get(2).getUserId());
+		assertEquals("name1", result.get(0).getName());
+		assertEquals("email1", result.get(0).getEmail());
+	}
+
+	@Test
+	void getSubscriptions_성공() {
+		Long requesterId = 1L;
+
+		User requester = mock(User.class);
+		User subscription1 = mock(User.class);
+		User subscription2 = mock(User.class);
+		User subscription3 = mock(User.class);
+		Subscription subscriptionInfo1 = mock(Subscription.class);
+		Subscription subscriptionInfo2 = mock(Subscription.class);
+		Subscription subscriptionInfo3 = mock(Subscription.class);
+
+		List<Subscription> subscription = new ArrayList<>();
+		subscription.add(subscriptionInfo1);
+		subscription.add(subscriptionInfo2);
+		subscription.add(subscriptionInfo3);
+
+		when(userRepository.findById(requesterId)).thenReturn(Optional.of(requester));
+		when(subscriptionRepository.findBySender(requester)).thenReturn(subscription);
+		when(subscriptionInfo1.getReceiver()).thenReturn(subscription1);
+		when(subscriptionInfo2.getReceiver()).thenReturn(subscription2);
+		when(subscriptionInfo3.getReceiver()).thenReturn(subscription3);
+		when(subscription1.getUserId()).thenReturn(1L);
+		when(subscription1.getName()).thenReturn("name1");
+		when(subscription1.getEmail()).thenReturn("email1");
+		when(subscription2.getUserId()).thenReturn(2L);
+		when(subscription2.getName()).thenReturn("name1");
+		when(subscription2.getEmail()).thenReturn("email1");
+		when(subscription3.getUserId()).thenReturn(3L);
+		when(subscription3.getName()).thenReturn("name1");
+		when(subscription3.getEmail()).thenReturn("email1");
+
+		List<SubscriptionResponseDto> result = subscriptionService.getSubscriptions(requesterId);
+
+		assertEquals(1L, result.get(0).getUserId());
+		assertEquals(2L, result.get(1).getUserId());
+		assertEquals(3L, result.get(2).getUserId());
+		assertEquals("name1", result.get(0).getName());
+		assertEquals("email1", result.get(0).getEmail());
 	}
 }
