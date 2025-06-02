@@ -1,5 +1,6 @@
 package com.example.feedprep.domain.subscription.service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
+import com.example.feedprep.domain.subscription.dto.SubscriptionResponseDto;
 import com.example.feedprep.domain.subscription.entity.Subscription;
 import com.example.feedprep.domain.subscription.repository.SubscriptionRepository;
 import com.example.feedprep.domain.user.entity.User;
@@ -50,5 +52,31 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 			throw new CustomException(ErrorCode.UNAUTHORIZED_SUBSCRIPTION_ACCESS);
 		}
 		subscriptionRepository.delete(subscription);
+	}
+
+	@Override
+	public List<SubscriptionResponseDto> getSubscribers(Long requesterId) {
+		Optional<User> requester = userRepository.findById(requesterId);
+		if(requester.isEmpty()){
+			throw new CustomException(ErrorCode.USER_NOT_FOUND);
+		}
+		List<Subscription> getSubscribers = subscriptionRepository.findByReceiver(requester.get());
+
+		return getSubscribers.stream()
+			.map(subscription -> new SubscriptionResponseDto(subscription.getSender()))
+			.toList();
+	}
+
+	@Override
+	public List<SubscriptionResponseDto> getSubscriptions(Long requesterId) {
+		Optional<User> requester = userRepository.findById(requesterId);
+		if(requester.isEmpty()){
+			throw new CustomException(ErrorCode.USER_NOT_FOUND);
+		}
+		List<Subscription> getSubscriptions = subscriptionRepository.findBySender(requester.get());
+
+		return getSubscriptions.stream()
+			.map(subscription -> new SubscriptionResponseDto(subscription.getReceiver()))
+			.toList();
 	}
 }
