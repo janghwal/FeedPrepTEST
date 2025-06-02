@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByRole(UserRole role);
 
-    default User findByIdOrElseThorw(Long id) {
+    default User findByIdOrElseThrow(Long id) {
         User user = findById(id).orElseThrow(
             () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
