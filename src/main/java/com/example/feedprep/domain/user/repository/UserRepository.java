@@ -1,5 +1,7 @@
 package com.example.feedprep.domain.user.repository;
 
+import com.example.feedprep.common.exception.base.CustomException;
+import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.domain.user.entity.User;
 import com.example.feedprep.domain.user.enums.UserRole;
 import com.example.feedprep.domain.user.enums.UserRole;
