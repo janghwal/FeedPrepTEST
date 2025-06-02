@@ -15,7 +15,7 @@ import lombok.Getter;
 import com.example.feedprep.common.entity.BaseTimeEntity;
 import com.example.feedprep.domain.document.entity.Document;
 import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
-import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRequestDTO;
+import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRequestDto;
 import com.example.feedprep.domain.user.entity.User;
 
 @Getter
@@ -43,7 +43,7 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 	//생성자
 	public FeedbackRequestEntity(){}
 
-	public FeedbackRequestEntity(FeedbackRequestDTO dto, User user, Document document) {
+	public FeedbackRequestEntity(FeedbackRequestDto dto, User user, Document document) {
 		this.user = user;
 		this.document = document;
 		this.content = dto.getContent();
