@@ -41,8 +41,8 @@ class SubscriptionServiceImplTest {
 		User sender = mock(User.class);
 		User receiver = mock(User.class);
 
-		when(userRepository.findById(senderId)).thenReturn(Optional.of(sender));
-		when(userRepository.findById(receiverId)).thenReturn(Optional.of(receiver));
+		when(userRepository.findByIdOrElseThrow(senderId)).thenReturn(sender);
+		when(userRepository.findByIdOrElseThrow(receiverId)).thenReturn(receiver);
 
 		assertDoesNotThrow(() -> subscriptionService.subscribe(senderId, receiverId));
 		verify(subscriptionRepository, times(1)).save(any());
@@ -58,20 +58,6 @@ class SubscriptionServiceImplTest {
 		});
 
 		assertEquals(ErrorCode.CANNOT_SUBSCRIBE_SELF, exception.getErrorCode());
-	}
-
-	@Test
-	void subscribe_실패_User가_존재하지_않음() {
-		Long senderId = 1L;
-		Long receiverId = 2L;
-
-		when(userRepository.findById(senderId)).thenReturn(Optional.empty());
-
-		CustomException exception = assertThrows(CustomException.class, () -> {
-			subscriptionService.subscribe(senderId, receiverId);
-		});
-
-		assertEquals(ErrorCode.USER_NOT_FOUND, exception.getErrorCode());
 	}
 
 	@Test
@@ -143,7 +129,7 @@ class SubscriptionServiceImplTest {
 		getSubscribers.add(subscriptionInfo2);
 		getSubscribers.add(subscriptionInfo3);
 
-		when(userRepository.findById(requesterId)).thenReturn(Optional.of(requester));
+		when(userRepository.findByIdOrElseThrow(requesterId)).thenReturn(requester);
 		when(subscriptionRepository.findByReceiver(requester)).thenReturn(getSubscribers);
 		when(subscriptionInfo1.getSender()).thenReturn(subscriber1);
 		when(subscriptionInfo2.getSender()).thenReturn(subscriber2);
@@ -184,7 +170,7 @@ class SubscriptionServiceImplTest {
 		subscription.add(subscriptionInfo2);
 		subscription.add(subscriptionInfo3);
 
-		when(userRepository.findById(requesterId)).thenReturn(Optional.of(requester));
+		when(userRepository.findByIdOrElseThrow(requesterId)).thenReturn(requester);
 		when(subscriptionRepository.findBySender(requester)).thenReturn(subscription);
 		when(subscriptionInfo1.getReceiver()).thenReturn(subscription1);
 		when(subscriptionInfo2.getReceiver()).thenReturn(subscription2);

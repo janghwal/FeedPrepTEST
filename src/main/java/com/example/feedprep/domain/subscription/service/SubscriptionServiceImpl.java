@@ -2,7 +2,6 @@ package com.example.feedprep.domain.subscription.service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,16 +30,11 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 			throw new CustomException(ErrorCode.CANNOT_SUBSCRIBE_SELF);
 		}
 
-		// UserRepository findByIdOrElseThrow 정의되면 수정
-		Optional<User> sender = userRepository.findById(senderId);
-		Optional<User> receiver = userRepository.findById(userId);
-		if(sender.isEmpty() || receiver.isEmpty()){
-			throw new CustomException(ErrorCode.USER_NOT_FOUND);
-		}
+		User sender = userRepository.findByIdOrElseThrow(senderId);
+		User receiver = userRepository.findByIdOrElseThrow(userId);
 
 		// 구독은 튜터에게만 가능한 것인가? 의사 결정 후 추가 필요.
-
-		Subscription subscription = new Subscription(sender.get(), receiver.get());
+		Subscription subscription = new Subscription(sender, receiver);
 		subscriptionRepository.save(subscription);
 	}
 
@@ -56,11 +50,8 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 
 	@Override
 	public List<SubscriptionResponseDto> getSubscribers(Long requesterId) {
-		Optional<User> requester = userRepository.findById(requesterId);
-		if(requester.isEmpty()){
-			throw new CustomException(ErrorCode.USER_NOT_FOUND);
-		}
-		List<Subscription> getSubscribers = subscriptionRepository.findByReceiver(requester.get());
+		User requester = userRepository.findByIdOrElseThrow(requesterId);
+		List<Subscription> getSubscribers = subscriptionRepository.findByReceiver(requester);
 
 		return getSubscribers.stream()
 			.map(subscription -> new SubscriptionResponseDto(subscription.getSender()))
@@ -69,11 +60,8 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 
 	@Override
 	public List<SubscriptionResponseDto> getSubscriptions(Long requesterId) {
-		Optional<User> requester = userRepository.findById(requesterId);
-		if(requester.isEmpty()){
-			throw new CustomException(ErrorCode.USER_NOT_FOUND);
-		}
-		List<Subscription> getSubscriptions = subscriptionRepository.findBySender(requester.get());
+		User requester = userRepository.findByIdOrElseThrow(requesterId);
+		List<Subscription> getSubscriptions = subscriptionRepository.findBySender(requester);
 
 		return getSubscriptions.stream()
 			.map(subscription -> new SubscriptionResponseDto(subscription.getReceiver()))
