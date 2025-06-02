@@ -16,6 +16,9 @@ public enum ErrorCode {
     SUBSCRIPTION_NOT_FOUND(HttpStatus.BAD_REQUEST, "존재하지 않는 구독 정보입니다."),
     UNAUTHORIZED_SUBSCRIPTION_ACCESS(HttpStatus.BAD_REQUEST, "해당 구독 정보를 수정할 수 있는 권한이 없습니다."),
 
+    // 기술 스택
+    TECH_STACK_NOT_FOUND(HttpStatus.NOT_FOUND, "요청한 기술 스택 정보를 찾을 수 없습니다."),
+
     // ENUM 입력 오류
     INVALID_ENUM_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 요청 입니다."),
 
