@@ -15,12 +15,14 @@ import lombok.Getter;
 import com.example.feedprep.common.entity.BaseTimeEntity;
 import com.example.feedprep.domain.document.entity.Document;
 import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
+import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRequestDTO;
 import com.example.feedprep.domain.user.entity.User;
 
 @Getter
 @Entity
 @Table(name = "feedbackrequestentitys")
 public class FeedbackRequestEntity extends BaseTimeEntity {
+	//속성
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -33,18 +35,27 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 	@JoinColumn(name = "document_id",nullable = false)
 	private Document document;
 
-	private String Content;
+	private String content;
 
 	@Column(nullable = false)
 	private RequestState requestState;
 
+	//생성자
 	public FeedbackRequestEntity(){}
+
+	public FeedbackRequestEntity(FeedbackRequestDTO dto, User user, Document document) {
+		this.user = user;
+		this.document = document;
+		this.content = dto.getContent();
+	}
 
 	public FeedbackRequestEntity(User user, Document document, RequestState requestState) {
 		this.user = user;
 		this.document = document;
 		this.requestState = requestState;
 	}
+
+	//변경
 	public void updateRequestState(RequestState requestState){
 		this.requestState = requestState;
 	}
