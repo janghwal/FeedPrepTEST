@@ -66,16 +66,24 @@ public class FeedbackServiceImpl implements FeedbackService{
 
 	@Transactional(readOnly = true)
 	@Override
-	public FeedbackRequestEntityResponseDto getRequest(Long userId,Long tutorId, Long documentId, Long page, Long size,
-		LocalDateTime time) {
+	public FeedbackRequestEntityResponseDto getRequest(
+		Long userId,
+		Long tutorId,
+		Long documentId,
+		int page,
+		int size,
+		LocalDateTime time)
+	{
 		//유저 본인 확인
-		User user =  userRepository.findById(userId).orElseThrow(()-> new CustomException(ErrorCode.INVALID_TUTOR));
+		User user = userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND);
 		if(!user.getUserId().equals(userId)){
-			//예외 반환
+			throw  new CustomException(ErrorCode. UNAUTHORIZED_REQUESTER_ACCESS);
 		}
-		//조건에 맞게 조회 출력후 무조건 DESC로 할것.
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+		Page<FeedbackRequestEntity> feedbackRequestEntities = feedBackRepository.findAll(min, max, pageRequest);
 		return null;
 	}
+
 	@Transactional
 	@Override
 	public FeedbackRequestEntityResponseDto updateRequest(FeedbackRequestDto dto,Long feedbackId, Long userId) {
