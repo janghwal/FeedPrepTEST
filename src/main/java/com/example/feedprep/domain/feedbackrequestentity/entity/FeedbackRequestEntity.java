@@ -32,6 +32,10 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn( name = "tutor_id", nullable = false)
+	private User tutor;
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "document_id",nullable = false)
 	private Document document;
 
@@ -43,8 +47,9 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 	//생성자
 	public FeedbackRequestEntity(){}
 
-	public FeedbackRequestEntity(FeedbackRequestDto dto, User user, Document document) {
+	public FeedbackRequestEntity(FeedbackRequestDto dto, User user, User tutor, Document document) {
 		this.user = user;
+		this.tutor = tutor;
 		this.document = document;
 		this.content = dto.getContent();
 	}
@@ -58,6 +63,11 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 	//변경
 	public void updateRequestState(RequestState requestState){
 		this.requestState = requestState;
+	}
+	public void updateFeedbackRequestEntity(FeedbackRequestDto dto, User tutor, Document document){
+		this.tutor = tutor;
+		this.document = document;
+		this.content = dto.getContent();
 	}
 
 }
