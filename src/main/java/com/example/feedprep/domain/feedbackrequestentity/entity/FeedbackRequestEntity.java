@@ -28,7 +28,7 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn( name = "tutor_id", nullable = false)
+	@JoinColumn( name = "user_id", nullable = false)
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
