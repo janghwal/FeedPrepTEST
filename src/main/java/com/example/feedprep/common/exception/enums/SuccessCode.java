@@ -15,7 +15,11 @@ public enum SuccessCode {
     PUTMYINFO_SUCCESS(HttpStatus.OK,"내 정보 수정이 완료 되었습니다."),
     PATCHPASSWORD_SUCCESS(HttpStatus.OK,"비밀번호 수정을 성공하였습니다."),
 
-
+    // 구독 모듈
+    SUBSCRIBED(HttpStatus.CREATED, "구독하였습니다."),
+    UNSUBSCRIBED(HttpStatus.OK, "구독을 취소하였습니다."),
+    SUBSCRIPTION_LIST(HttpStatus.OK, "구독 목록입니다."),
+    SUBSCRIBER_LIST(HttpStatus.OK, "구독자 목록입니다."),
 
 
     ;
