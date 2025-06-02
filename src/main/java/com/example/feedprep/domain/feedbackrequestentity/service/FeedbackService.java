@@ -10,7 +10,14 @@ import com.example.feedprep.domain.feedbackrequestentity.dto.response.FeedbackRe
 
 public interface FeedbackService {
      FeedbackRequestEntityResponseDto saveRequest(FeedbackRequestDto dto, Long userId);
-	 List<FeedbackRequestEntityResponseDto> getRequest(Long userId, Long tutorId, Long documentId, int page, int size, LocalDateTime time);
+	List<FeedbackRequestEntityResponseDto> getRequest(
+		Long userId,
+		Long tutorId,
+		Long documentId,
+		LocalDateTime month,
+		int page,
+		int size
+	);
 	 FeedbackRequestEntityResponseDto updateRequest(FeedbackRequestDto dto,Long feedbackId, Long userId);
 	 ApiResponseDto cancleRequest(Long RequestId, Long userId);
 }
