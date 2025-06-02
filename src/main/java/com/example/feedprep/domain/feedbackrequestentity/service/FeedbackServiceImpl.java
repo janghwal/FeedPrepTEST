@@ -78,7 +78,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 		)
 	{
 		//유저 본인 확인
-		User user = userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND);
+		User user = userRepository.findByIdOrElseThrow(userId);
 		if(!user.getUserId().equals(userId)){
 			throw  new CustomException(ErrorCode. UNAUTHORIZED_REQUESTER_ACCESS);
 		}
@@ -108,7 +108,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 		if (request.getRequestState() != RequestState.PENDING) {
 			throw new CustomException(ErrorCode.CANNOT_EDIT_COMPLETED_REQUEST);
 		}
-		User tutor = userRepository.findByIdOrElseThorw(dto.getTutorId());
+		User tutor = userRepository.findByIdOrElseThrow(userId);
 
 		//문서 조회
 		Document document = documentRepository.findById(dto.getDocumentId())
