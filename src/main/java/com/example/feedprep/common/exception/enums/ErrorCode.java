@@ -14,8 +14,9 @@ public enum ErrorCode {
 
 
     // 피드백 요청 생성
-    ALREADY_REQUESTED(HttpStatus.BAD_REQUEST, "이미 피드백을 요청한 문서입니다."),
-    INVALID_TUTOR(HttpStatus.FORBIDDEN, "유효하지 않은 튜터입니다."),
+    // 사용자 인증 관련
+    UNAUTHORIZED_REQUESTER_ACCESS(HttpStatus.FORBIDDEN, "해당 요청을 수행할 권한이 없습니다."),
+    TUTOR_NOT_FOUND(HttpStatus.NOT_FOUND, "튜터 정보를 찾을 수 없습니다."),
     INVALID_DOCUMENT(HttpStatus.NOT_FOUND, "존재하지 않는 문서입니다."),
     SELF_FEEDBACK_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "자신에게는 피드백을 요청할 수 없습니다."),
 
