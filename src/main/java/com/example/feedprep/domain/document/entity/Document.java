@@ -28,7 +28,7 @@ public class Document extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
 
     @Column(name = "file_url")
     private String fileUrl;
