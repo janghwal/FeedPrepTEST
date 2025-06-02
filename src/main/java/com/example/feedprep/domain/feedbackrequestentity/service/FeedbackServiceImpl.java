@@ -61,7 +61,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 		//조건에 맞게 조회 출력후 무조건 DESC로 할것.
 		return null;
 	}
-
+	@Transactional
 	@Override
 	public FeedbackRequestEntityResponseDto updateRequest(FeedbackRequestDto dto,Long feedbackId, Long userId) {
 		//유저 본인 확인
@@ -69,7 +69,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 		//수정 적용
 		return null;
 	}
-
+	@Transactional
 	@Override
 	public ApiResponseDto cancleRequest(Long RequestId, Long userId) {
 		//유저 본인 확인
