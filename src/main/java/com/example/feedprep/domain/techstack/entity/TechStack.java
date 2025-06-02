@@ -24,4 +24,8 @@ public class TechStack {
 	public TechStack(CreateTechStackRequestDto requestDto) {
 		this.techStack = requestDto.getTechStack();
 	}
+
+	public TechStack(String techStack) {
+		this.techStack = techStack;
+	}
 }
