@@ -21,10 +21,6 @@ public class TechStack {
 	private Long techId;
 	private String techStack;
 
-	public TechStack(CreateTechStackRequestDto requestDto) {
-		this.techStack = requestDto.getTechStack();
-	}
-
 	public TechStack(String techStack) {
 		this.techStack = techStack;
 	}

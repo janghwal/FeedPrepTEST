@@ -17,7 +17,7 @@ public class TechStackServiceImpl implements TechStackService{
 
 	@Override
 	public void createTechStack(CreateTechStackRequestDto requestDto) {
-		TechStack techStack = new TechStack(requestDto);
+		TechStack techStack = new TechStack(requestDto.getTechStack());
 		techStackRepository.save(techStack);
 	}
 
