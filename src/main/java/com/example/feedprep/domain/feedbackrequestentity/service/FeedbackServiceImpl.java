@@ -28,7 +28,6 @@ import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
 import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRequestDto;
 import com.example.feedprep.domain.feedbackrequestentity.dto.response.FeedbackRequestEntityResponseDto;
 import com.example.feedprep.domain.feedbackrequestentity.entity.FeedbackRequestEntity;
-import com.example.feedprep.domain.feedbackrequestentity.repository.FeedbackRequestEntityCustomRepository;
 import com.example.feedprep.domain.feedbackrequestentity.repository.FeedbackRequestEntityRepository;
 import com.example.feedprep.domain.user.entity.User;
 import com.example.feedprep.domain.user.repository.UserRepository;
