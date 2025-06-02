@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
@@ -84,5 +85,41 @@ class SubscriptionServiceImplTest {
 
 		assertDoesNotThrow(() -> subscriptionService.unsubscribe(senderId, subscriptionId));
 		verify(subscriptionRepository, times(1)).delete(any());
+	}
+
+	@Test
+	void unsubscribe_실패_구독_정보가_없음() {
+		Long senderId = 1L;
+		Long subscriptionId = 1L;
+
+		CustomException customException = new CustomException(ErrorCode.SUBSCRIPTION_NOT_FOUND);
+
+		when(subscriptionRepository.findByIdOrElseThrow(subscriptionId)).thenThrow(customException);
+
+		CustomException exception = assertThrows(CustomException.class, () -> {
+			subscriptionService.unsubscribe(senderId, subscriptionId);
+		});
+
+		assertEquals(ErrorCode.SUBSCRIPTION_NOT_FOUND, exception.getErrorCode());
+	}
+
+	@Test
+	void unsubscribe_실패_구독의_주인이_아님() {
+		Long senderId = 1L;
+		Long anotherId = 2L;
+		Long subscriptionId = 1L;
+
+		User sender = mock(User.class);
+		Subscription subscription = mock(Subscription.class);
+
+		when(subscriptionRepository.findByIdOrElseThrow(subscriptionId)).thenReturn(subscription);
+		when(subscription.getSender()).thenReturn(sender);
+		when(sender.getUserId()).thenReturn(anotherId);
+
+		CustomException exception = assertThrows(CustomException.class, () -> {
+			subscriptionService.unsubscribe(senderId, subscriptionId);
+		});
+
+		assertEquals(ErrorCode.UNAUTHORIZED_SUBSCRIPTION_ACCESS, exception.getErrorCode());
 	}
 }
