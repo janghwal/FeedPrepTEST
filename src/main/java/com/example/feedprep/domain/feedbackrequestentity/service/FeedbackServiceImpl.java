@@ -11,6 +11,9 @@ import javax.swing.text.html.Option;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,7 @@ import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.document.entity.Document;
 import com.example.feedprep.domain.document.repository.DocumentRepository;
 import com.example.feedprep.domain.feedback.repository.FeedBackRepository;
+import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
 import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRequestDto;
 import com.example.feedprep.domain.feedbackrequestentity.dto.response.FeedbackRequestEntityResponseDto;
 import com.example.feedprep.domain.feedbackrequestentity.entity.FeedbackRequestEntity;
@@ -43,9 +47,16 @@ public class FeedbackServiceImpl implements FeedbackService{
 		Map<Long, User> userMap = users.stream()
 			.collect(Collectors.toMap(User::getUserId, Function.identity()));
         //검증은 여기서 부터
-		User user = Optional.ofNullable(userMap.get(userId)).orElseThrow(()-> new CustomException(ErrorCode. UNAUTHORIZED_REQUESTER_ACCESS));
-		User tutor = Optional.ofNullable(userMap.get(dto.getTutorId())).orElseThrow(()->new CustomException(ErrorCode.TUTOR_NOT_FOUND));
-		Document document = documentRepository.findById(dto.getDocumentId()).orElseThrow(()-> new CustomException(ErrorCode.INVALID_DOCUMENT));
+		User user = Optional.ofNullable(userMap
+			.get(userId))
+			.orElseThrow(
+				()-> new CustomException(ErrorCode. UNAUTHORIZED_REQUESTER_ACCESS));
+
+		User tutor = Optional.ofNullable(userMap.get(dto.getTutorId()))
+			.orElseThrow(()->new CustomException(ErrorCode.TUTOR_NOT_FOUND));
+
+		Document document = documentRepository.findById(dto.getDocumentId())
+			.orElseThrow(()-> new CustomException(ErrorCode.INVALID_DOCUMENT));
 
 		//확인 후 요청 생성
 		FeedbackRequestEntity request = new FeedbackRequestEntity(dto, tutor, document);
