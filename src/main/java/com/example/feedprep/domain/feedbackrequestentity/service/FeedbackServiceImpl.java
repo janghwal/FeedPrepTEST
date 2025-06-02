@@ -24,12 +24,12 @@ import com.example.feedprep.common.exception.enums.SuccessCode;
 import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.document.entity.Document;
 import com.example.feedprep.domain.document.repository.DocumentRepository;
-import com.example.feedprep.domain.feedback.repository.FeedBackRepository;
 import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
 import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRequestDto;
 import com.example.feedprep.domain.feedbackrequestentity.dto.response.FeedbackRequestEntityResponseDto;
 import com.example.feedprep.domain.feedbackrequestentity.entity.FeedbackRequestEntity;
 import com.example.feedprep.domain.feedbackrequestentity.repository.FeedbackRequestEntityCustomRepository;
+import com.example.feedprep.domain.feedbackrequestentity.repository.FeedbackRequestEntityRepository;
 import com.example.feedprep.domain.user.entity.User;
 import com.example.feedprep.domain.user.repository.UserRepository;
 
@@ -37,7 +37,7 @@ import com.example.feedprep.domain.user.repository.UserRepository;
 @Repository
 @RequiredArgsConstructor
 public class FeedbackServiceImpl implements FeedbackService{
-	private final FeedBackRepository feedBackRepository;
+	private final FeedbackRequestEntityRepository feedbackRequestEntityRepository;
 	private final UserRepository userRepository;
 	private final DocumentRepository documentRepository;
 
@@ -63,28 +63,35 @@ public class FeedbackServiceImpl implements FeedbackService{
 
 		//확인 후 요청 생성
 		FeedbackRequestEntity request = new FeedbackRequestEntity(dto, user, tutor, document);
-		FeedbackRequestEntity getInfoRequest =feedBackRepository.save(request);
+		FeedbackRequestEntity getInfoRequest =feedbackRequestEntityRepository.save(request);
 		return new FeedbackRequestEntityResponseDto(getInfoRequest);
 	}
 
 	@Transactional(readOnly = true)
 	@Override
-	public FeedbackRequestEntityResponseDto getRequest(
+	public List<FeedbackRequestEntityResponseDto> getRequest(
 		Long userId,
 		Long tutorId,
 		Long documentId,
+		LocalDateTime month,
 		int page,
-		int size,
-		LocalDateTime time)
+		int size
+		)
 	{
 		//유저 본인 확인
 		User user = userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND);
 		if(!user.getUserId().equals(userId)){
 			throw  new CustomException(ErrorCode. UNAUTHORIZED_REQUESTER_ACCESS);
 		}
-		PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-		Page<FeedbackRequestEntity> feedbackRequestEntities = feedBackRepository.findAll(min, max, pageRequest);
-		return null;
+		PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+
+		Page<FeedbackRequestEntity> pages =
+			feedbackRequestEntityRepository.findByRequest(userId,tutorId,documentId,month, pageable);
+
+		List<FeedbackRequestEntityResponseDto> result =
+			pages.stream().map(FeedbackRequestEntityResponseDto::new).toList();
+		return result;
 	}
 
 	@Transactional
@@ -92,7 +99,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 	public FeedbackRequestEntityResponseDto updateRequest(FeedbackRequestDto dto,Long feedbackId, Long userId) {
 
 		//요청이 존재하는 가?
-		FeedbackRequestEntity request = feedBackRepository.findById(feedbackId)
+		FeedbackRequestEntity request = feedbackRequestEntityRepository.findById(feedbackId)
 			.orElseThrow(()->new CustomException(ErrorCode.FEEDBACK_NOT_FOUND));
 		if(!request.getUser().getUserId().equals(userId))
 		{
@@ -118,7 +125,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 	@Override
 	public ApiResponseDto cancleRequest(Long RequestId, Long userId) {
 		//요청이 존재하는 가?
-		FeedbackRequestEntity request = feedBackRepository.findById(RequestId)
+		FeedbackRequestEntity request = feedbackRequestEntityRepository.findById(RequestId)
 			.orElseThrow(()->new CustomException(ErrorCode.FEEDBACK_NOT_FOUND));
 		if(!request.getUser().getUserId().equals(userId))
 		{
