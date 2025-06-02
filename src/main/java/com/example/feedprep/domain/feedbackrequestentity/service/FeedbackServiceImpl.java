@@ -87,20 +87,30 @@ public class FeedbackServiceImpl implements FeedbackService{
 	@Transactional
 	@Override
 	public FeedbackRequestEntityResponseDto updateRequest(FeedbackRequestDto dto,Long feedbackId, Long userId) {
-		//유저 본인 확인
-		User user =  userRepository.findById(dto.getTutorId()).orElseThrow(()-> new CustomException(ErrorCode.INVALID_TUTOR));
-		if(!user.getUserId().equals(userId)){
-			//예외 반환
-		}
-		//요청이 존재하는 가?
-		FeedbackRequestEntity request = feedBackRepository.findById(feedbackId).orElseThrow(()->new CustomException(ErrorCode.FEEDBACK_NOT_FOUND));
-		if(request.getUser().getUserId().equals(userId))
-		{
 
+		//요청이 존재하는 가?
+		FeedbackRequestEntity request = feedBackRepository.findById(feedbackId)
+			.orElseThrow(()->new CustomException(ErrorCode.FEEDBACK_NOT_FOUND));
+		if(!request.getUser().getUserId().equals(userId))
+		{
+			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
-		//수정 적용
-		return null;
+
+		if (request.getRequestState() == RequestState.COMPLETED) {
+			throw new CustomException(ErrorCode.CANNOT_EDIT_COMPLETED_REQUEST);
+		}
+		User tutor = userRepository.findByIdOrElseThorw(dto.getTutorId());
+
+		//문서 조회
+		Document document = documentRepository.findById(dto.getDocumentId())
+			.orElseThrow(()-> new CustomException(ErrorCode.INVALID_DOCUMENT));
+
+		request.updateFeedbackRequestEntity(dto, tutor, document);
+
+		return new FeedbackRequestEntityResponseDto(request);
 	}
+
+
 	@Transactional
 	@Override
 	public ApiResponseDto cancleRequest(Long RequestId, Long userId) {
