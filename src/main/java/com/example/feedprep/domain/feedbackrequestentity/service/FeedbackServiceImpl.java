@@ -14,11 +14,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
+import com.example.feedprep.common.exception.enums.SuccessCode;
 import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.document.entity.Document;
 import com.example.feedprep.domain.document.repository.DocumentRepository;
@@ -27,6 +29,7 @@ import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
 import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRequestDto;
 import com.example.feedprep.domain.feedbackrequestentity.dto.response.FeedbackRequestEntityResponseDto;
 import com.example.feedprep.domain.feedbackrequestentity.entity.FeedbackRequestEntity;
+import com.example.feedprep.domain.feedbackrequestentity.repository.FeedbackRequestEntityCustomRepository;
 import com.example.feedprep.domain.user.entity.User;
 import com.example.feedprep.domain.user.repository.UserRepository;
 
@@ -59,7 +62,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 			.orElseThrow(()-> new CustomException(ErrorCode.INVALID_DOCUMENT));
 
 		//확인 후 요청 생성
-		FeedbackRequestEntity request = new FeedbackRequestEntity(dto, tutor, document);
+		FeedbackRequestEntity request = new FeedbackRequestEntity(dto, user, tutor, document);
 		FeedbackRequestEntity getInfoRequest =feedBackRepository.save(request);
 		return new FeedbackRequestEntityResponseDto(getInfoRequest);
 	}
@@ -96,7 +99,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
 
-		if (request.getRequestState() == RequestState.COMPLETED) {
+		if (request.getRequestState() != RequestState.PENDING) {
 			throw new CustomException(ErrorCode.CANNOT_EDIT_COMPLETED_REQUEST);
 		}
 		User tutor = userRepository.findByIdOrElseThorw(dto.getTutorId());
@@ -114,18 +117,22 @@ public class FeedbackServiceImpl implements FeedbackService{
 	@Transactional
 	@Override
 	public ApiResponseDto cancleRequest(Long RequestId, Long userId) {
-		//유저 본인 확인
-		User user =  userRepository.findById(dto.getTutorId()).orElseThrow(()-> new CustomException(ErrorCode.INVALID_TUTOR));
-		if(!user.getUserId().equals(userId)){
-			//예외 반환
-		}
 		//요청이 존재하는 가?
-		FeedbackRequestEntity request = feedBackRepository.findById(feedbackId).orElseThrow(()->new CustomException(ErrorCode.FEEDBACK_NOT_FOUND));
-		if(request.getUser().getUserId().equals(userId))
+		FeedbackRequestEntity request = feedBackRepository.findById(RequestId)
+			.orElseThrow(()->new CustomException(ErrorCode.FEEDBACK_NOT_FOUND));
+		if(!request.getUser().getUserId().equals(userId))
 		{
-
+			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
-		//취소 적용
-		return null;
+		if (request.getRequestState() != RequestState.PENDING){
+			throw new CustomException(ErrorCode.CANNOT_EDIT_COMPLETED_REQUEST);
+		}
+		request.updateRequestState(RequestState.CANCELED);
+
+
+		return new ApiResponseDto(
+			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.hashCode(),
+			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.getMessage(),
+			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.getHttpStatus());
 	}
 }
