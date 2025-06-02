@@ -2,6 +2,7 @@ package com.example.feedprep.domain.subscription.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,8 +37,7 @@ public class SubscriptionController {
 	@DeleteMapping("/{subscriptionId}")
 	public ResponseEntity<ApiResponseDto<Void>> unsubscribe(
 		// @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal,
-		@RequestParam Long subscriptionId
-	) {
+		@PathVariable Long subscriptionId) {
 		// 임시 senderId
 		Long senderId = 1L;
 
@@ -46,4 +46,6 @@ public class SubscriptionController {
 		return ResponseEntity.status(SuccessCode.UNSUBSCRIBED.getHttpStatus())
 			.body(ApiResponseDto.success(SuccessCode.UNSUBSCRIBED));
 	}
+
+
 }
