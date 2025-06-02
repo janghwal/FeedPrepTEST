@@ -24,4 +24,9 @@ public class UserTechStack extends BaseTimeEntity {
 	@ManyToOne
 	@JoinColumn(name = "tech_id")
 	private TechStack techStack;
+
+	public UserTechStack(User requester, TechStack techStack) {
+		this.user = requester;
+		this.techStack = techStack;
+	}
 }

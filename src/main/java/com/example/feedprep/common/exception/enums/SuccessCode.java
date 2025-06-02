@@ -17,8 +17,12 @@ public enum SuccessCode {
     SUBSCRIPTION_LIST(HttpStatus.OK, "구독 목록입니다."),
     SUBSCRIBER_LIST(HttpStatus.OK, "구독자 목록입니다."),
 
+    // 기술스택
     TECH_STACK_CREATED(HttpStatus.CREATED, "기술 스택을 추가하였습니다."),
     TECH_STACK_DELETED(HttpStatus.OK, "기술 스택을 삭제하였습니다."),
+    TECH_STACK_LISTED(HttpStatus.OK, "기술 스택 목록입니다."),
+    ADD_MY_TECH_STACK(HttpStatus.CREATED, "관심 기술 스택을 추가하였습니다."),
+    REMOVE_MY_TECH_STACK(HttpStatus.OK, "관심 기술 스택을 삭제하였습니다.")
 
     ;
 
