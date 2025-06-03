@@ -1,4 +1,4 @@
-package com.example.feedprep.common.s3.Config;
+package com.example.feedprep.common.s3.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
