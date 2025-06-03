@@ -37,4 +37,11 @@ public class User extends BaseTimeEntity {
 
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
+
+    public User(String name, String email, String password, UserRole role){
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 }
