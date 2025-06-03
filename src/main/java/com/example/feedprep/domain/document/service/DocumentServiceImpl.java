@@ -93,4 +93,17 @@ public class DocumentServiceImpl implements DocumentService{
 
         return documentListResponseDtos;
     }
+
+    @Override
+    public DocumentResponseDto getMyDocument(Long documentId, Long tokenMyId) {
+
+        Document document = documentRepository.findByIdOrElseThrow(documentId);
+
+        // 본인 문서가 아니면 접근 권한 없음
+        if(!document.getUser().getUserId().equals(tokenMyId)){
+            throw new CustomException(ErrorCode.FORBIDDEN_GET_DOCUMENT);
+        }
+
+        return new DocumentResponseDto(document);
+    }
 }

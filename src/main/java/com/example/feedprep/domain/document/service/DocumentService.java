@@ -10,4 +10,6 @@ public interface DocumentService {
     DocumentResponseDto createDocument(MultipartFile file, String resume, Long tokenMyId);
 
     List<DocumentListResponseDto> getMyDocumentList(Long tokenMyId);
+
+    DocumentResponseDto getMyDocument(Long documentId, Long tokenMyId);
 }
