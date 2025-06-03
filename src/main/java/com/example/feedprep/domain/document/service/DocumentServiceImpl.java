@@ -35,6 +35,10 @@ public class DocumentServiceImpl implements DocumentService{
     @Transactional
     public DocumentResponseDto createDocument(MultipartFile file, String resume, Long tokenMyId) {
 
+        if(file.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_FILE);
+        }
+
         User user = userRepository.findByIdOrElseThrow(tokenMyId);
 
         // user의 이력서는 최대 5개까지 생성 제한
