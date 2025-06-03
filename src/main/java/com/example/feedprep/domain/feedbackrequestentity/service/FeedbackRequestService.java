@@ -3,12 +3,11 @@ package com.example.feedprep.domain.feedbackrequestentity.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRequestDto;
 import com.example.feedprep.domain.feedbackrequestentity.dto.response.FeedbackRequestEntityResponseDto;
 
-public interface FeedbackService {
+public interface FeedbackRequestService {
      FeedbackRequestEntityResponseDto saveRequest(FeedbackRequestDto dto, Long userId);
 	List<FeedbackRequestEntityResponseDto> getRequest(
 		Long userId,
