@@ -19,6 +19,7 @@ public enum SuccessCode {
 
     // 문서
     CREATE_DOCUMENT_SUCCESS(HttpStatus.CREATED, "문서 작성에 성공하였습니다."),
+    GET_MYDOCUMENLIST_SUCCESS(HttpStatus.OK, "나의 문서목록 조회를 성공했습니다."),
 
 
     // 구독 모듈

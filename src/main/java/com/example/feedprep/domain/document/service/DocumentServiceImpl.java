@@ -3,15 +3,19 @@ package com.example.feedprep.domain.document.service;
 
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
+import com.example.feedprep.domain.document.dto.responseDto.DocumentListResponseDto;
 import com.example.feedprep.domain.document.dto.responseDto.DocumentResponseDto;
 import com.example.feedprep.domain.document.entity.Document;
 import com.example.feedprep.domain.document.repository.DocumentRepository;
 import com.example.feedprep.domain.user.entity.User;
 import com.example.feedprep.domain.user.repository.UserRepository;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -28,12 +32,21 @@ public class DocumentServiceImpl implements DocumentService{
     private final Environment env;
 
     @Override
+    @Transactional
     public DocumentResponseDto createDocument(MultipartFile file, String resume, Long tokenMyId) {
 
         User user = userRepository.findByIdOrElseThrow(tokenMyId);
 
+        // user의 이력서는 최대 5개까지 생성 제한
+        long cntDocument = documentRepository.countByUser(user);
+        if(cntDocument >= 5) {
+            throw new CustomException(ErrorCode.DONT_CREATE_MORE);
+        }
+
+        // 접속 할 버켓 이름
         String bucket = env.getProperty("aws.s3.bucket");
 
+        // 램덤 UUID로 파일이름 중복 방지 - 중복될 확률이 거의 0에 수렴.
         String fileName = resume + "/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -60,5 +73,20 @@ public class DocumentServiceImpl implements DocumentService{
             saveDocument.getCreatedAt(),
             saveDocument.getModifiedAt()
         );
+    }
+
+    @Override
+    public List<DocumentListResponseDto> getMyDocumentList(Long tokenMyId) {
+
+        List<Document> documentList = documentRepository.findAllByUserUserId(tokenMyId);
+
+        List<DocumentListResponseDto> documentListResponseDtos =
+            documentList.stream().map(document -> new DocumentListResponseDto(
+                document.getDocumentId(),
+                document.getCreatedAt(),
+                document.getModifiedAt()
+            )).collect(Collectors.toList());
+
+        return documentListResponseDtos;
     }
 }
