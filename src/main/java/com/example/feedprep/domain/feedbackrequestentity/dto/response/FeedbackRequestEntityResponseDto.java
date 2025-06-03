@@ -20,7 +20,7 @@ public class FeedbackRequestEntityResponseDto {
 
 	public FeedbackRequestEntityResponseDto(FeedbackRequestEntity entity){
 		this.id = entity.getId();
-		this.tutorId = entity.getUser().getUserId();
+		this.tutorId = entity.getTutor().getUserId();
 		this.documentId = entity.getDocument().getDocumentId();
 		this.content = entity.getContent();
 		this.requestState = entity.getRequestState();
