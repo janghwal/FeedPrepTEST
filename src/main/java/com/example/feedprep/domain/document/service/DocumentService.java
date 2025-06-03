@@ -12,4 +12,6 @@ public interface DocumentService {
     List<DocumentListResponseDto> getMyDocumentList(Long tokenMyId);
 
     DocumentResponseDto getMyDocument(Long documentId, Long tokenMyId);
+
+    void deleteDocument(Long documentId, Long tokenMyId);
 }

@@ -21,7 +21,8 @@ public enum ErrorCode {
     NOT_FOUND_FILE(HttpStatus.NOT_FOUND, "업로드 할 이력서를 넣어 주세요."),
     S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3 파일 업로드에 실패했습니다."),
     DONT_CREATE_MORE(HttpStatus.BAD_REQUEST, "이력서 저장은 최대 5개까지 입니다."),
-    FORBIDDEN_GET_DOCUMENT(HttpStatus.FORBIDDEN, "자신의 문서만 조회 할 수 있습니다."),
+    FOREIGN_DOCUMENT_ACCESS(HttpStatus.FORBIDDEN, "자신의 문서만 조회 할 수 있습니다."),
+    DONT_DELETE_S3FILE(HttpStatus.INTERNAL_SERVER_ERROR,"저장된 이력서 삭제에 실패하였습니다."),
 
 
     // 구독

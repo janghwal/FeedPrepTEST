@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -101,9 +102,37 @@ public class DocumentServiceImpl implements DocumentService{
 
         // 본인 문서가 아니면 접근 권한 없음
         if(!document.getUser().getUserId().equals(tokenMyId)){
-            throw new CustomException(ErrorCode.FORBIDDEN_GET_DOCUMENT);
+            throw new CustomException(ErrorCode.FOREIGN_DOCUMENT_ACCESS);
         }
 
         return new DocumentResponseDto(document);
+    }
+
+    @Override
+    @Transactional
+    public void deleteDocument(Long documentId, Long tokenMyId) {
+        Document document = documentRepository.findByIdOrElseThrow(documentId);
+
+        // 본인 문서가 아니면 접근 권한 없음
+        if(!document.getUser().getUserId().equals(tokenMyId)){
+            throw new CustomException(ErrorCode.FOREIGN_DOCUMENT_ACCESS);
+        }
+
+        String fileUrl = document.getFileUrl();
+        String bucket = env.getProperty("aws.s3.bucket");
+
+        documentRepository.delete(document);
+
+        try{
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .bucket(bucket)
+                .key(fileUrl)
+                .build();
+
+            s3Client.deleteObject(deleteObjectRequest);
+
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.DONT_DELETE_S3FILE);
+        }
     }
 }

@@ -21,6 +21,7 @@ public enum SuccessCode {
     CREATE_DOCUMENT_SUCCESS(HttpStatus.CREATED, "문서 작성에 성공하였습니다."),
     GET_MYDOCUMENLIST_SUCCESS(HttpStatus.OK, "나의 문서목록 조회를 성공했습니다."),
     GET_MYDOCUMEN_SUCCESS(HttpStatus.OK, "나의 단건 문서 조회를 성공했습니다."),
+    DELETE_MYDOCUMEN_SUCCESS(HttpStatus.ACCEPTED, "문서 삭제에 성공하였습니다."),
 
 
     // 구독 모듈
