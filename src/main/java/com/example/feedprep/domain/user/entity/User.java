@@ -9,13 +9,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.sql.Timestamp;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "user")
+@AllArgsConstructor
+@Table(name = "users")
 public class User extends BaseTimeEntity {
 
     @Id

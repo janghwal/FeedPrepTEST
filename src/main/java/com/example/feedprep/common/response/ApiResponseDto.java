@@ -2,7 +2,6 @@ package com.example.feedprep.common.response;
 
 import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.common.exception.enums.SuccessCode;
-import com.example.feedprep.common.response.ErrorData;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.micrometer.common.lang.Nullable;
 import lombok.Builder;
