@@ -9,14 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.sql.Timestamp;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "user")
 public class User extends BaseTimeEntity {
 
@@ -37,4 +35,13 @@ public class User extends BaseTimeEntity {
 
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
+
+    public User(String name, String email, String password, UserRole role) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.point = 0L;
+    }
+
 }
