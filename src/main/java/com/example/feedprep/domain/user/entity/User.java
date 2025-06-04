@@ -63,4 +63,12 @@ public class User extends BaseTimeEntity {
         this.role = role;
         this.point = 0L;
     }
+
+    public User(String name, String email, String password, UserRole role) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.point = 0L;
+    }
 }

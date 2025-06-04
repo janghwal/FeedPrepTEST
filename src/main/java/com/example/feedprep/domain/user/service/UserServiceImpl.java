@@ -47,9 +47,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto getMyInfo(Long tokenMyId) {
+    public UserResponseDto getMyInfo(Long userId) {
 
-        User user = userRepository.findByIdOrElseThrow(tokenMyId);
+        User user = userRepository.findByIdOrElseThrow(userId);
 
         UserResponseDto responseDto = new UserResponseDto(user);
 
@@ -58,9 +58,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponseDto updateMyInfo(Long tokenMyId, UpdateMyInfoRequestDto requestDto) {
+    public UserResponseDto updateMyInfo(Long userId, UpdateMyInfoRequestDto requestDto) {
 
-        User user = userRepository.findByIdOrElseThrow(tokenMyId);
+        User user = userRepository.findByIdOrElseThrow(userId);
 
         Optional.ofNullable(requestDto.getName()).ifPresent(user::setName);
         Optional.ofNullable(requestDto.getAddress()).ifPresent(user::setAddress);
@@ -75,9 +75,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public PasswordModifiedAtResponseDto changePassword(Long tokenMyId, NewPasswordRequestDto requestDto) {
+    public PasswordModifiedAtResponseDto changePassword(Long userId, NewPasswordRequestDto requestDto) {
 
-        User user = userRepository.findByIdOrElseThrow(tokenMyId);
+        User user = userRepository.findByIdOrElseThrow(userId);
 
         if(!passwordEncoder.matches(requestDto.getOldPassword(), user.getPassword())) {
             throw new CustomException(ErrorCode.NOT_MATCH_PASSWORD);
