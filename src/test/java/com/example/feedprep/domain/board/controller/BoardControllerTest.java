@@ -23,6 +23,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@WithMockUser(username = "testuser", roles = "USER")
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
