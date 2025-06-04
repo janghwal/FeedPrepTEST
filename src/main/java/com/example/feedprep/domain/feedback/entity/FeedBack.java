@@ -1,6 +1,5 @@
 package com.example.feedprep.domain.feedback.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.feedprep.common.entity.BaseTimeEntity;
 import com.example.feedprep.domain.feedback.common.RejectReason;
-import com.example.feedprep.domain.feedback.dto.request.FeedbackRequestDto;
+import com.example.feedprep.domain.feedback.dto.request.FeedbackWriteRequestDto;
 import com.example.feedprep.domain.feedbackrequestentity.entity.FeedbackRequestEntity;
 import com.example.feedprep.domain.user.entity.User;
 
@@ -45,14 +44,14 @@ public class Feedback extends BaseTimeEntity{
 
 	private String etcContent;
 
-	public Feedback(FeedbackRequestDto requestDto, User tutor){
+	public Feedback(FeedbackWriteRequestDto requestDto, User tutor){
 		this.content = requestDto.getContent();
 		this.rejectReason = requestDto.getRejectReason();
 		this.etcContent = requestDto.getEtcContent();
 		this.tutor =tutor;
 	}
 
-	public void updateFeedback(FeedbackRequestDto requestDto){
+	public void updateFeedback(FeedbackWriteRequestDto requestDto){
 		this.content = requestDto.getContent();
 		this.rejectReason = requestDto.getRejectReason();
 		this.etcContent = requestDto.getEtcContent();
