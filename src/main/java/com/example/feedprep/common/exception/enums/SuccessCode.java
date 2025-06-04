@@ -12,6 +12,19 @@ public enum SuccessCode {
     SIGNUP_SUCCESS(HttpStatus.CREATED,"회원가입에 성공하였습니다." ),
     LOGIN_SUCCESS(HttpStatus.OK, "로그인에 성공하였습니다."),
 
+    // 회원 정보
+    GET_TUTORLIST_SUCCESS(HttpStatus.OK, "튜터 목록 조회를 성공하였습니다."),
+    GET_MYINFO_SUCCESS(HttpStatus.OK,"내 정보 불러오기에 성공하였습니다."),
+    UPDATE_MYINFO_SUCCESS(HttpStatus.OK,"내 정보 수정이 완료 되었습니다."),
+    CHANGE_PASSWORD_SUCCESS(HttpStatus.OK,"비밀번호 수정을 성공하였습니다."),
+
+    // 문서
+    CREATE_DOCUMENT_SUCCESS(HttpStatus.CREATED, "문서 작성에 성공하였습니다."),
+    GET_MYDOCUMENLIST_SUCCESS(HttpStatus.OK, "나의 문서목록 조회를 성공했습니다."),
+    GET_MYDOCUMEN_SUCCESS(HttpStatus.OK, "나의 단건 문서 조회를 성공했습니다."),
+    DELETE_MYDOCUMEN_SUCCESS(HttpStatus.ACCEPTED, "문서 삭제에 성공하였습니다."),
+
+
     // 구독 모듈
     SUBSCRIBED(HttpStatus.CREATED, "구독하였습니다."),
     UNSUBSCRIBED(HttpStatus.OK, "구독을 취소하였습니다."),

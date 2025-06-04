@@ -17,6 +17,21 @@ public enum ErrorCode {
     MISSING_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 존재하지 않습니다."),
     INVALID_JWT_SIGNATURE(HttpStatus.UNAUTHORIZED, "유효하지 않은 JWT 서명입니다."),
     INVALID_SECRET_CODE(HttpStatus.UNAUTHORIZED, "유효하지 않은 시크릿 코드입니다." ),
+    NOT_MATCH_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 틀렸습니다."),
+
+
+    //유저
+    INVALID_USER_ROLE(HttpStatus.BAD_REQUEST, "잘못된 역할입니다. STUDENT, PENDING_TUTOR, ADMIN 중 하나를 선택해 주세요"),
+    NOT_FOUND_TUTOR(HttpStatus.BAD_REQUEST,"검색 된 튜터가 없습니다."),
+
+    // 문서 및 S3 파일 업로드
+    NOT_FOUND_DOCUMENT(HttpStatus.NOT_FOUND,"해당 문서를 찾을 수 없습니다."),
+    NOT_FOUND_FILE(HttpStatus.NOT_FOUND, "업로드 할 이력서를 넣어 주세요."),
+    S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3 파일 업로드에 실패했습니다."),
+    DONT_CREATE_MORE(HttpStatus.BAD_REQUEST, "이력서 저장은 최대 5개까지 입니다."),
+    FOREIGN_DOCUMENT_ACCESS(HttpStatus.FORBIDDEN, "자신의 문서만 조회 할 수 있습니다."),
+    DONT_DELETE_S3FILE(HttpStatus.INTERNAL_SERVER_ERROR,"저장된 이력서 삭제에 실패하였습니다."),
+
 
     // 구독
     CANNOT_SUBSCRIBE_SELF(HttpStatus.BAD_REQUEST, "자기 자신을 구독할 수 없습니다."),
@@ -55,7 +70,6 @@ public enum ErrorCode {
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "피드백 처리 중 내부 오류가 발생했습니다."),
 
     ;
-
 
     private final HttpStatus httpStatus;
     private final String message;
