@@ -26,7 +26,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private static final Set<String> WHITELIST = Set.of(
             "/auth/signup",
-            "/auth/login"
+            "/auth/login",
+            "/admin/signup",
+            "/admin/login"
     );
 
     @Override
