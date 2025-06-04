@@ -17,9 +17,10 @@ public enum SuccessCode {
     SUBSCRIPTION_LIST(HttpStatus.OK, "구독 목록입니다."),
     SUBSCRIBER_LIST(HttpStatus.OK, "구독자 목록입니다."),
 
-   //피드백 요청 취소 성공
-    OK_FEEDBACK_REQUEST_CANCELED(HttpStatus.OK, "정상적으로 취소 되었습니다.")
-
+    //피드백 요청 취소
+    OK_FEEDBACK_REQUEST_CANCELED(HttpStatus.OK, "정상적으로 취소 되었습니다."),
+    //피드백 거절
+    OK_SUCCESS_FEEDBACK_REJECTED(HttpStatus.OK, "피드백 요청이 거절되었습니다.")
     ;
 
     private final HttpStatus httpStatus;
