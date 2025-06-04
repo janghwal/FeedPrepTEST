@@ -38,17 +38,21 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	public FeedbackRequestEntityResponseDto saveRequest(FeedbackRequestDto dto, Long userId) {
 		User  user = userRepository.findByIdOrElseThrow(userId);
 		User tutor = userRepository.findByIdOrElseThrow(dto.getTutorId());
+
 		Document document = documentRepository.findById(dto.getDocumentId())
 			.orElseThrow(()-> new CustomException(ErrorCode.INVALID_DOCUMENT));
+
         FeedbackRequestEntity feedbackRequestEntity =
 			 feedbackRequestEntityRepository.findTop1ByUser_UserIdAndTutor_UserIdAndContentAndRequestState(
 				 userId,
 				 tutor.getUserId(),
 				 RequestState.PENDING)
 				 .orElse(null);
+
         if(feedbackRequestEntity != null){
 			throw new RuntimeException("이미 같은 튜터님께 신청 대기 중입니다.");
 		}
+
 		FeedbackRequestEntity request = new FeedbackRequestEntity(dto, user, tutor, document);
 		request.updateRequestState(RequestState.PENDING);
 		FeedbackRequestEntity getInfoRequest =feedbackRequestEntityRepository.save(request);
