@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.feedprep.common.exception.enums.ErrorCode;
+import com.example.feedprep.common.exception.enums.SuccessCode;
 import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.feedback.dto.request.FeedbackRequestDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackResponse;
@@ -67,7 +68,27 @@ public class FeedbackServiceImpl implements FeedbackService{
 		return new FeedbackResponse(saveFeedback);
 	}
 
-	public ApiResponseDto rejectFeedback(Long userId, Long requestId) {
-		return  null;
+	@Transactional
+	public ApiResponseDto rejectFeedback(Long userId, Long requestId, FeedbackRequestDto dto) {
+		// 1. 튜터 본인 확인
+		User tutor = userRepository.findByIdOrElseThrow(userId);
+		// 2. 피드백 존재 여부 확인(Pendding 상태에서만)
+		FeedbackRequestEntity request = feedbackRequestEntityRepository.findPendingByIdAndTutorOrElseThrow(
+			tutor.getUserId(), requestId, ErrorCode.USER_NOT_FOUND);
+		if(!request.getRequestState().equals(RequestState.PENDING)){
+			throw new RuntimeException("대기중인건만 가능해 바보야~!");
+		}
+		//3. 거절 사유가 적힌 피드백을 반환.
+		Feedback feedback = new Feedback(dto, tutor);
+		request.updateRequestState(RequestState.REJECTED);
+		//요청을 거절 상태로 변경
+		feedback.updateFeedbackRequest(request);
+		// 6. 저장 (트랜잭션 내에서)
+		feedBackRepository.save(feedback);
+		return new ApiResponseDto(
+			SuccessCode.OK_SUCCESS_FEEDBACK_REJECTED.getHttpStatus().value(),
+			SuccessCode.OK_SUCCESS_FEEDBACK_REJECTED.getMessage(),
+			SuccessCode.OK_SUCCESS_FEEDBACK_REJECTED.name()
+		);
 	}
 }
