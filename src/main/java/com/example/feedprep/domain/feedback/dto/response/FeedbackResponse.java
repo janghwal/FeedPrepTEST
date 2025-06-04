@@ -14,6 +14,7 @@ public class FeedbackResponse {
 	private String content;
 
 	private RejectReason rejectReason;
+	private String reason;
 
 	private String etcContent;
 
@@ -22,6 +23,7 @@ public class FeedbackResponse {
 		this.feedbackRequestEntityId = feedBack.getFeedbackRequestEntity().getId();
 		this.content = feedBack.getContent();
 		this.rejectReason = feedBack.getRejectReason();
+		 this.reason = feedBack.getRejectReason().getDescription();
 		this.etcContent = feedBack.getEtcContent();
 
 	}
