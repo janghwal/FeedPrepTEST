@@ -15,7 +15,7 @@ import lombok.Getter;
 
 import com.example.feedprep.common.entity.BaseTimeEntity;
 import com.example.feedprep.domain.document.entity.Document;
-import com.example.feedprep.domain.feedback.entity.FeedBack;
+import com.example.feedprep.domain.feedback.entity.Feedback;
 import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
 import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRequestDto;
 import com.example.feedprep.domain.user.entity.User;
@@ -43,7 +43,7 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "feedback_id")
-	private FeedBack feedBack;
+	private Feedback feedback;
 
 	private String content;
 
@@ -76,7 +76,7 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 		this.content = dto.getContent();
 	}
 
-	public void updateFeedback(FeedBack feedBack) {
-		this.feedBack=  feedBack;
-	}
+	// public void updateFeedback(FeedBack feedBack) {
+	// 	this.feedBack=  feedBack;
+	// }
 }
