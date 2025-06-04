@@ -76,4 +76,7 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 		this.content = dto.getContent();
 	}
 
+	public void updateFeedback(FeedBack feedBack) {
+		this.feedBack=  feedBack;
+	}
 }
