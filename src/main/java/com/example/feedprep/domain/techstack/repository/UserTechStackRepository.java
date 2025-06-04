@@ -11,7 +11,7 @@ import com.example.feedprep.domain.techstack.entity.UserTechStack;
 
 public interface UserTechStackRepository extends JpaRepository<UserTechStack, Long> {
 	@Override
-	Optional<UserTechStack> findById(Long aLong);
+	Optional<UserTechStack> findById(Long relationId);
 
 	default UserTechStack findByIdOrElseThrow(Long relationId) {
 		return findById(relationId)
