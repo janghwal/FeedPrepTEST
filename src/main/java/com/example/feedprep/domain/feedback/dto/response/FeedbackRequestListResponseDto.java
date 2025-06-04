@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import com.example.feedprep.domain.feedbackrequestentity.dto.response.FeedbackRequestEntityResponseDto;
 import com.example.feedprep.domain.user.entity.User;
 
 @Getter
@@ -12,9 +13,9 @@ import com.example.feedprep.domain.user.entity.User;
 public class FeedbackRequestListResponseDto {
 	private Long tutorId;
 	private String nickname;
-	private List<FeedbackRequestResponseDto> requests;
+	private List<FeedbackRequestEntityResponseDto> requests;
 
-	public FeedbackRequestListResponseDto(User user, List<FeedbackRequestResponseDto> requests) {
+	public FeedbackRequestListResponseDto(User user, List<FeedbackRequestEntityResponseDto> requests) {
 		this.tutorId = user.getUserId();
 		this.nickname = user.getName();
 		this.requests = requests;
