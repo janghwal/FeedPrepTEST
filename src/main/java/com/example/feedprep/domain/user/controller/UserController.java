@@ -9,7 +9,6 @@ import com.example.feedprep.domain.user.dto.request.UpdateMyInfoRequestDto;
 import com.example.feedprep.domain.user.dto.response.PasswordModifiedAtResponseDto;
 import com.example.feedprep.domain.user.dto.response.TutorResponseDto;
 import com.example.feedprep.domain.user.dto.response.UserResponseDto;
-import com.example.feedprep.domain.user.enums.UserRole;
 import com.example.feedprep.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

@@ -51,16 +51,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByIdOrElseThrow(tokenMyId);
 
-        UserResponseDto responseDto = new UserResponseDto(
-            user.getUserId(),
-            user.getName(),
-            user.getEmail(),
-            user.getAddress(),
-            user.getIntroduction(),
-            user.getRole(),
-            user.getCreatedAt(),
-            user.getModifiedAt()
-        );
+        UserResponseDto responseDto = new UserResponseDto(user);
 
         return responseDto;
     }
@@ -75,16 +66,9 @@ public class UserServiceImpl implements UserService {
         Optional.ofNullable(requestDto.getAddress()).ifPresent(user::setAddress);
         Optional.ofNullable(requestDto.getIntroduction()).ifPresent(user::setIntroduction);
 
-        UserResponseDto responseDto = new UserResponseDto(
-            user.getUserId(),
-            user.getName(),
-            user.getEmail(),
-            user.getAddress(),
-            user.getIntroduction(),
-            user.getRole(),
-            user.getCreatedAt(),
-            user.getModifiedAt()
-        );
+        User saveUser = userRepository.save(user);
+
+        UserResponseDto responseDto = new UserResponseDto(saveUser);
 
         return responseDto;
     }
