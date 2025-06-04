@@ -19,7 +19,13 @@ public enum SuccessCode {
     SUBSCRIBER_LIST(HttpStatus.OK, "구독자 목록입니다."),
 
    //피드백 요청 취소 성공
-    OK_FEEDBACK_REQUEST_CANCELED(HttpStatus.OK, "정상적으로 취소 되었습니다.")
+    OK_FEEDBACK_REQUEST_CANCELED(HttpStatus.OK, "정상적으로 취소 되었습니다."),
+    // 기술스택
+    TECH_STACK_CREATED(HttpStatus.CREATED, "기술 스택을 추가하였습니다."),
+    TECH_STACK_DELETED(HttpStatus.OK, "기술 스택을 삭제하였습니다."),
+    TECH_STACK_LISTED(HttpStatus.OK, "기술 스택 목록입니다."),
+    ADD_MY_TECH_STACK(HttpStatus.CREATED, "관심 기술 스택을 추가하였습니다."),
+    REMOVE_MY_TECH_STACK(HttpStatus.OK, "관심 기술 스택을 삭제하였습니다.")
 
     ;
 

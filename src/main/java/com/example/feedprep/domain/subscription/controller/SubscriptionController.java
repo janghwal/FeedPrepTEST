@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.feedprep.common.exception.enums.SuccessCode;
 import com.example.feedprep.common.response.ApiResponseDto;
+import com.example.feedprep.common.security.annotation.AuthUser;
 import com.example.feedprep.domain.subscription.dto.SubscriptionResponseDto;
 import com.example.feedprep.domain.subscription.enums.GetType;
 import com.example.feedprep.domain.subscription.service.SubscriptionService;
@@ -27,12 +28,9 @@ public class SubscriptionController {
 
 	@PostMapping
 	public ResponseEntity<ApiResponseDto<Void>> subscribe(
-		// @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal,
+		@AuthUser Long senderId,
 		@RequestParam Long userId
 	) {
-		// 임시 senderId
-		Long senderId = 1L;
-
 		subscriptionService.subscribe(senderId, userId);
 
 		return ResponseEntity.status(SuccessCode.SUBSCRIBED.getHttpStatus())
@@ -41,10 +39,8 @@ public class SubscriptionController {
 
 	@DeleteMapping("/{subscriptionId}")
 	public ResponseEntity<ApiResponseDto<Void>> unsubscribe(
-		// @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal,
+		@AuthUser Long senderId,
 		@PathVariable Long subscriptionId) {
-		// 임시 senderId
-		Long senderId = 1L;
 
 		subscriptionService.unsubscribe(senderId, subscriptionId);
 
@@ -54,12 +50,9 @@ public class SubscriptionController {
 
 	@GetMapping
 	public ResponseEntity<ApiResponseDto<List<SubscriptionResponseDto>>> getSubscriptionsInfo(
-		// @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal,
+		@AuthUser Long requesterId,
 		@RequestParam GetType getType
 	) {
-		// 임시 requesterId
-		Long requesterId  = 1L;
-
 		List<SubscriptionResponseDto> subscriptionList;
 		switch (getType) {
 			case SUBSCRIBERS -> {
@@ -75,10 +68,4 @@ public class SubscriptionController {
 		}
 		return null;
 	}
-
-	// 발생한 MethodArgumentTypeMismatchException 을 CustomException 으로 바꿔주는 로직 필요
-	// @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-	// public void changeException(MethodArgumentTypeMismatchException e) {
-	// 	throw new CustomException(ErrorCode.INVALID_ENUM_GETTYPE);
-	// }
 }
