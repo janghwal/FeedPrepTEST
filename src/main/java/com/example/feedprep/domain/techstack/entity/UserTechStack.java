@@ -4,6 +4,8 @@ import com.example.feedprep.common.entity.BaseTimeEntity;
 import com.example.feedprep.domain.user.entity.User;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -17,6 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserTechStack extends BaseTimeEntity {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long relationId;
 
 	@ManyToOne
@@ -30,5 +33,6 @@ public class UserTechStack extends BaseTimeEntity {
 	public UserTechStack(User requester, TechStack techStack) {
 		this.user = requester;
 		this.techStack = techStack;
+		techStack.setUserTechStacks(this);
 	}
 }
