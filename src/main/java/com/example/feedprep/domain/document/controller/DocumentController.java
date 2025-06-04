@@ -4,6 +4,7 @@ package com.example.feedprep.domain.document.controller;
 import static com.example.feedprep.common.exception.enums.SuccessCode.*;
 
 import com.example.feedprep.common.response.ApiResponseDto;
+import com.example.feedprep.common.security.annotation.AuthUser;
 import com.example.feedprep.domain.document.dto.responseDto.DocumentListResponseDto;
 import com.example.feedprep.domain.document.dto.responseDto.DocumentResponseDto;
 import com.example.feedprep.domain.document.service.DocumentService;
@@ -27,47 +28,46 @@ import org.springframework.web.multipart.MultipartFile;
 public class DocumentController {
 
     private final DocumentService documentService;
-    private final TokenInfo tokenInfo;
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<DocumentResponseDto>> createDocument(
+        @AuthUser Long userId,
         @RequestParam("file")MultipartFile file
     ) throws IOException {
 
-        Long tokenMyId = tokenInfo.getTokenInfo(authheader);
-
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(ApiResponseDto.success(CREATE_DOCUMENT_SUCCESS,
-                documentService.createDocument(file,"resume",tokenMyId)));
+                documentService.createDocument(file,"resume",userId)));
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponseDto<List<DocumentListResponseDto>>> getMyDocumentList() {
-        Long tokenMyId = tokenInfo.getTokenInfo(authheader);
+    public ResponseEntity<ApiResponseDto<List<DocumentListResponseDto>>> getMyDocumentList(
+        @AuthUser Long userId
+    ) {
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(ApiResponseDto.success(GET_MYDOCUMENLIST_SUCCESS,
-                documentService.getMyDocumentList(tokenMyId)));
+                documentService.getMyDocumentList(userId)));
     }
 
     @GetMapping("/{documentId}")
     public ResponseEntity<ApiResponseDto<DocumentResponseDto>> getMyDocument(
+        @AuthUser Long userId,
         @PathVariable Long documentId
     ) {
-        Long tokenMyId = tokenInfo.getTokenInfo(authheader);
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(ApiResponseDto.success(GET_MYDOCUMEN_SUCCESS,
-                documentService.getMyDocument(documentId, tokenMyId)));
+                documentService.getMyDocument(documentId, userId)));
     }
 
     @DeleteMapping("/{documentId}")
     public ResponseEntity<ApiResponseDto<DocumentResponseDto>> deleteDocument(
+        @AuthUser Long userId,
         @PathVariable Long documentId
     ) {
-        Long tokenMyId = tokenInfo.getTokenInfo(authheader);
 
-        documentService.deleteDocument(documentId,tokenMyId);
+        documentService.deleteDocument(documentId,userId);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
             .body(ApiResponseDto.success(DELETE_MYDOCUMEN_SUCCESS));
