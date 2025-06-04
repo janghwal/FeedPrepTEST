@@ -1,7 +1,5 @@
 package com.example.feedprep.domain.user.service;
 
-import static com.example.feedprep.domain.user.enums.UserRole.APPROVED_TUTOR;
-
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.domain.user.dto.request.NewPasswordRequestDto;
@@ -10,6 +8,7 @@ import com.example.feedprep.domain.user.dto.response.PasswordModifiedAtResponseD
 import com.example.feedprep.domain.user.dto.response.TutorResponseDto;
 import com.example.feedprep.domain.user.dto.response.UserResponseDto;
 import com.example.feedprep.domain.user.entity.User;
+import com.example.feedprep.domain.user.enums.UserRole;
 import com.example.feedprep.domain.user.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +29,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<TutorResponseDto> getTutorList() {
 
-        List<User> tutorList = userRepository.findAllByRole(APPROVED_TUTOR);
+        List<User> tutorList = userRepository.findAllByRole(UserRole.APPROVED_TUTOR);
 
         if(tutorList.isEmpty()) {
             throw new CustomException(ErrorCode.NOT_FOUND_TUTOR);
@@ -56,6 +55,8 @@ public class UserServiceImpl implements UserService {
             user.getUserId(),
             user.getName(),
             user.getEmail(),
+            user.getAddress(),
+            user.getIntroduction(),
             user.getRole(),
             user.getCreatedAt(),
             user.getModifiedAt()
@@ -78,6 +79,8 @@ public class UserServiceImpl implements UserService {
             user.getUserId(),
             user.getName(),
             user.getEmail(),
+            user.getAddress(),
+            user.getIntroduction(),
             user.getRole(),
             user.getCreatedAt(),
             user.getModifiedAt()
