@@ -3,8 +3,10 @@ package com.example.feedprep.domain.techstack.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.feedprep.common.exception.enums.SuccessCode;
 import com.example.feedprep.common.response.ApiResponseDto;
+import com.example.feedprep.common.security.annotation.AuthUser;
+import com.example.feedprep.common.security.jwt.CustomUserDetails;
 import com.example.feedprep.domain.techstack.dto.TechStackResponseDto;
 import com.example.feedprep.domain.techstack.service.TechStackService;
 
@@ -35,9 +39,9 @@ public class TechStackController {
 
 	@PostMapping
 	public ResponseEntity<ApiResponseDto<Void>> addTechStack(
+		@AuthUser Long requesterId,
 		@RequestParam Long techId
 	) {
-		Long requesterId  = 1L;
 		techStackService.addTechStack(requesterId, techId);
 
 		return ResponseEntity.status(SuccessCode.ADD_MY_TECH_STACK.getHttpStatus())
@@ -45,8 +49,9 @@ public class TechStackController {
 	}
 
 	@GetMapping("/me")
-	public ResponseEntity<ApiResponseDto<List<TechStackResponseDto>>> getMyTechStackList() {
-		Long requesterId  = 1L;
+	public ResponseEntity<ApiResponseDto<List<TechStackResponseDto>>> getMyTechStackList(
+		@AuthUser Long requesterId
+	) {
 		List<TechStackResponseDto> myTechStackList = techStackService.getMyTechStackList(requesterId);
 
 		return ResponseEntity.status(SuccessCode.ADD_MY_TECH_STACK.getHttpStatus())
@@ -55,9 +60,8 @@ public class TechStackController {
 
 	@DeleteMapping("/{relationId}")
 	public ResponseEntity<ApiResponseDto<Void>> removeTechStack(
-		@RequestParam Long relationId
-	) {
-		Long requesterId  = 1L;
+		@AuthUser Long requesterId,
+		@PathVariable Long relationId) {
 		techStackService.removeTechStack(requesterId, relationId);
 
 		return ResponseEntity.status(SuccessCode.ADD_MY_TECH_STACK.getHttpStatus())
