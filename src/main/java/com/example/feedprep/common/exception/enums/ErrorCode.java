@@ -2,15 +2,23 @@ package com.example.feedprep.common.exception.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
 
+    // 잘못된 요청
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다." ),
+
+    INVALID_ROLE_REQUEST(HttpStatus.FORBIDDEN, "해당 역할로 가입할 수 없습니다."),
+
     //인증
     MISSING_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 존재하지 않습니다."),
     INVALID_JWT_SIGNATURE(HttpStatus.UNAUTHORIZED, "유효하지 않은 JWT 서명입니다."),
+    INVALID_SECRET_CODE(HttpStatus.UNAUTHORIZED, "유효하지 않은 시크릿 코드입니다." ),
     NOT_MATCH_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 틀렸습니다."),
+
 
     //유저
     INVALID_USER_ROLE(HttpStatus.BAD_REQUEST, "잘못된 역할입니다. STUDENT, PENDING_TUTOR, ADMIN 중 하나를 선택해 주세요"),
@@ -33,7 +41,6 @@ public enum ErrorCode {
 
     // 유저 모듈 임시 에러 코드
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
-
 
     // 피드백 요청 생성
     // 사용자 인증 관련

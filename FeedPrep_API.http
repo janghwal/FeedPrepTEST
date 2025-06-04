@@ -1,0 +1,52 @@
+
+### 유저 회원가입
+POST localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "name": "윤경모",
+  "email": "userf123@naver.com",
+  "password": "asdasdjkDF23",
+  "role": "STUDENT"
+}
+
+### 튜터 회원가입
+POST localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "name": "윤경모",
+  "email": "userf123@naver.com",
+  "password": "asdasdjkDF23",
+  "role": "TUTOR"
+}
+
+### 관리자 회원가입
+POST localhost:8080/admin/signup
+Content-Type: application/json
+
+{
+  "name": "윤경모",
+  "email": "adminf123@naver.com",
+  "password": "asdasdjkDF23",
+  "role": "ADMIN",
+  "secretCode": "{{JWT_SECRET_KEY}}"
+}
+
+### 관리자 로그인
+
+POST localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin123@naver.com",
+  "password": "asdasdjkDF23"
+}
+
+> {%
+    client.global.set("accessToken", response.body.data.accessToken)
+%}
+
+
+
+
