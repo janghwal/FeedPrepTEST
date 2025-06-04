@@ -1,13 +1,20 @@
 package com.example.feedprep.domain.feedback.service;
 
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.common.exception.enums.SuccessCode;
 import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.feedback.dto.request.FeedbackRequestDto;
+import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestListResponseDto;
+import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackResponse;
 import com.example.feedprep.domain.feedback.entity.Feedback;
 import com.example.feedprep.domain.feedback.repository.FeedBackRepository;
@@ -23,6 +30,30 @@ public class FeedbackServiceImpl implements FeedbackService{
 	private final FeedBackRepository feedBackRepository;
 	private final FeedbackRequestEntityRepository feedbackRequestEntityRepository;
 	private final UserRepository userRepository;
+
+	@Transactional(readOnly = true)
+	@Override
+	public FeedbackRequestResponseDto getFeedbackRequest(Long userId, Long requestId) {
+		//튜터 확인.
+		User tutor = userRepository.findByIdOrElseThrow(userId);
+		FeedbackRequestEntity request =feedbackRequestEntityRepository
+			.findById(requestId)
+			.orElseThrow(()->new RuntimeException(""));
+
+		return new FeedbackRequestResponseDto(tutor, request);
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public FeedbackRequestListResponseDto getFeedbackRequestList(Long userId, int page, int size) {
+		User tutor = userRepository.findByIdOrElseThrow(userId);
+		PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+		Page<FeedbackRequestResponseDto> requests = feedbackRequestEntityRepository.getPagedRequestsForTutor(tutor.getUserId(), pageable);
+		List<FeedbackRequestResponseDto> getRequestList =requests.getContent();
+
+		return new FeedbackRequestListResponseDto(tutor,  getRequestList);
+	}
+
 	@Transactional
 	@Override
 	public FeedbackResponse createFeedback(Long userId, Long requestId, FeedbackRequestDto dto) {
@@ -49,13 +80,14 @@ public class FeedbackServiceImpl implements FeedbackService{
 	}
 
 	@Transactional
+	@Override
 	public FeedbackResponse updateFeedback(Long userId, Long feedbackId, FeedbackRequestDto dto) {
 		// 1. 튜터 본인 확인
 		User tutor = userRepository.findByIdOrElseThrow(userId);
 		// 2. 피드백 존재 여부 확인
 		Feedback feedback = feedBackRepository.findById(feedbackId).orElseThrow(()->new RuntimeException("없습니다."));
 		// 3. 본인 피드백인지 검사
-		if(feedback.getTutor().equals(tutor)){
+		if(feedback.getTutor().getUserId().equals(tutor.getUserId())){
 			throw new RuntimeException("너님이 만든게 아닌거 알아 나가!");
 		}
 		// 4. dto 내용으로 feedback 업데이트
@@ -69,6 +101,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 	}
 
 	@Transactional
+	@Override
 	public ApiResponseDto rejectFeedback(Long userId, Long requestId, FeedbackRequestDto dto) {
 		// 1. 튜터 본인 확인
 		User tutor = userRepository.findByIdOrElseThrow(userId);
