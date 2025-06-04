@@ -1,11 +1,15 @@
 package com.example.feedprep.common.advice;
 
 import com.example.feedprep.common.exception.base.CustomException;
+import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.common.response.ApiResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -23,4 +27,12 @@ public class GlobalExceptionHandler {
 
     }
 
+    // 정의된 ENUM과 타입 불일치 오류
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiResponseDto<?>> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e, HttpServletRequest httpServletRequest) {
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(ApiResponseDto.fail(ErrorCode.INVALID_ENUM_TYPE, httpServletRequest.getRequestURI()));
+
+    }
 }
