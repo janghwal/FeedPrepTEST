@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface UserService {
 
-    List<TutorResponseDto> getTutorList(UserRole role);
+    List<TutorResponseDto> getTutorList();
 
     UserResponseDto getMyInfo(Long tokenMyId);
 

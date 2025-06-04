@@ -33,11 +33,9 @@ public class UserController {
     private final TokenInfo tokenInfo;
 
     @GetMapping
-    public ResponseEntity<ApiResponseDto<List<TutorResponseDto>>> getTutorList(
-        @RequestParam(name = "role") String role
-    ) {
+    public ResponseEntity<ApiResponseDto<List<TutorResponseDto>>> getTutorList() {
         return ResponseEntity.status(HttpStatus.OK)
-            .body(ApiResponseDto.success(GET_TUTORLIST_SUCCESS,userService.getTutorList(UserRole.of(role))
+            .body(ApiResponseDto.success(GET_TUTORLIST_SUCCESS,userService.getTutorList()
                 .stream().toList()));
     }
 
