@@ -8,6 +8,6 @@ public interface FeedbackService {
 
   FeedbackResponse createFeedback(Long userId, Long requestId, FeedbackRequestDto dto);
   FeedbackResponse updateFeedback(Long userId, Long requestId, FeedbackRequestDto dto);
-  ApiResponseDto rejectFeedback(Long userId, Long requestId);
+  ApiResponseDto rejectFeedback(Long userId, Long requestId,  FeedbackRequestDto dto);
 
 }
