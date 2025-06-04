@@ -29,11 +29,10 @@ public interface FeedbackRequestEntityRepository extends JpaRepository<FeedbackR
 		,@Param("tutorId")Long tutorId
 		,@Param("state") RequestState state);
 
-	//피드백 작성용 조회
+	@Query("SELECT f FROM FeedbackRequestEntity f where  f.tutor.userId = :tutorId AND f.requestState = :state ")
+	Page<FeedbackRequestEntity>  getPagedRequestsForTutor(Long tutorId,  RequestState state, PageRequest pageable);
 
-	Page<FeedbackRequestResponseDto> getPagedRequestsForTutor(Long tutorId, PageRequest pageable);
-
-	@Query("SELECT f FROM FeedbackRequestEntity f WHERE f.id = :requestId AND f.tutor = :tutorId")
+	@Query("SELECT f FROM FeedbackRequestEntity f WHERE  f.tutor.userId = :tutorId AND f.id = :requestId")
 	Optional<FeedbackRequestEntity> findPendingByIdAndTutor(@Param("tutorId") Long tutorId, @Param("requestId")Long requestId);
 
 	default FeedbackRequestEntity findPendingByIdAndTutorOrElseThrow(Long tutorId, Long requestId, ErrorCode errorCode){
