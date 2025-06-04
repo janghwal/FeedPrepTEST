@@ -20,6 +20,9 @@ import com.example.feedprep.domain.feedbackrequestentity.service.FeedbackRequest
 import com.example.feedprep.domain.user.entity.User;
 import com.example.feedprep.domain.user.enums.UserRole;
 import com.example.feedprep.domain.user.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 @ActiveProfiles("local")
 @SpringBootTest
@@ -67,11 +70,15 @@ public class FeedbackRequestServiceTest {
 		long end= System.currentTimeMillis();
 		System.out.println("첫 실행 시간: " + (end - start) + "ms"); // DB 조회
 
-		System.out.println( " " + feedbackRequestEntityResponseDto.getId() +
-			                "\n" + feedbackRequestEntityResponseDto.getTutorId() +
-			                "\n" +feedbackRequestEntityResponseDto.getDocumentId() +
-			                "\n" +feedbackRequestEntityResponseDto.getRequestState().toString()
-		);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
+
+		try {
+			String json = mapper.writeValueAsString(feedbackRequestEntityResponseDto); // 전체 객체를 JSON 변환
+			System.out.println(json);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 	 }
 
 	@Transactional
@@ -92,11 +99,15 @@ public class FeedbackRequestServiceTest {
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
-		System.out.println(UpdateFeedbackRequestEntityResponseDto.getId());
-		System.out.println(UpdateFeedbackRequestEntityResponseDto.getTutorId());
-		System.out.println(UpdateFeedbackRequestEntityResponseDto.getDocumentId());
-		System.out.println(UpdateFeedbackRequestEntityResponseDto.getContent());
-		System.out.println(UpdateFeedbackRequestEntityResponseDto.getRequestState().toString());
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
+
+		try {
+			String json = mapper.writeValueAsString(UpdateFeedbackRequestEntityResponseDto); // 전체 객체를 JSON 변환
+			System.out.println(json);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Transactional
@@ -112,12 +123,19 @@ public class FeedbackRequestServiceTest {
 		feedbackService.saveRequest(requestDto, users.get(5).getUserId());
 
 		long start = System.currentTimeMillis();
-		ApiResponseDto CanCELEResponseDto =  feedbackService.cancleRequest(1L,users.get(5).getUserId());
+		ApiResponseDto canceleResponseDto =  feedbackService.cancleRequest(1L,users.get(5).getUserId());
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
-		System.out.println(CanCELEResponseDto.statusCode());
-		System.out.println(CanCELEResponseDto.message());
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
+
+		try {
+			String json = mapper.writeValueAsString(canceleResponseDto); // 전체 객체를 JSON 변환
+			System.out.println(json);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Transactional
