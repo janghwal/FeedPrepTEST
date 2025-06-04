@@ -66,9 +66,7 @@ public class UserServiceImpl implements UserService {
         Optional.ofNullable(requestDto.getAddress()).ifPresent(user::setAddress);
         Optional.ofNullable(requestDto.getIntroduction()).ifPresent(user::setIntroduction);
 
-        User saveUser = userRepository.save(user);
-
-        UserResponseDto responseDto = new UserResponseDto(saveUser);
+        UserResponseDto responseDto = new UserResponseDto(user);
 
         return responseDto;
     }

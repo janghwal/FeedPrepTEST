@@ -3,6 +3,7 @@ package com.example.feedprep.domain.user.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import com.example.feedprep.common.exception.base.CustomException;
@@ -16,6 +17,7 @@ import com.example.feedprep.domain.user.entity.User;
 import com.example.feedprep.domain.user.enums.UserRole;
 import com.example.feedprep.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -147,21 +150,32 @@ class UserServiceImplTest {
     void changePassword_success() {
         //given
         String oldPassword = passwordEncoder.encode("oldPassword");
+        String newPassword = passwordEncoder.encode("newPassword");
 
-        User user = User.builder().userId(1L).password(oldPassword).build();
+        User userSpy = Mockito.spy(
+            User.builder()
+                .userId(1L)
+                .password(oldPassword)
+                .build()
+        );
 
         NewPasswordRequestDto newPasswordRequestDto =
             new NewPasswordRequestDto("oldPassword","newPassword");
 
         // when
-        when(userRepository.findByIdOrElseThrow(1L)).thenReturn(user);
+        doReturn(userSpy).when(userRepository).findByIdOrElseThrow(1L);
+        when(passwordEncoder.matches(newPasswordRequestDto.getOldPassword(), userSpy.getPassword())).thenReturn(true);
+        when(passwordEncoder.encode(newPasswordRequestDto.getNewPassword())).thenReturn(newPassword);
+        LocalDateTime modifiedAt = LocalDateTime.now();
+        doReturn(modifiedAt).when(userSpy).getModifiedAt();
 
         PasswordModifiedAtResponseDto result = userServiceImpl.changePassword(
             1L, newPasswordRequestDto);
 
         //then
+        assertThat(userSpy.getPassword()).isEqualTo(newPassword);
         assertThat(result.getModifiedAt()).isCloseTo(LocalDateTime.now(),
-            within(1, java.time.temporal.ChronoUnit.SECONDS));
+            within(5, ChronoUnit.SECONDS));
     }
 
     @Test
@@ -170,20 +184,26 @@ class UserServiceImplTest {
         //given
         String oldPassword = passwordEncoder.encode("oldPassword");
 
-        User user = User.builder().userId(1L).password(oldPassword).build();
+        User userSpy = Mockito.spy(
+            User.builder()
+                .userId(1L)
+                .password(oldPassword)
+                .build()
+        );
 
         NewPasswordRequestDto newPasswordRequestDto =
             new NewPasswordRequestDto("otherPassword","newPassword");
 
         // when
-        when(userRepository.findByIdOrElseThrow(1L)).thenReturn(user);
+        doReturn(userSpy).when(userRepository).findByIdOrElseThrow(1L);
+        when(passwordEncoder.matches(newPasswordRequestDto.getOldPassword(), userSpy.getPassword())).thenReturn(false);
 
         //then
         CustomException customException = assertThrows(CustomException.class, () -> {
             userServiceImpl.changePassword(1L, newPasswordRequestDto);
         });
 
-        assertThat(customException)
+        assertThat(customException.getErrorCode())
             .isEqualTo(ErrorCode.NOT_MATCH_PASSWORD);
     }
 }

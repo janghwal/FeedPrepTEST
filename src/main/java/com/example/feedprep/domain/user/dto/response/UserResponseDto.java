@@ -4,11 +4,13 @@ import com.example.feedprep.domain.user.entity.User;
 import com.example.feedprep.domain.user.enums.UserRole;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 
 @Getter
 @AllArgsConstructor
+@EqualsAndHashCode
 public class UserResponseDto {
 
     private Long userId;
