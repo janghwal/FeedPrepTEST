@@ -1,17 +1,27 @@
 package com.example.feedprep.domain.feedbackrequestentity.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import com.example.feedprep.common.exception.base.CustomException;
+import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
 import com.example.feedprep.domain.feedbackrequestentity.entity.FeedbackRequestEntity;
 
 @Repository
 public interface FeedbackRequestEntityRepository extends JpaRepository<FeedbackRequestEntity, Long>
 	, FeedbackRequestEntityRepositoryCustom{
+
+	@Query("SELECT f FROM FeedbackRequestEntity f WHERE f.id = :requestId AND f.tutor = :tutorId")
+	Optional<FeedbackRequestEntity> findPendingByIdAndTutor(@Param("tutorId") Long tutorId, @Param("requestId")Long requestId);
+
+	default FeedbackRequestEntity findPendingByIdAndTutorOrElseThrow(Long tutorId, Long requestId, ErrorCode errorCode){
+		return findPendingByIdAndTutor(tutorId, requestId).orElseThrow(() -> new CustomException(errorCode));
+	}
 
 	@Query("SELECT f FROM FeedbackRequestEntity f "
 		+ "WHERE f.user.userId = :userId "
