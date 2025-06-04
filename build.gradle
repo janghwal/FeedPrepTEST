@@ -30,10 +30,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
-    // S3
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
     implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
+
+    // S3
     implementation platform('software.amazon.awssdk:bom:2.20.90')
     implementation 'software.amazon.awssdk:s3:2.20.46'
     implementation 'software.amazon.awssdk:auth:2.20.46'
