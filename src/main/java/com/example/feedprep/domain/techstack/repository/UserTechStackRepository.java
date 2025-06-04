@@ -1,5 +1,6 @@
 package com.example.feedprep.domain.techstack.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +16,8 @@ public interface UserTechStackRepository extends JpaRepository<UserTechStack, Lo
 		return findById(relationId)
 			.orElseThrow(() -> new CustomException(ErrorCode.TECH_STACK_NOT_FOUND));
 	}
+
+	List<UserTechStack> findUserTechStackByUser_UserId(Long UserId);
 
 	boolean existsByTechStackAndUser(TechStack techStack, User user);
 }

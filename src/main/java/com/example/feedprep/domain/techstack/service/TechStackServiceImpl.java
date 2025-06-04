@@ -63,7 +63,7 @@ public class TechStackServiceImpl implements TechStackService{
 
 	@Override
 	public List<TechStackResponseDto> getMyTechStackList(Long requesterId) {
-		List<TechStack> myTechStack = techStackRepository.findTechStackByTechId(requesterId);
+		List<UserTechStack> myTechStack = userTechStackRepository.findUserTechStackByUser_UserId(requesterId);
 
 		return myTechStack.stream().map(TechStackResponseDto::new).toList();
 	}
