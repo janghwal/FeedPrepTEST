@@ -57,7 +57,8 @@ public class TechStackController {
 	public ResponseEntity<ApiResponseDto<Void>> removeTechStack(
 		@RequestParam Long relationId
 	) {
-		techStackService.removeTechStack(relationId);
+		Long requesterId  = 1L;
+		techStackService.removeTechStack(requesterId, relationId);
 
 		return ResponseEntity.status(SuccessCode.ADD_MY_TECH_STACK.getHttpStatus())
 			.body(ApiResponseDto.success(SuccessCode.ADD_MY_TECH_STACK));

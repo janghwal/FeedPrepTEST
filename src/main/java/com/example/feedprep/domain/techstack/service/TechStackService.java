@@ -16,5 +16,5 @@ public interface TechStackService {
 
 	List<TechStackResponseDto> getMyTechStackList(Long requesterId);
 
-	void removeTechStack(Long relationId);
+	void removeTechStack(Long requesterId, Long relationId);
 }

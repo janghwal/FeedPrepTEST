@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.feedprep.common.exception.base.CustomException;
+import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.domain.techstack.dto.CreateTechStackRequestDto;
 import com.example.feedprep.domain.techstack.dto.TechStackResponseDto;
 import com.example.feedprep.domain.techstack.entity.TechStack;
@@ -50,6 +52,10 @@ public class TechStackServiceImpl implements TechStackService{
 		User requester = userRepository.findByIdOrElseThrow(requesterId);
 		TechStack techStack = techStackRepository.findByIdOrElseThrow(techId);
 
+		if(userTechStackRepository.existsByTechStackAndUser(techStack, requester)){
+			throw new CustomException(ErrorCode.DUPLICATE_TECH_STACK);
+		}
+
 		UserTechStack userTechStack = new UserTechStack(requester, techStack);
 
 		userTechStackRepository.save(userTechStack);
@@ -64,8 +70,13 @@ public class TechStackServiceImpl implements TechStackService{
 
 	@Transactional
 	@Override
-	public void removeTechStack(Long relationId) {
+	public void removeTechStack(Long requesterId, Long relationId) {
 		UserTechStack myTechStack = userTechStackRepository.findByIdOrElseThrow(relationId);
+
+		if(!myTechStack.getUser().getUserId().equals(requesterId)){
+			throw new CustomException(ErrorCode.UNAUTHORIZED_TECH_STACK_DELETION);
+		}
+
 		userTechStackRepository.delete(myTechStack);
 	}
 

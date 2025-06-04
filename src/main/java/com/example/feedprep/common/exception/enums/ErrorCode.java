@@ -18,6 +18,8 @@ public enum ErrorCode {
 
     // 기술 스택
     TECH_STACK_NOT_FOUND(HttpStatus.NOT_FOUND, "요청한 기술 스택 정보를 찾을 수 없습니다."),
+    DUPLICATE_TECH_STACK(HttpStatus.CONFLICT, "이미 추가된 기술 스택입니다."),
+    UNAUTHORIZED_TECH_STACK_DELETION(HttpStatus.BAD_REQUEST, "해당 기술 스택을 삭제할 권한이 없습니다."),
 
     // ENUM 입력 오류
     INVALID_ENUM_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 요청 입니다."),
