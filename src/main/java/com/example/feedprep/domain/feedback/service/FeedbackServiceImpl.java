@@ -38,7 +38,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 	@Override
 	public FeedbackRequestResponseDto getFeedbackRequest(Long userId, Long requestId) {
 		//튜터 확인.
-		User tutor = userRepository.findByIdOrElseThrow(userId, ErrorCode.TUTOR_NOT_FOUND);
+		User tutor = userRepository.findByIdOrElseThrow(userId, ErrorCode.NOT_FOUND_TUTOR);
 		FeedbackRequestEntity request =feedbackRequestEntityRepository
 			.findById(requestId)
 			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REQUEST));
@@ -49,7 +49,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 	@Transactional(readOnly = true)
 	@Override
 	public FeedbackRequestListResponseDto getFeedbackRequestList(Long userId, int page, int size) {
-		User tutor = userRepository.findByIdOrElseThrow(userId, ErrorCode.TUTOR_NOT_FOUND);
+		User tutor = userRepository.findByIdOrElseThrow(userId, ErrorCode.NOT_FOUND_TUTOR);
         if(!tutor.getRole().equals(UserRole.APPROVED_TUTOR)){
 			 throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
@@ -72,7 +72,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 	public FeedbackResponseDto createFeedback(Long userId, Long requestId, FeedbackWriteRequestDto dto) {
 		// 1. 유효성 검사 (필수 필드, 글자 수 등)
 		// 3. 튜터 권한 확인
-		User tutor = userRepository.findByIdOrElseThrow(userId, ErrorCode.TUTOR_NOT_FOUND);
+		User tutor = userRepository.findByIdOrElseThrow(userId, ErrorCode.NOT_FOUND_TUTOR);
 		if(!tutor.getRole().equals(UserRole.APPROVED_TUTOR)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
@@ -100,7 +100,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 	@Override
 	public FeedbackResponseDto updateFeedback(Long userId, Long feedbackId, FeedbackWriteRequestDto dto) {
 		// 1. 튜터 본인 확인
-		User tutor = userRepository.findByIdOrElseThrow(userId, ErrorCode.TUTOR_NOT_FOUND);
+		User tutor = userRepository.findByIdOrElseThrow(userId, ErrorCode.NOT_FOUND_TUTOR);
 		if(!tutor.getRole().equals(UserRole.APPROVED_TUTOR)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
@@ -129,7 +129,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 	@Override
 	public FeedbackRejectResponseDto rejectFeedback(Long userId, Long requestId, FeedbackWriteRequestDto dto) {
 		// 1. 튜터 본인 확인
-		User tutor = userRepository.findByIdOrElseThrow(userId, ErrorCode.TUTOR_NOT_FOUND);
+		User tutor = userRepository.findByIdOrElseThrow(userId, ErrorCode.NOT_FOUND_TUTOR);
 		if(!tutor.getRole().equals(UserRole.APPROVED_TUTOR)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}

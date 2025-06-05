@@ -37,7 +37,7 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	@Override
 	public FeedbackRequestEntityResponseDto saveRequest(FeedbackRequestDto dto, Long userId) {
 		User user = userRepository.findByIdOrElseThrow(userId);
-		User tutor = userRepository.findByIdOrElseThrow(dto.getTutorId(), ErrorCode.TUTOR_NOT_FOUND);
+		User tutor = userRepository.findByIdOrElseThrow(dto.getTutorId(), ErrorCode.NOT_FOUND_TUTOR);
 
 		Document document = documentRepository.findById(dto.getDocumentId())
 			.orElseThrow(()-> new CustomException(ErrorCode.INVALID_DOCUMENT));
