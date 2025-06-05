@@ -1,9 +1,21 @@
 package com.example.feedprep.domain.feedbackreview.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.example.feedprep.domain.feedbackreview.entity.FeedbackReview;
 
 @Repository
 public interface FeedBackReviewRepository extends JpaRepository<FeedbackReview, Long> {
+
+	//학생이 작성한 리뷰를 확인
+	@Query("SELECT fr FROM FeedbackReview fr WHERE fr.userId = :userId AND fr.deletedAt IS null ")
+	Page<FeedbackReview> findByUserIdAndDeletedAtIsNull(@Param("userId")Long userId, PageRequest pageable);
+
+	//튜터에게 작성한 학생들의 리뷰를 조회
+	@Query("SELECT fr FROM FeedbackReview fr WHERE fr.tutorId = :tutorId AND fr.deletedAt IS null ")
+	Page<FeedbackReview> findByTutorIdAndDeletedAtIsNull(@Param("tutorId")Long tutorId, PageRequest pageable);
 }
