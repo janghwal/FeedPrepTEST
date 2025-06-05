@@ -33,7 +33,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 @ActiveProfiles("local")
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class FeedbackServiceTest {
+public class FeedbackReviewServiceTest {
 
 	@Autowired
 	private FeedbackRequestEntityRepository feedbackRequestEntityRepository;
