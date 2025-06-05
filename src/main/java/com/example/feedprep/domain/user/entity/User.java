@@ -41,11 +41,11 @@ public class User extends BaseTimeEntity {
 
     private String password;
 
-    @Enumerated(EnumType.STRING)
     private String address;
 
     private String introduction;
 
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     private Long point;

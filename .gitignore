@@ -37,3 +37,5 @@ out/
 .vscode/
 
 http-client.env.json
+
+application-test.properties
