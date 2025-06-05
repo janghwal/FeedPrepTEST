@@ -15,17 +15,20 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	//피드백 요청용 조회 문
-
-	// @Query("SELECT u FROM User u WHERE u.userId = :userId AND u.role = :userRole OR u.userId = :tutorId AND u.role = :tutorRole")
-	// List<User> findByIds(@Param("userId") Long userId, @Param("userRole") UserRole userRole , @Param("tutorId") Long tutorId, @Param("tutorRole") UserRole tutorRole);
-
 
     List<User> findAllByRole(UserRole role);
 
     default User findByIdOrElseThrow(Long id) {
         User user = findById(id).orElseThrow(
             () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+        return user;
+    }
+
+    //피드백 요청용 조회 문
+    default User findByIdOrElseThrow(Long id, ErrorCode errorCode) {
+        User user = findById(id).orElseThrow(
+            () -> new CustomException(errorCode)
         );
         return user;
     }
