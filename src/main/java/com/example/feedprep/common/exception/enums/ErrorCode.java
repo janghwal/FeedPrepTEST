@@ -56,7 +56,8 @@ public enum ErrorCode {
     // 사용자 인증 관련
     TUTOR_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 튜터를 찾을 수 없습니다."),
     INVALID_DOCUMENT(HttpStatus.NOT_FOUND, "존재하지 않는 문서입니다."),
-    FEEDBACK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 피드백 요청을 찾을 수 없습니다."),
+    NOT_FOUND_FEEDBACK_REQUEST(HttpStatus.NOT_FOUND, "해당 피드백 요청을 찾을 수 없습니다."),
+    NOT_FOUND_FEEDBACK(HttpStatus.NOT_FOUND, "해당 피드백을 찾을 수 없습니다."),
 
     UNAUTHORIZED_ACCESS(HttpStatus.FORBIDDEN, "이 피드백에 접근할 수 없습니다."),
     UNAUTHORIZED_REQUESTER_ACCESS(HttpStatus.FORBIDDEN, "해당 요청을 수행할 권한이 없습니다."),
