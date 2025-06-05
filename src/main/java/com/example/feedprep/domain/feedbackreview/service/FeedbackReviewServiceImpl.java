@@ -89,7 +89,9 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 
 	@Override
 	public Float getAverageRating(Long tutorId) {
-		return 0f;
+		User tutor = userRepository.findByIdOrElseThrow(tutorId);
+		feedBackReviewRepository.getAverageRating(tutor.getUserId());
+		return feedBackReviewRepository.getAverageRating(tutor.getUserId());
 	}
 
 	@Override

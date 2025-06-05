@@ -18,4 +18,7 @@ public interface FeedBackReviewRepository extends JpaRepository<FeedbackReview, 
 	//튜터에게 작성한 학생들의 리뷰를 조회
 	@Query("SELECT fr FROM FeedbackReview fr WHERE fr.tutorId = :tutorId AND fr.deletedAt IS null ")
 	Page<FeedbackReview> findByTutorIdAndDeletedAtIsNull(@Param("tutorId")Long tutorId, PageRequest pageable);
+
+	@Query("SELECT AVG(fr) FROM FeedbackReview fr WHERE fr.tutorId = :tutorId AND fr.deletedAt IS null ")
+	Float getAverageRating(@Param("tutorId") Long tutorId);
 }
