@@ -11,7 +11,6 @@ import com.example.feedprep.domain.feedbackrequestentity.entity.FeedbackRequestE
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Getter
-@Builder
 @RequiredArgsConstructor
 public class FeedbackRequestEntityResponseDto {
 	private Long id;
@@ -21,7 +20,8 @@ public class FeedbackRequestEntityResponseDto {
 	private String content;
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	private RequestState requestState;
-	private LocalDateTime modifiedAt;
+	private String state;
+	private String modifiedAt;
 
 	public FeedbackRequestEntityResponseDto(FeedbackRequestEntity entity){
 		this.id = entity.getId();
@@ -30,7 +30,8 @@ public class FeedbackRequestEntityResponseDto {
 		this.documentId = entity.getDocument().getDocumentId();
 		this.content = entity.getContent();
 		this.requestState = entity.getRequestState();
-		this.modifiedAt = entity.getModifiedAt();
+		this.state = requestState.getDescription();
+		this.modifiedAt = entity.getModifiedAt().toString();
 	}
 
 
