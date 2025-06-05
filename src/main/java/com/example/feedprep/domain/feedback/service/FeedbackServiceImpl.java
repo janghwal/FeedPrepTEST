@@ -41,7 +41,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 		User tutor = userRepository.findByIdOrElseThrow(userId, ErrorCode.TUTOR_NOT_FOUND);
 		FeedbackRequestEntity request =feedbackRequestEntityRepository
 			.findById(requestId)
-			.orElseThrow(()->new CustomException(ErrorCode. FEEDBACK_NOT_FOUND));
+			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REQUEST));
 
 		return new FeedbackRequestResponseDto(tutor, request);
 	}
@@ -107,7 +107,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 
 		// 2. 피드백 존재 여부 확인
 		Feedback feedback = feedBackRepository.findById(feedbackId)
-			.orElseThrow(()->new CustomException(ErrorCode.FEEDBACK_NOT_FOUND));
+			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK));
 		// 3. 본인 피드백인지 검사
 		if(feedback.getFeedbackRequestEntity().getRequestState().equals(RequestState.PENDING)){
 			throw new CustomException(ErrorCode.CANNOT_EDIT_PENDING_FEEDBACK);
