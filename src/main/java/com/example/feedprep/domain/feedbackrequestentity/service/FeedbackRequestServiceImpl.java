@@ -2,19 +2,12 @@ package com.example.feedprep.domain.feedbackrequestentity.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import javax.swing.text.html.Option;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +28,7 @@ import com.example.feedprep.domain.user.repository.UserRepository;
 @Service
 @Repository
 @RequiredArgsConstructor
-public class FeedbackServiceImpl implements FeedbackService{
+public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	private final FeedbackRequestEntityRepository feedbackRequestEntityRepository;
 	private final UserRepository userRepository;
 	private final DocumentRepository documentRepository;
@@ -43,25 +36,25 @@ public class FeedbackServiceImpl implements FeedbackService{
 	@Transactional
 	@Override
 	public FeedbackRequestEntityResponseDto saveRequest(FeedbackRequestDto dto, Long userId) {
-		//유저, 튜터 동시 조회.
-		List<User> users = userRepository.findByIds(userId,dto.getTutorId());
-		//아무것도 없다면 빈 map
-		Map<Long, User> userMap = users.stream()
-			.collect(Collectors.toMap(User::getUserId, Function.identity()));
-        //검증은 여기서 부터
-		User user = Optional.ofNullable(userMap
-			.get(userId))
-			.orElseThrow(
-				()-> new CustomException(ErrorCode. UNAUTHORIZED_REQUESTER_ACCESS));
-
-		User tutor = Optional.ofNullable(userMap.get(dto.getTutorId()))
-			.orElseThrow(()->new CustomException(ErrorCode.TUTOR_NOT_FOUND));
+		User user = userRepository.findByIdOrElseThrow(userId);
+		User tutor = userRepository.findByIdOrElseThrow(dto.getTutorId(), ErrorCode.TUTOR_NOT_FOUND);
 
 		Document document = documentRepository.findById(dto.getDocumentId())
 			.orElseThrow(()-> new CustomException(ErrorCode.INVALID_DOCUMENT));
 
-		//확인 후 요청 생성
+        FeedbackRequestEntity feedbackRequestEntity =
+			 feedbackRequestEntityRepository.findTop1ByUser_UserIdAndTutor_UserIdAndContentAndRequestState(
+				 userId,
+				 tutor.getUserId(),
+				 RequestState.PENDING)
+				 .orElse(null);
+
+        if(feedbackRequestEntity != null){
+			throw new RuntimeException("이미 같은 튜터님께 신청 대기 중입니다.");
+		}
+
 		FeedbackRequestEntity request = new FeedbackRequestEntity(dto, user, tutor, document);
+		request.updateRequestState(RequestState.PENDING);
 		FeedbackRequestEntity getInfoRequest =feedbackRequestEntityRepository.save(request);
 		return new FeedbackRequestEntityResponseDto(getInfoRequest);
 	}
@@ -100,8 +93,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 		//요청이 존재하는 가?
 		FeedbackRequestEntity request = feedbackRequestEntityRepository.findById(feedbackId)
 			.orElseThrow(()->new CustomException(ErrorCode.FEEDBACK_NOT_FOUND));
-		if(!request.getUser().getUserId().equals(userId))
-		{
+		if(!request.getUser().getUserId().equals(userId)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
 
@@ -137,8 +129,8 @@ public class FeedbackServiceImpl implements FeedbackService{
 
 
 		return new ApiResponseDto(
-			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.hashCode(),
+			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.getHttpStatus().value(),
 			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.getMessage(),
-			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.getHttpStatus());
+		SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.name());
 	}
 }

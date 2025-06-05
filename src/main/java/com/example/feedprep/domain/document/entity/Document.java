@@ -35,4 +35,9 @@ public class Document extends BaseTimeEntity {
     @Column(name = "file_url")
     private String fileUrl;
 
+
+    public Document(User user, String fileUrl){
+        this.userId =  user;
+        this.fileUrl = fileUrl;
+    }
 }
