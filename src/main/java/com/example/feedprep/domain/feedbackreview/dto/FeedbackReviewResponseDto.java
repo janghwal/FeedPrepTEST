@@ -19,9 +19,9 @@ public class FeedbackReviewResponseDto {
 
 	private  String Content;
 
-	public FeedbackReviewResponseDto(FeedbackReview feedbackReview, User user) {
+	public FeedbackReviewResponseDto(FeedbackReview feedbackReview) {
 		this.id = feedbackReview.getId();
-		this.userId = user.getUserId();
+		this.userId = feedbackReview.getUserId();
 		this.tutorId =feedbackReview.getTutorId();
 		this.Rating = feedbackReview.getRating();
 		this.Content = feedbackReview.getContent();
