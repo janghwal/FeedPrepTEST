@@ -92,7 +92,7 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 
 		//요청이 존재하는 가?
 		FeedbackRequestEntity request = feedbackRequestEntityRepository.findById(feedbackId)
-			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK));
+			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REQUEST));
 		if(!request.getUser().getUserId().equals(userId)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
@@ -117,7 +117,7 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	public ApiResponseDto cancleRequest(Long RequestId, Long userId) {
 		//요청이 존재하는 가?
 		FeedbackRequestEntity request = feedbackRequestEntityRepository.findById(RequestId)
-			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK));
+			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REQUEST));
 		if(!request.getUser().getUserId().equals(userId))
 		{
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
