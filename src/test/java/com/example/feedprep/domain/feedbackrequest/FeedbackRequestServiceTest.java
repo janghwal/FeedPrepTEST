@@ -91,11 +91,12 @@ public class FeedbackRequestServiceTest {
 		documentRepository.save(doc);
 
 		FeedbackRequestDto requestDto = new FeedbackRequestDto(1L, 1L, "Text");
-		FeedbackRequestEntityResponseDto feedbackRequestEntityResponseDto =  feedbackService.saveRequest(requestDto, users.get(5).getUserId());
+		feedbackService.saveRequest(requestDto, users.get(5).getUserId());
 
 		FeedbackRequestDto UpdateRequestDto = new FeedbackRequestDto(1L, 1L, "거절 한다.");
 		long start = System.currentTimeMillis();
-		FeedbackRequestEntityResponseDto UpdateFeedbackRequestEntityResponseDto =feedbackService.updateRequest(UpdateRequestDto,1L, users.get(5).getUserId());
+		FeedbackRequestEntityResponseDto UpdateFeedbackRequestEntityResponseDto =
+			feedbackService.updateRequest(UpdateRequestDto,1L, users.get(5).getUserId());
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
@@ -158,12 +159,15 @@ public class FeedbackRequestServiceTest {
 			feedbackService.saveRequest(requestDtos.get(i), users.get(5).getUserId());
 		}
 		long start = System.currentTimeMillis();
-		List<FeedbackRequestEntityResponseDto> getRequests = feedbackService.getRequest(users.get(5).getUserId(), null, null, null, 0, 20);
+		List<FeedbackRequestEntityResponseDto> getRequests
+			= feedbackService.getRequest(users.get(5).getUserId(), null, null, null, 0, 20);
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
 		for (int i = 0; i < getRequests.size(); i++) {
-                 System.out.println("" + getRequests.get(i).getTutorId() + " " + getRequests.get(i).getContent() +" " + getRequests.get(i).getRequestState() );
+                 System.out.println(getRequests.get(i).getTutorId()
+					 + " " + getRequests.get(i).getContent()
+					 +" " + getRequests.get(i).getRequestState() );
 		}
 	}
 
@@ -187,12 +191,16 @@ public class FeedbackRequestServiceTest {
 			feedbackService.saveRequest(requestDtos.get(i), users.get(5).getUserId());
 		}
 		long start = System.currentTimeMillis();
-		List<FeedbackRequestEntityResponseDto> getRequests = feedbackService.getRequest(users.get(5).getUserId(),3L, null, null, 0, 20);
+		List<FeedbackRequestEntityResponseDto> getRequests =
+			feedbackService.getRequest(users.get(5).getUserId(),3L, null, null, 0, 20);
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
 		for (int i = 0; i < getRequests.size(); i++) {
-			System.out.println("" + getRequests.get(i).getTutorId() + " " + getRequests.get(i).getContent() +" " + getRequests.get(i).getRequestState() );
+			System.out.println(getRequests.get(i).getTutorId()
+				+" " + getRequests.get(i).getContent()
+				+" " + getRequests.get(i).getRequestState()
+			);
 		}
 	}
 
@@ -221,7 +229,10 @@ public class FeedbackRequestServiceTest {
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
 		for (int i = 0; i < getRequests.size(); i++) {
-			System.out.println("" + getRequests.get(i).getTutorId() + " " + getRequests.get(i).getContent() +" " + getRequests.get(i).getRequestState() );
+			System.out.println( getRequests.get(i).getTutorId()
+				+ " " + getRequests.get(i).getContent()
+				+" " + getRequests.get(i).getRequestState()
+			);
 		}
 	}
 	@Transactional
@@ -255,7 +266,10 @@ public class FeedbackRequestServiceTest {
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
 		for (int i = 0; i < getRequests.size(); i++) {
-			System.out.println("" + getRequests.get(i).getTutorId() + " " + getRequests.get(i).getContent() +" " + getRequests.get(i).getRequestState() );
+			System.out.println(getRequests.get(i).getTutorId()
+				+ " " + getRequests.get(i).getContent()
+				+" " + getRequests.get(i).getRequestState()
+			);
 		}
 	}
 }
