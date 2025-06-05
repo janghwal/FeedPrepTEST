@@ -1,5 +1,7 @@
 package com.example.feedprep.common.security.jwt;
 
+import com.example.feedprep.common.exception.base.CustomException;
+import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.common.security.service.CustomUserDetailsService;
 
 import io.jsonwebtoken.Claims;
@@ -23,6 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService userDetailsService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     private static final Set<String> WHITELIST = Set.of(
             "/auth/signup",
@@ -35,7 +38,6 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // 화이트리스트에 해당 경로가 포함되면 JWT 검증 스킵
         String path = request.getRequestURI();
         log.info("Request URI: {}", path);
 
@@ -48,24 +50,29 @@ public class JwtFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
 
         String token = authHeader.substring(7);
 
-        Claims claims = jwtUtil.validateToken(token);
-
-        if (claims != null) {
-            String username = claims.getSubject();
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-            SecurityContextHolder.getContext().setAuthentication(auth);
+        if (tokenBlacklistService.isTokenBlacklisted(token)) {
+            log.warn("블랙리스트에 등록된 토큰 : {}", token);
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
 
+        Claims claims = jwtUtil.validateToken(token);
+
+        if (claims == null) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+
+        String username = claims.getSubject();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        UsernamePasswordAuthenticationToken auth =
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
         filterChain.doFilter(request, response);
     }

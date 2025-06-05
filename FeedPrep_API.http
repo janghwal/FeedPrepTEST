@@ -5,10 +5,23 @@ Content-Type: application/json
 
 {
   "name": "윤경모",
-  "email": "userf123@naver.com",
+  "email": "user123@naver.com",
   "password": "asdasdjkDF23",
   "role": "STUDENT"
 }
+
+### 유저 로그인
+POST localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "user123@naver.com",
+  "password": "asdasdjkDF23"
+}
+
+> {%
+    client.global.set("accessToken", response.body.data.accessToken)
+%}
 
 ### 튜터 회원가입
 POST localhost:8080/auth/signup
@@ -16,10 +29,23 @@ Content-Type: application/json
 
 {
   "name": "윤경모",
-  "email": "userf123@naver.com",
+  "email": "tutor123@naver.com",
   "password": "asdasdjkDF23",
   "role": "TUTOR"
 }
+
+### 튜터 로그인
+POST localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "tutor123@naver.com",
+  "password": "asdasdjkDF23"
+}
+
+> {%
+    client.global.set("accessToken", response.body.data.accessToken)
+%}
 
 ### 관리자 회원가입
 POST localhost:8080/admin/signup
@@ -27,15 +53,15 @@ Content-Type: application/json
 
 {
   "name": "윤경모",
-  "email": "adminf123@naver.com",
+  "email": "admin123@naver.com",
   "password": "asdasdjkDF23",
   "role": "ADMIN",
-  "secretCode": "{{JWT_SECRET_KEY}}"
+  "secretCode": "7JWI64WV7ZWY7IS47JqUIOyggO2drOuKlCDst6jspIDsg50g7Luk666k64uI7YuwIO2UhOuhnOygne2KuOulvCDrp4zrk6Tqs6Ag7J6I7Iq164uI64ukLg==;"
 }
 
 ### 관리자 로그인
 
-POST localhost:8080/api/auth/login
+POST localhost:8080/admin/login
 Content-Type: application/json
 
 {
@@ -47,6 +73,6 @@ Content-Type: application/json
     client.global.set("accessToken", response.body.data.accessToken)
 %}
 
-
-
-
+### 로그아웃
+POST localhost:8080/auth/logout
+Authorization: Bearer {{accessToken}}

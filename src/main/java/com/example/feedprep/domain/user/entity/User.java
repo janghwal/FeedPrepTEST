@@ -2,12 +2,8 @@ package com.example.feedprep.domain.user.entity;
 
 import com.example.feedprep.common.entity.BaseTimeEntity;
 import com.example.feedprep.domain.user.enums.UserRole;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
@@ -32,6 +28,7 @@ public class User extends BaseTimeEntity {
 
     private String password;
 
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     private Long point;

@@ -14,7 +14,7 @@ public class CustomUserDetailsService {
     private final UserRepository userRepository;
 
     public UserDetails loadUserByUsername(String email) {
-        User user = userRepository.getUserByNameOrElseThrow(email);
+        User user = userRepository.getUserByEmailOrElseThrow(email);
         return new CustomUserDetails(user);
     }
 }
