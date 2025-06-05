@@ -50,12 +50,21 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 	}
 
 	@Override
-	public FeedbackReviewResponseDto updateReview(FeedbackReviewRequestDto dto, Long userId, Long feedbackId) {
-		return null;
+	public FeedbackReviewResponseDto updateReview(FeedbackReviewRequestDto dto, Long userId, Long reviewId) {
+		User user = userRepository.findByIdOrElseThrow(userId);
+		if(!user.getUserId().equals(userId)){
+			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
+		}
+		FeedbackReview feedbackReview = feedBackReviewRepository.findById(reviewId)
+			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REVIEW));
+
+		feedbackReview.updateFeedbackReview(dto);
+		FeedbackReview saveReview = feedBackReviewRepository.save(feedbackReview);
+		return new FeedbackReviewResponseDto(saveReview);
 	}
 
 	@Override
-	public ApiResponseDto deleteReview(FeedbackReviewRequestDto dto, Long userId, Long feedbackId) {
+	public ApiResponseDto deleteReview(Long userId, Long feedbackId) {
 		return null;
 	}
 }
