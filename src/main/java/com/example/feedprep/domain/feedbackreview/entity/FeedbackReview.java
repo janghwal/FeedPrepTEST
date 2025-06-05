@@ -35,7 +35,7 @@ public class FeedbackReview  extends  BaseTimeEntity{
 
 		private Long tutorId;
 
-		private int Rating;
+		private int rating;
 
 		private  String content;
 
@@ -45,13 +45,13 @@ public class FeedbackReview  extends  BaseTimeEntity{
 			this.feedback = feedback;
 		    this.userId = user.getUserId();
 		    this.tutorId = feedback.getTutor().getUserId();
-		    this.Rating = dto.getRating();
+		    this.rating = dto.getRating();
 		    this.content = dto.getContent();
 		}
 
 		public void updateFeedbackReview(FeedbackReviewRequestDto dto){
 			this.tutorId = feedback.getTutor().getUserId();
-			this.Rating = dto.getRating();
+			this.rating = dto.getRating();
 			this.content = dto.getContent();
 		}
 		public  void updateDeletedAt(LocalDateTime now){
