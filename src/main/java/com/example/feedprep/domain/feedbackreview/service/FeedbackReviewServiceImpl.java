@@ -1,10 +1,13 @@
 package com.example.feedprep.domain.feedbackreview.service;
 
+import java.time.LocalDateTime;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
+import com.example.feedprep.common.exception.enums.SuccessCode;
 import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.feedback.entity.Feedback;
 import com.example.feedprep.domain.feedback.repository.FeedBackRepository;
@@ -64,7 +67,21 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 	}
 
 	@Override
-	public ApiResponseDto deleteReview(Long userId, Long feedbackId) {
-		return null;
+	public ApiResponseDto deleteReview(Long userId, Long feedbackId, Long reviewId) {
+		User user = userRepository.findByIdOrElseThrow(userId);
+		if(!user.getUserId().equals(userId)){
+			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
+		}
+		FeedbackReview feedbackReview = feedBackReviewRepository.findById(reviewId)
+			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REVIEW));
+		feedbackReview.updateDeletedAt(LocalDateTime.now());
+
+
+		return new ApiResponseDto(
+			SuccessCode.OK_SUCCESS_FEEDBACK_REVIEW_DELETED.getHttpStatus().value(),
+			SuccessCode.OK_SUCCESS_FEEDBACK_REVIEW_DELETED.getMessage(),
+			SuccessCode.OK_SUCCESS_FEEDBACK_REVIEW_DELETED.getHttpStatus()
+
+			);
 	}
 }
