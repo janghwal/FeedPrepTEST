@@ -1,9 +1,14 @@
 package com.example.feedprep.domain.feedbackreview.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
@@ -50,6 +55,41 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 
 
 		return  new FeedbackReviewResponseDto(feedbackReview);
+	}
+
+	@Override
+	public List<FeedbackReviewResponseDto> getWrittenReviewsByStudent(Long userId, Long reviewId, int page, int size) {
+		User user = userRepository.findByIdOrElseThrow(userId);
+		if(!user.getUserId().equals(userId)){
+			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
+		}
+		PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+		Page<FeedbackReview> reviews = feedBackReviewRepository.findByUserIdAndDeletedAtIsNull(user.getUserId(),pageable);
+
+
+		return reviews.stream()
+			.map(FeedbackReviewResponseDto ::new)
+			.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<FeedbackReviewResponseDto> getReceivedReviewsForTutor(Long userId, Long reviewId, int page, int size) {
+		User tutor = userRepository.findByIdOrElseThrow(userId);
+		if(!tutor.getUserId().equals(userId)){
+			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
+		}
+		PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+		Page<FeedbackReview> reviews = feedBackReviewRepository.findByTutorIdAndDeletedAtIsNull(tutor.getUserId(),pageable);
+
+
+		return reviews.stream()
+			.map(FeedbackReviewResponseDto ::new)
+			.collect(Collectors.toList());
+	}
+
+	@Override
+	public Float getAverageRating(Long tutorId) {
+		return 0f;
 	}
 
 	@Override
