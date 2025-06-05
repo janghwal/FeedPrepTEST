@@ -36,8 +36,8 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	@Transactional
 	@Override
 	public FeedbackRequestEntityResponseDto saveRequest(FeedbackRequestDto dto, Long userId) {
-		User  user = userRepository.findByIdOrElseThrow(userId);
-		User tutor = userRepository.findByIdOrElseThrow(dto.getTutorId());
+		User user = userRepository.findByIdOrElseThrow(userId);
+		User tutor = userRepository.findByIdOrElseThrow(dto.getTutorId(), ErrorCode.TUTOR_NOT_FOUND);
 
 		Document document = documentRepository.findById(dto.getDocumentId())
 			.orElseThrow(()-> new CustomException(ErrorCode.INVALID_DOCUMENT));
@@ -93,8 +93,7 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 		//요청이 존재하는 가?
 		FeedbackRequestEntity request = feedbackRequestEntityRepository.findById(feedbackId)
 			.orElseThrow(()->new CustomException(ErrorCode.FEEDBACK_NOT_FOUND));
-		if(!request.getUser().getUserId().equals(userId))
-		{
+		if(!request.getUser().getUserId().equals(userId)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
 
