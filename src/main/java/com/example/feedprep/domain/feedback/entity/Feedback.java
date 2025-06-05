@@ -25,7 +25,6 @@ import com.example.feedprep.domain.user.entity.User;
 @RequiredArgsConstructor
 public class Feedback extends BaseTimeEntity{
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

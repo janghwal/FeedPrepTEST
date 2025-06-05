@@ -33,14 +33,12 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
     ) throws CustomException {
         // 1. 인증 객체 꺼내옴
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        // 2. 인증 객체가 비어 있거나  CustomUserDetails 타입이 아닐 경우
-        if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails userDetails)) {
-            AuthUser authUser = parameter.getParameterAnnotation(AuthUser.class);
-            if (authUser == null || authUser.required()) {
-                // 유효 하지 않은 토큰 예외 처리
-                throw new CustomException(ErrorCode.MISSING_TOKEN);
-            }
-            return null;
+        // 2. 인증 객체가 비어 있거나  CustomUserDetails 타입이 아닐 경우 예외 처리
+        if (authentication == null) {
+            throw new CustomException(ErrorCode.MISSING_TOKEN);
+        }
+        if (!(authentication.getPrincipal() instanceof CustomUserDetails userDetails)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         // 유효할 경우 userId 반환
         return userDetails.getUser().getUserId();
