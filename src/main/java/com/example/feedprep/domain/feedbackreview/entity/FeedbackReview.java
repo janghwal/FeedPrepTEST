@@ -11,12 +11,17 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import com.example.feedprep.common.entity.BaseTimeEntity;
 import com.example.feedprep.domain.feedback.entity.Feedback;
+import com.example.feedprep.domain.feedbackreview.dto.FeedbackReviewRequestDto;
+import com.example.feedprep.domain.user.entity.User;
+
 @Getter
 @Entity
 @Table(name = "feedbackreviews")
+@RequiredArgsConstructor
 public class FeedbackReview  extends  BaseTimeEntity{
 
 		@Id
@@ -32,7 +37,15 @@ public class FeedbackReview  extends  BaseTimeEntity{
 
 		private int Rating;
 
-		private  String Content;
+		private  String content;
 
 		private LocalDateTime deletedAt;
+
+	    public FeedbackReview( FeedbackReviewRequestDto dto, Feedback feedback, User user) {
+			this.feedback = feedback;
+		    this.userId = user.getUserId();
+		    this.tutorId = feedback.getTutor().getUserId();
+		    this.Rating = dto.getRating();
+		    this.content = dto.getContent();
+		}
 }
