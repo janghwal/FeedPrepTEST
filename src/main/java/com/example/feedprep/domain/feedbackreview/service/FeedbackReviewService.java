@@ -8,7 +8,7 @@ import com.example.feedprep.domain.feedbackreview.entity.FeedbackReview;
 public interface FeedbackReviewService {
 
 	FeedbackReviewResponseDto saveReview(FeedbackReviewRequestDto dto, Long userId, Long feedbackId);
-	FeedbackReviewResponseDto getReview(FeedbackReviewRequestDto dto, Long userId, Long feedbackId);
-	FeedbackReviewResponseDto updateReview(FeedbackReviewRequestDto dto, Long userId, Long feedbackId);
-	ApiResponseDto deleteReview(FeedbackReviewRequestDto dto, Long userId, Long feedbackId);
+	FeedbackReviewResponseDto getReview(Long userId, Long reviewId);
+	FeedbackReviewResponseDto updateReview(FeedbackReviewRequestDto dto, Long userId, Long reviewId);
+	ApiResponseDto deleteReview(Long userId, Long feedbackId, Long reviewId);
 }
