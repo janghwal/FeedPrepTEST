@@ -48,4 +48,10 @@ public class FeedbackReview  extends  BaseTimeEntity{
 		    this.Rating = dto.getRating();
 		    this.content = dto.getContent();
 		}
+
+		public void updateFeedbackReview(FeedbackReviewRequestDto dto){
+			this.tutorId = feedback.getTutor().getUserId();
+			this.Rating = dto.getRating();
+			this.content = dto.getContent();
+		}
 }
