@@ -1,14 +1,9 @@
 package com.example.feedprep.domain.auth.controller;
-
-import com.example.feedprep.common.exception.base.CustomException;
-import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.common.exception.enums.SuccessCode;
 import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.common.security.jwt.JwtUtil;
 import com.example.feedprep.domain.auth.dto.*;
 import com.example.feedprep.domain.auth.service.AuthService;
-import com.example.feedprep.domain.user.enums.UserRole;
-import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
