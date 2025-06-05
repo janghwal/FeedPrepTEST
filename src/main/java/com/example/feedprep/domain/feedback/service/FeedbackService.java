@@ -1,10 +1,10 @@
 package com.example.feedprep.domain.feedback.service;
 
-import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.feedback.dto.request.FeedbackWriteRequestDto;
+import com.example.feedprep.domain.feedback.dto.response.FeedbackRejectResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestListResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestResponseDto;
-import com.example.feedprep.domain.feedback.dto.response.FeedbackResponse;
+import com.example.feedprep.domain.feedback.dto.response.FeedbackResponseDto;
 
 public interface FeedbackService {
 
@@ -13,10 +13,10 @@ public interface FeedbackService {
   //요청 리스트 조회 다건
   FeedbackRequestListResponseDto getFeedbackRequestList(Long userId , int page, int size);
   //요청 리스트 생성
-  FeedbackResponse createFeedback(Long userId, Long requestId, FeedbackWriteRequestDto dto);
+  FeedbackResponseDto createFeedback(Long userId, Long requestId, FeedbackWriteRequestDto dto);
   //요청 리스트 수정
-  FeedbackResponse updateFeedback(Long userId, Long requestId, FeedbackWriteRequestDto dto);
+  FeedbackResponseDto updateFeedback(Long userId, Long requestId, FeedbackWriteRequestDto dto);
   //요청 리스트 거절
-  FeedbackResponse rejectFeedback(Long userId, Long requestId,  FeedbackWriteRequestDto dto);
+  FeedbackRejectResponseDto rejectFeedback(Long userId, Long requestId,  FeedbackWriteRequestDto dto);
 
 }
