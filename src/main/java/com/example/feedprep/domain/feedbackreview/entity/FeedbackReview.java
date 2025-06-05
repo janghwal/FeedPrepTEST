@@ -54,4 +54,7 @@ public class FeedbackReview  extends  BaseTimeEntity{
 			this.Rating = dto.getRating();
 			this.content = dto.getContent();
 		}
+		public  void updateDeletedAt(LocalDateTime now){
+			this.deletedAt = now;
+		}
 }
