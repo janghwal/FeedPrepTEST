@@ -19,6 +19,6 @@ public interface FeedBackReviewRepository extends JpaRepository<FeedbackReview, 
 	@Query("SELECT fr FROM FeedbackReview fr WHERE fr.tutorId = :tutorId AND fr.deletedAt IS null ")
 	Page<FeedbackReview> findByTutorIdAndDeletedAtIsNull(@Param("tutorId")Long tutorId, PageRequest pageable);
 
-	@Query("SELECT AVG(fr) FROM FeedbackReview fr WHERE fr.tutorId = :tutorId AND fr.deletedAt IS null ")
-	Float getAverageRating(@Param("tutorId") Long tutorId);
+	@Query("SELECT AVG(fr.rating) FROM FeedbackReview fr WHERE fr.tutorId = :tutorId AND fr.deletedAt IS null ")
+	Double getAverageRating(@Param("tutorId") Long tutorId);
 }
