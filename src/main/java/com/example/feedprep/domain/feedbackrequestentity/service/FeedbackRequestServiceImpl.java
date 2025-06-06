@@ -50,7 +50,7 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 				 .orElse(null);
 
         if(feedbackRequestEntity != null){
-			throw new RuntimeException("이미 같은 튜터님께 신청 대기 중입니다.");
+			throw new CustomException(ErrorCode.DUPLICATE_FEEDBACK_REQUEST);
 		}
 
 		FeedbackRequestEntity request = new FeedbackRequestEntity(dto, user, tutor, document);
