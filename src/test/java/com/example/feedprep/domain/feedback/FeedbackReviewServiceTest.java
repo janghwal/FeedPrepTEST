@@ -83,7 +83,7 @@ public class FeedbackReviewServiceTest {
 
 		);
 		for(int  i =0; i <requestDtos.size(); i++){
-			feedbackRequestService.saveRequest(requestDtos.get(i), users.get(1).getUserId());
+			feedbackRequestService.createRequest( users.get(1).getUserId(), requestDtos.get(i));
 		}
 		long start = System.currentTimeMillis();
         FeedbackRequestResponseDto getRequest =  feedbackService.getFeedbackRequest(tutors.get(1).getUserId(),1L);
@@ -119,13 +119,14 @@ public class FeedbackReviewServiceTest {
 
 		);
 
-		feedbackRequestService.saveRequest(requestDtos.get(3), users.get(0).getUserId());
-		feedbackRequestService.saveRequest(requestDtos.get(3), users.get(1).getUserId());
-		feedbackRequestService.saveRequest(requestDtos.get(3), users.get(2).getUserId());
-		feedbackRequestService.saveRequest(requestDtos.get(3), users.get(3).getUserId());
-		feedbackRequestService.saveRequest(requestDtos.get(3), users.get(4).getUserId());
+
+		feedbackRequestService.createRequest( users.get(0).getUserId(), requestDtos.get(3));
+		feedbackRequestService.createRequest( users.get(1).getUserId(), requestDtos.get(3));
+		feedbackRequestService.createRequest( users.get(2).getUserId(), requestDtos.get(3));
+		feedbackRequestService.createRequest( users.get(3).getUserId(), requestDtos.get(3));
+		feedbackRequestService.createRequest( users.get(4).getUserId(), requestDtos.get(3));
 		long start = System.currentTimeMillis();
-		FeedbackRequestListResponseDto getRequests =  feedbackService.getFeedbackRequestList(tutors.get(3).getUserId(),0, 20);
+		FeedbackRequestListResponseDto getRequests =  feedbackService.getFeedbackRequests(tutors.get(3).getUserId(),0, 20);
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
@@ -150,11 +151,13 @@ public class FeedbackReviewServiceTest {
 
 		Document doc = new Document(users.get(1), "api/ef/?");
 		documentRepository.save(doc);
-	    FeedbackRequestDto testRequestDto = new FeedbackRequestDto(tutors.get(2).getUserId(), 1L, "Text");
-		feedbackRequestService.saveRequest(testRequestDto, users.get(1).getUserId());
+
+		FeedbackRequestDto testRequestDto = new FeedbackRequestDto(tutors.get(2).getUserId(), 1L, "Text");
+		feedbackRequestService.createRequest( users.get(0).getUserId(), testRequestDto);
 
 		FeedbackWriteRequestDto requestDto
 			= new FeedbackWriteRequestDto(1L,"날먹잼", null, null);
+
 		long start = System.currentTimeMillis();
 		FeedbackResponseDto response = feedbackService.createFeedback(tutors.get(2).getUserId(), 1L, requestDto);
 		long end= System.currentTimeMillis();
@@ -185,7 +188,7 @@ public class FeedbackReviewServiceTest {
 		FeedbackRequestDto testRequestDto =
 			new FeedbackRequestDto(tutors.get(2).getUserId(), 1L, "Text");
 
-		feedbackRequestService.saveRequest(testRequestDto, users.get(1).getUserId());
+		feedbackRequestService.createRequest( users.get(1).getUserId(), testRequestDto);
 
 		//피드백 작성 하기
 		FeedbackWriteRequestDto requestDto =
@@ -221,7 +224,7 @@ public class FeedbackReviewServiceTest {
 
 		//유저가 튜터4에게 피드백을 요청한다.
 		FeedbackRequestDto testRequestDto = new FeedbackRequestDto(tutors.get(2).getUserId(), 1L, "Text");
-		feedbackRequestService.saveRequest(testRequestDto, users.get(1).getUserId());
+		feedbackRequestService.createRequest( users.get(1).getUserId(), testRequestDto);
 
 		//강제 Error 셋팅.
 		FeedbackRequestEntity alreadyExistRequest = feedbackRequestEntityRepository.findById(1L).orElseThrow();
@@ -261,14 +264,14 @@ public class FeedbackReviewServiceTest {
 
 		//유저가 튜터4에게 피드백을 요청한다.
 		FeedbackRequestDto testRequestDto = new FeedbackRequestDto(tutors.get(2).getUserId(), 1L, "Text");
-		feedbackRequestService.saveRequest(testRequestDto, users.get(1).getUserId());
+		feedbackRequestService.createRequest( users.get(1).getUserId(), testRequestDto);
 
 		FeedbackWriteRequestDto feedbackWriteRequestDto =
 			new FeedbackWriteRequestDto(1L, null, RejectReason.ETC, "OO일 부로 사직함.");
 
 		long start = System.currentTimeMillis();
 		FeedbackRejectResponseDto response
-			= feedbackService.rejectFeedback(tutors.get(2).getUserId(),1L,feedbackWriteRequestDto);
+			= feedbackService .rejectFeedback(tutors.get(2).getUserId(),1L,feedbackWriteRequestDto);
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
