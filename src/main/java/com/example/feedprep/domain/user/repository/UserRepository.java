@@ -5,6 +5,9 @@ import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.domain.user.entity.User;
 import com.example.feedprep.domain.user.enums.UserRole;
 import java.util.List;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,11 +16,10 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    Optional<User> getUserByEmail(String email);
 
-    Optional<User> getUserByName(String email);
-
-    default User getUserByNameOrElseThrow(String email) {
-        return getUserByName(email).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+    default User getUserByEmailOrElseThrow(String email) {
+        return getUserByEmail(email).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
     @EntityGraph(attributePaths = "documents")
@@ -36,4 +38,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
         );
         return user;
     }
+
+    Optional<User> findByEmail(String email);
 }
