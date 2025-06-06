@@ -48,8 +48,8 @@ public class FeedbackServiceImpl implements FeedbackService{
 
 	@Transactional(readOnly = true)
 	@Override
-	public FeedbackRequestListResponseDto getFeedbackRequestList(Long userId, int page, int size) {
-		User tutor = userRepository.findByIdOrElseThrow(userId, ErrorCode.NOT_FOUND_TUTOR);
+	public FeedbackRequestListResponseDto getFeedbackRequests(Long tutorId, int page, int size){
+		User tutor = userRepository.findByIdOrElseThrow(tutorId, ErrorCode.NOT_FOUND_TUTOR);
         if(!tutor.getRole().equals(UserRole.APPROVED_TUTOR)){
 			 throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
@@ -98,9 +98,9 @@ public class FeedbackServiceImpl implements FeedbackService{
 
 	@Transactional
 	@Override
-	public FeedbackResponseDto updateFeedback(Long userId, Long feedbackId, FeedbackWriteRequestDto dto) {
+	public FeedbackResponseDto updateFeedback(Long tutorId, Long feedbackId, FeedbackWriteRequestDto dto) {
 		// 1. 튜터 본인 확인
-		User tutor = userRepository.findByIdOrElseThrow(userId, ErrorCode.NOT_FOUND_TUTOR);
+		User tutor = userRepository.findByIdOrElseThrow(tutorId, ErrorCode.NOT_FOUND_TUTOR);
 		if(!tutor.getRole().equals(UserRole.APPROVED_TUTOR)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
@@ -127,23 +127,30 @@ public class FeedbackServiceImpl implements FeedbackService{
 
 	@Transactional
 	@Override
-	public FeedbackRejectResponseDto rejectFeedback(Long userId, Long requestId, FeedbackWriteRequestDto dto) {
+	public FeedbackRejectResponseDto rejectFeedback(Long tutorId, Long feedbackId, FeedbackWriteRequestDto dto) {
 		// 1. 튜터 본인 확인
-		User tutor = userRepository.findByIdOrElseThrow(userId, ErrorCode.NOT_FOUND_TUTOR);
+		User tutor = userRepository.findByIdOrElseThrow(tutorId, ErrorCode.NOT_FOUND_TUTOR);
 		if(!tutor.getRole().equals(UserRole.APPROVED_TUTOR)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
 		// 2. 피드백 존재 여부 확인(Pendding 상태에서만)
-		FeedbackRequestEntity request = feedbackRequestEntityRepository.findPendingByIdAndTutorOrElseThrow(
-			tutor.getUserId(), requestId, ErrorCode.USER_NOT_FOUND);
-		if(!request.getRequestState().equals(RequestState.PENDING)){
+
+		// 2. 피드백 존재 여부 확인
+		Feedback feedback = feedBackRepository.findById(feedbackId)
+			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK));
+		// 3. 본인 피드백인지 검사
+		if(!feedback.getFeedbackRequestEntity().getRequestState().equals(RequestState.PENDING)){
 			throw new CustomException(ErrorCode.CANNOT_REJECT_NON_PENDING_FEEDBACK);
 		}
+		if(feedback.getTutor().getUserId().equals(tutor.getUserId())){
+			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
+		}
+
+
 		//3. 거절 사유가 적힌 피드백을 반환.
-		Feedback feedback = new Feedback(dto, tutor);
-		request.updateRequestState(RequestState.REJECTED);
-		//요청을 거절 상태로 변경
-		feedback.updateFeedbackRequest(request);
+		Feedback rejectNewFeedback = new Feedback(dto, tutor);
+		rejectNewFeedback.getFeedbackRequestEntity()
+			.updateRequestState(RequestState.REJECTED);
 		// 6. 저장 (트랜잭션 내에서)
 		Feedback saveFeedback = feedBackRepository.save(feedback);
 		return new FeedbackRejectResponseDto(saveFeedback);
