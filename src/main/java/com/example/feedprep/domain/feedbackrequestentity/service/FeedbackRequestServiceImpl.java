@@ -35,7 +35,7 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 
 	@Transactional
 	@Override
-	public FeedbackRequestEntityResponseDto saveRequest(FeedbackRequestDto dto, Long userId) {
+	public FeedbackRequestEntityResponseDto createRequest(Long userId, FeedbackRequestDto dto) {
 		User user = userRepository.findByIdOrElseThrow(userId);
 		User tutor = userRepository.findByIdOrElseThrow(dto.getTutorId(), ErrorCode.NOT_FOUND_TUTOR);
 
@@ -61,14 +61,14 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<FeedbackRequestEntityResponseDto> getRequest(
-		Long userId,
-		Long tutorId,
-		Long documentId,
-		LocalDateTime month,
+	public List<FeedbackRequestEntityResponseDto> getRequests(
+		Long userId,         // 신청자 or 튜터
+		Long tutorId,        // 피드백 받을 대상
+		Long documentId,     // 문서
+		LocalDateTime month, // 월별 필터
 		int page,
 		int size
-		)
+	)
 	{
 		//유저 본인 확인
 		User user = userRepository.findByIdOrElseThrow(userId);
@@ -88,10 +88,10 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 
 	@Transactional
 	@Override
-	public FeedbackRequestEntityResponseDto updateRequest(FeedbackRequestDto dto,Long feedbackId, Long userId) {
+	public FeedbackRequestEntityResponseDto updateRequest(Long userId, Long feedbackRequestId, FeedbackRequestDto dto) {
 
 		//요청이 존재하는 가?
-		FeedbackRequestEntity request = feedbackRequestEntityRepository.findById(feedbackId)
+		FeedbackRequestEntity request = feedbackRequestEntityRepository.findById(feedbackRequestId)
 			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REQUEST));
 		if(!request.getUser().getUserId().equals(userId)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
@@ -114,9 +114,9 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 
 	@Transactional
 	@Override
-	public ApiResponseDto cancleRequest(Long RequestId, Long userId) {
+	public ApiResponseDto cancelRequest(Long userId, Long feedbackRequestId) {
 		//요청이 존재하는 가?
-		FeedbackRequestEntity request = feedbackRequestEntityRepository.findById(RequestId)
+		FeedbackRequestEntity request = feedbackRequestEntityRepository.findById(feedbackRequestId)
 			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REQUEST));
 		if(!request.getUser().getUserId().equals(userId))
 		{

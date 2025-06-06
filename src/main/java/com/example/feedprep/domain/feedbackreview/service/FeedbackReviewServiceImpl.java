@@ -30,7 +30,7 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 	private final FeedBackRepository feedBackRepository;
     private final UserRepository userRepository;
 	@Override
-	public FeedbackReviewResponseDto saveReview(FeedbackReviewRequestDto dto, Long userId, Long feedbackId) {
+	public FeedbackReviewResponseDto createReview( Long userId, Long feedbackId, FeedbackReviewRequestDto dto) {
 		User user = userRepository.findByIdOrElseThrow(userId);
 		if(!user.getUserId().equals(userId)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
@@ -58,7 +58,7 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 	}
 
 	@Override
-	public List<FeedbackReviewResponseDto> getWrittenReviewsByStudent(Long userId, Long reviewId, int page, int size) {
+	public List<FeedbackReviewResponseDto> getWrittenReviewsByStudent(Long userId, int page, int size) {
 		User user = userRepository.findByIdOrElseThrow(userId);
 		if(!user.getUserId().equals(userId)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
@@ -73,9 +73,9 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 	}
 
 	@Override
-	public List<FeedbackReviewResponseDto> getReceivedReviewsForTutor(Long userId, Long reviewId, int page, int size) {
-		User tutor = userRepository.findByIdOrElseThrow(userId);
-		if(!tutor.getUserId().equals(userId)){
+	public List<FeedbackReviewResponseDto> getReceivedReviewsForTutor(Long tutorId, int page, int size) {
+		User tutor = userRepository.findByIdOrElseThrow(tutorId);
+		if(!tutor.getUserId().equals(tutorId)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
 		PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
@@ -88,14 +88,14 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 	}
 
 	@Override
-	public Float getAverageRating(Long tutorId) {
+	public Double getAverageRating(Long tutorId) {
 		User tutor = userRepository.findByIdOrElseThrow(tutorId);
 		feedBackReviewRepository.getAverageRating(tutor.getUserId());
 		return feedBackReviewRepository.getAverageRating(tutor.getUserId());
 	}
 
 	@Override
-	public FeedbackReviewResponseDto updateReview(FeedbackReviewRequestDto dto, Long userId, Long reviewId) {
+	public FeedbackReviewResponseDto updateReview(Long userId, Long reviewId, FeedbackReviewRequestDto dto) {
 		User user = userRepository.findByIdOrElseThrow(userId);
 		if(!user.getUserId().equals(userId)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
