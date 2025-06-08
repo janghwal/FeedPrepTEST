@@ -8,9 +8,10 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum SuccessCode {
 
-    // 회원가입 및 로그인 성공
+    // 회원가입 및 로그인 / 로그아웃 성공
     SIGNUP_SUCCESS(HttpStatus.CREATED,"회원가입에 성공하였습니다." ),
     LOGIN_SUCCESS(HttpStatus.OK, "로그인에 성공하였습니다."),
+    LOGOUT_SUCCESS(HttpStatus.OK, "로그아웃에 성공하였습니다."),
 
     // 회원 정보
     GET_TUTORLIST_SUCCESS(HttpStatus.OK, "튜터 목록 조회를 성공하였습니다."),
@@ -31,8 +32,11 @@ public enum SuccessCode {
     SUBSCRIPTION_LIST(HttpStatus.OK, "구독 목록입니다."),
     SUBSCRIBER_LIST(HttpStatus.OK, "구독자 목록입니다."),
 
-   //피드백 요청 취소 성공
+    //피드백 요청 취소
     OK_FEEDBACK_REQUEST_CANCELED(HttpStatus.OK, "정상적으로 취소 되었습니다."),
+    //피드백 거절
+    OK_SUCCESS_FEEDBACK_REJECTED(HttpStatus.OK, "피드백 요청이 거절되었습니다."),
+
     // 기술스택
     TECH_STACK_CREATED(HttpStatus.CREATED, "기술 스택을 추가하였습니다."),
     TECH_STACK_DELETED(HttpStatus.OK, "기술 스택을 삭제하였습니다."),

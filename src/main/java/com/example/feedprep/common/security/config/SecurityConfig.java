@@ -2,6 +2,7 @@ package com.example.feedprep.common.security.config;
 
 import com.example.feedprep.common.security.jwt.JwtFilter;
 import com.example.feedprep.common.security.jwt.JwtUtil;
+import com.example.feedprep.common.security.jwt.TokenBlacklistService;
 import com.example.feedprep.common.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,7 @@ public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService userDetailsService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -46,7 +48,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtFilter jwtFilter() {
-        return new JwtFilter(jwtUtil, userDetailsService);
+        return new JwtFilter(jwtUtil, userDetailsService,tokenBlacklistService);
     }
 
     @Bean

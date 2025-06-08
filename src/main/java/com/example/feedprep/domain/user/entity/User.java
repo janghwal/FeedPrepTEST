@@ -3,6 +3,8 @@ package com.example.feedprep.domain.user.entity;
 import com.example.feedprep.common.entity.BaseTimeEntity;
 import com.example.feedprep.domain.document.entity.Document;
 import com.example.feedprep.domain.user.enums.UserRole;
+import jakarta.persistence.*;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
