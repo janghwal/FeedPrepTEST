@@ -1,6 +1,9 @@
 package com.example.feedprep.domain.feedback.service;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -12,8 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
+import com.example.feedprep.common.exception.enums.SuccessCode;
+import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.feedback.dto.request.FeedbackWriteRequestDto;
-import com.example.feedprep.domain.feedback.dto.response.FeedbackRejectResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestListResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackResponseDto;
@@ -127,32 +131,40 @@ public class FeedbackServiceImpl implements FeedbackService{
 
 	@Transactional
 	@Override
-	public FeedbackRejectResponseDto rejectFeedback(Long tutorId, Long feedbackId, FeedbackWriteRequestDto dto) {
+	public ApiResponseDto rejectFeedbackRequest(Long tutorId, Long requestId, FeedbackWriteRequestDto dto) {
 		// 1. 튜터 본인 확인
 		User tutor = userRepository.findByIdOrElseThrow(tutorId, ErrorCode.NOT_FOUND_TUTOR);
 		if(!tutor.getRole().equals(UserRole.APPROVED_TUTOR)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
-		// 2. 피드백 존재 여부 확인(Pendding 상태에서만)
 
-		// 2. 피드백 존재 여부 확인
-		Feedback feedback = feedBackRepository.findById(feedbackId)
-			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK));
-		// 3. 본인 피드백인지 검사
-		if(!feedback.getFeedbackRequestEntity().getRequestState().equals(RequestState.PENDING)){
+		// 2. 피드백 요청 존재 여부 확인
+		FeedbackRequestEntity request =feedbackRequestEntityRepository
+			.findById(requestId)
+			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REQUEST));
+
+		// 2. 피드백 존재 여부 확인(Pendding 상태 거절)
+		if(!request.getRequestState().equals(RequestState.PENDING)){
 			throw new CustomException(ErrorCode.CANNOT_REJECT_NON_PENDING_FEEDBACK);
 		}
-		if(feedback.getTutor().getUserId().equals(tutor.getUserId())){
+		//3. 본인에게 신청한 피드백인지 검사
+		if(!request.getTutor().getUserId().equals(tutor.getUserId())){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
 
+		request.updateRequestState(RequestState.REJECTED);
 
-		//3. 거절 사유가 적힌 피드백을 반환.
-		Feedback rejectNewFeedback = new Feedback(dto, tutor);
-		rejectNewFeedback.getFeedbackRequestEntity()
-			.updateRequestState(RequestState.REJECTED);
-		// 6. 저장 (트랜잭션 내에서)
-		Feedback saveFeedback = feedBackRepository.save(feedback);
-		return new FeedbackRejectResponseDto(saveFeedback);
+		Map<String, Object> data =  new LinkedHashMap<>();
+		data.put("requestId ", request.getId());
+		data.put("rejectReason ", dto.getRejectReason().getDescription());
+		if(dto.getEtcContent() !=null){
+			data.put("EtcReason ", dto.getEtcContent());
+		}
+		data.put("modifiedAt ", request.getModifiedAt().toString());
+		return new ApiResponseDto(
+			SuccessCode.OK_SUCCESS_FEEDBACK_REJECTED.getHttpStatus().value(),
+			SuccessCode.OK_SUCCESS_FEEDBACK_REJECTED.getMessage(),
+			data
+			);
 	}
 }
