@@ -81,7 +81,7 @@ public class FeedbackReviewTest {
 		//리뷰 작성 완료하기.
 
 		FeedbackReviewRequestDto feedbackReviewRequestDto
-			=new FeedbackReviewRequestDto(1L, 5, "같이 좀..." );
+			=new FeedbackReviewRequestDto(1L, 5, "튜터님 좋은 조언 감사합니다." );
 
 		long start = System.currentTimeMillis();
 		FeedbackReviewResponseDto feedbackReviewResponseDto =
@@ -248,7 +248,7 @@ public class FeedbackReviewTest {
 
          List<User> tutors = List.of(
 			 new User("아카시아", "Test65@naver.com", "tester1234", UserRole.APPROVED_TUTOR),
-			 new User("아카시아", "Test65@naver.com", "tester1234", UserRole.APPROVED_TUTOR)
+			 new User("아카시아2", "Test66@naver.com", "tester1234", UserRole.APPROVED_TUTOR)
 		 ) ;
 		userRepository.save( tutors.get(0) );
 		userRepository.save( tutors.get(1) );
@@ -318,24 +318,26 @@ public class FeedbackReviewTest {
 		FeedbackRequestDto requestDto = new FeedbackRequestDto(users.get(0).getUserId(), doc.getDocumentId(), "Text");
 
 		IntStream.range(1, users.size())
-			.forEach(i -> feedbackRequestService.createRequest(users.get(1).getUserId(), requestDto));
+			.forEach(i -> feedbackRequestService.createRequest(users.get(i).getUserId(), requestDto));
 		System.out.println("신청완료");
 
 		//피드백 요청에 대한 피드백 작성
-		for (Long i = 1L; i < users.size(); i++) {
+		for (Long i = 0L; i < users.size()-1; i++) {
 			FeedbackWriteRequestDto testfeedbackWriteRequestDto =
 				new FeedbackWriteRequestDto(i, "~이런점을 수정하면 좋을것 같습니다.", null, null);
 
-			feedbackService.createFeedback(users.get(0).getUserId(), i, testfeedbackWriteRequestDto);
+			feedbackService.createFeedback(users.get(0).getUserId(), i + 1, testfeedbackWriteRequestDto);
 		}
 		System.out.println("리뷰 작성");
 		//리뷰 작성 완료하기.
 
+		int sid = 1;
 		for (Long i = 1L; i < users.size(); i++) {
 			FeedbackReviewRequestDto feedbackReviewRequestDto
 				= new FeedbackReviewRequestDto(i, 5, "좋은 피드백이었습니다.");
 
-			feedbackReviewService.createReview( users.get(1).getUserId(), i, feedbackReviewRequestDto);
+			feedbackReviewService.createReview( users.get(sid).getUserId(), i, feedbackReviewRequestDto);
+			sid++;
 		}
 
 		//리뷰 조회하기
@@ -359,17 +361,17 @@ public class FeedbackReviewTest {
 	@Transactional
 	@Test
 	public void 리뷰_평균_조회_테스트(){
-		List<User> users =userSetting();
-		userRepository.saveAll(users );
+		List<User> users = userSetting();
+		userRepository.saveAll(users);
 
 		Document doc = new Document(users.get(1), "api/ef/?");
 		documentRepository.save(doc);
 
 		//한 튜터에게 여러명이 다른 피드백 요청 신청
-		FeedbackRequestDto requestDto= new FeedbackRequestDto(users.get(0).getUserId(), doc.getDocumentId(), "Text");
+		FeedbackRequestDto requestDto = new FeedbackRequestDto(users.get(0).getUserId(), doc.getDocumentId(), "Text");
 
 		IntStream.range(1, users.size())
-			.forEach(i -> 		feedbackRequestService.createRequest(users.get(1).getUserId(), requestDto));
+			.forEach(i -> feedbackRequestService.createRequest(users.get(i).getUserId(), requestDto));
 		System.out.println("신청완료");
 
 		//피드백 요청에 대한 피드백 작성
