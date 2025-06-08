@@ -7,11 +7,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface DocumentService {
 
-    DocumentResponseDto createDocument(MultipartFile file, String resume, Long tokenMyId);
+    DocumentResponseDto createDocument(MultipartFile file, String resume, Long userId);
 
-    List<DocumentListResponseDto> getMyDocumentList(Long tokenMyId);
+    List<DocumentListResponseDto> getMyDocumentList(Long userId);
 
-    DocumentResponseDto getMyDocument(Long documentId, Long tokenMyId);
+    DocumentResponseDto getMyDocument(Long documentId, Long userId);
 
-    void deleteDocument(Long documentId, Long tokenMyId);
+    void deleteDocument(Long documentId, Long userId);
 }
