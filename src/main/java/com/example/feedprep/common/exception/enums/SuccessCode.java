@@ -37,7 +37,7 @@ public enum SuccessCode {
     //피드백 거절
     OK_SUCCESS_FEEDBACK_REJECTED(HttpStatus.OK, "피드백 요청이 거절되었습니다."),
     //피드백 리뷰 삭제
-    OK_SUCCESS_FEEDBACK_REVIEW_DELETED(HttpStatus.OK, "피드백 리뷰가 삭제되었습니다."),
+    OK_SUCCESS_FEEDBACK_REVIEW_DELETED(HttpStatus.OK, "작성한 피드백 리뷰가 정상적으로 삭제되었습니다."),
 
     // 기술스택
     TECH_STACK_CREATED(HttpStatus.CREATED, "기술 스택을 추가하였습니다."),
