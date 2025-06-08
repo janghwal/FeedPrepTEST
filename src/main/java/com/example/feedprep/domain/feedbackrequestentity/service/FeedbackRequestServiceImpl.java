@@ -129,7 +129,7 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 		}
 		request.updateRequestState(RequestState.CANCELED);
 		Map<String ,Object> data = new HashMap<>();
-		data.put("modifiedsAt", request.getModifiedAt());
+		data.put("modifiedAt", request.getModifiedAt().toString());
 
 		return new ApiResponseDto(
 			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.getHttpStatus().value(),

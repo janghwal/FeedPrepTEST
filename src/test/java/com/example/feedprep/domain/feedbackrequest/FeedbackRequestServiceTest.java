@@ -93,7 +93,7 @@ public class FeedbackRequestServiceTest {
 		FeedbackRequestDto requestDto = new FeedbackRequestDto(1L, 1L, "Text");
 		feedbackService.createRequest(users.get(5).getUserId(), requestDto);
 
-		FeedbackRequestDto UpdateRequestDto = new FeedbackRequestDto(1L, 1L, "거절 한다.");
+		FeedbackRequestDto UpdateRequestDto = new FeedbackRequestDto(1L, 1L, "수정된 피드백 요청 내용");
 		long start = System.currentTimeMillis();
 		FeedbackRequestEntityResponseDto UpdateFeedbackRequestEntityResponseDto =
 			feedbackService.updateRequest( users.get(5).getUserId() ,1L, UpdateRequestDto);
@@ -165,11 +165,16 @@ public class FeedbackRequestServiceTest {
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
-		for (int i = 0; i < getRequests.size(); i++) {
-                 System.out.println(getRequests.get(i).getTutorId()
-					 + " " + getRequests.get(i).getContent()
-					 +" " + getRequests.get(i).getRequestState() );
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
+
+		try {
+			String json = json = mapper.writeValueAsString(getRequests);
+			System.out.println(json);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
 		}
+
 	}
 
 	@Transactional
@@ -196,12 +201,14 @@ public class FeedbackRequestServiceTest {
 		feedbackService.getRequests(users.get(5).getUserId(), 3L, null, null, 0, 20);
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
 
-		for (int i = 0; i < getRequests.size(); i++) {
-			System.out.println(getRequests.get(i).getTutorId()
-				+" " + getRequests.get(i).getContent()
-				+" " + getRequests.get(i).getRequestState()
-			);
+		try {
+			String json = json = mapper.writeValueAsString(getRequests);
+			System.out.println(json);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -230,11 +237,14 @@ public class FeedbackRequestServiceTest {
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
-		for (int i = 0; i < getRequests.size(); i++) {
-			System.out.println( getRequests.get(i).getTutorId()
-				+ " " + getRequests.get(i).getContent()
-				+" " + getRequests.get(i).getRequestState()
-			);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
+
+		try {
+			String json = json = mapper.writeValueAsString(getRequests);
+			System.out.println(json);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
 		}
 	}
 	@Transactional
@@ -269,11 +279,14 @@ public class FeedbackRequestServiceTest {
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
-		for (int i = 0; i < getRequests.size(); i++) {
-			System.out.println(getRequests.get(i).getTutorId()
-				+ " " + getRequests.get(i).getContent()
-				+" " + getRequests.get(i).getRequestState()
-			);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
+
+		try {
+			String json = json = mapper.writeValueAsString(getRequests);
+			System.out.println(json);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
 		}
 	}
 }
