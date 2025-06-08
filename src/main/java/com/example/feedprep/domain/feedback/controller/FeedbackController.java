@@ -12,29 +12,31 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.common.security.annotation.AuthUser;
 import com.example.feedprep.domain.feedback.dto.request.FeedbackWriteRequestDto;
-import com.example.feedprep.domain.feedback.dto.response.FeedbackRejectResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestListResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackResponseDto;
 import com.example.feedprep.domain.feedback.service.FeedbackService;
 
 @RestController
+@RequestMapping("/feedback")
 @RequiredArgsConstructor
 public class FeedbackController {
 	private final FeedbackService feedbackService;
 
-	@GetMapping("requests/{requestId}")
+	@GetMapping("/requests/{requestId}")
 	public ResponseEntity<FeedbackRequestResponseDto>  getFeedbackRequest(
 		@AuthUser Long tutorId,
 		@PathVariable  Long requestId
 	){
 		return  new ResponseEntity<>(feedbackService.getFeedbackRequest(tutorId, requestId), HttpStatus.OK);
 	}
-	@GetMapping("requests/")
+	@GetMapping("/requests")
 	public ResponseEntity<FeedbackRequestListResponseDto> getFeedbackRequests(
 		@AuthUser Long tutorId,
 		@RequestParam(defaultValue = "0") int page,
@@ -43,7 +45,15 @@ public class FeedbackController {
 		return new ResponseEntity<>(feedbackService.getFeedbackRequests(tutorId, page, size), HttpStatus.OK);
 	}
 
-	@PostMapping("requests/{requestId}/feedback")
+	@PatchMapping ("/requests/{requestId}/reject")
+	public ResponseEntity<ApiResponseDto> rejectFeedbackRequest(
+		@AuthUser Long tutorId,
+		@PathVariable Long requestId,
+		@RequestBody FeedbackWriteRequestDto dto){
+		return  new ResponseEntity<>(feedbackService.rejectFeedbackRequest(tutorId, requestId, dto), HttpStatus.OK);
+	}
+
+	@PostMapping("/requests/{requestId}/feedback")
 	public ResponseEntity<FeedbackResponseDto> createFeedback(
 		@AuthUser Long tutorId,
 		@PathVariable Long requestId,
@@ -53,7 +63,7 @@ public class FeedbackController {
 		return new ResponseEntity<>(feedbackService.createFeedback(tutorId, requestId,dto),HttpStatus.CREATED);
 	}
 
-	@PatchMapping("feedbacks/{feedbackId}")
+	@PatchMapping("/{feedbackId}")
 	public ResponseEntity<FeedbackResponseDto> updateFeedback (
 		@AuthUser Long tutorId,
 		@PathVariable Long feedbackId,
@@ -62,11 +72,5 @@ public class FeedbackController {
 		return new ResponseEntity<>(feedbackService.updateFeedback(tutorId, feedbackId, dto), HttpStatus.OK);
 	}
 
-	@DeleteMapping ("feedbacks/{feedbackId}")
-	public ResponseEntity<FeedbackRejectResponseDto> rejectFeedback(
-		@AuthUser Long tutorId,
-		@PathVariable Long feedbackId,
-		@RequestBody FeedbackWriteRequestDto dto){
-		return  new ResponseEntity<>(feedbackService.rejectFeedback(tutorId, feedbackId, dto), HttpStatus.OK);
-	}
+
 }
