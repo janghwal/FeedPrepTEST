@@ -1,5 +1,6 @@
 package com.example.feedprep.domain.feedback.service;
 
+import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.feedback.dto.request.FeedbackWriteRequestDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRejectResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestListResponseDto;
@@ -21,6 +22,6 @@ public interface FeedbackService {
   FeedbackResponseDto updateFeedback(Long tutorId, Long feedbackId, FeedbackWriteRequestDto dto);
 
   // 피드백 요청 거절
-  FeedbackRejectResponseDto rejectFeedback(Long tutorId, Long feedbackId, FeedbackWriteRequestDto dto);
+  ApiResponseDto rejectFeedbackRequest(Long tutorId, Long requestId, FeedbackWriteRequestDto dto);
 
 }
