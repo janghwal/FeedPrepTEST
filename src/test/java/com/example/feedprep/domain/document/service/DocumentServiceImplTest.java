@@ -69,7 +69,7 @@ class DocumentServiceImplTest {
             .extracting(
                 DocumentResponseDto::getDocumentId,
                 DocumentResponseDto::getName,
-                dto -> dto.getRole().name(),
+                DocumentResponseDto::getRole,
                 DocumentResponseDto::getFileUrl
             )
             .containsExactly(
@@ -175,7 +175,7 @@ class DocumentServiceImplTest {
                 DocumentResponseDto::getFileUrl
             )
             .containsExactly(
-                document,
+                documentId,
                 "name",
                 UserRole.STUDENT,
                 "https://s3.aws.com/file.pdf"
