@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.document.entity.Document;
 import com.example.feedprep.domain.document.repository.DocumentRepository;
 import com.example.feedprep.domain.feedback.common.RejectReason;
@@ -156,7 +157,7 @@ public class FeedbackReviewServiceTest {
 		feedbackRequestService.createRequest( users.get(0).getUserId(), testRequestDto);
 
 		FeedbackWriteRequestDto requestDto
-			= new FeedbackWriteRequestDto(1L,"날먹잼", null, null);
+			= new FeedbackWriteRequestDto(1L,"내용", null, null);
 
 		long start = System.currentTimeMillis();
 		FeedbackResponseDto response = feedbackService.createFeedback(tutors.get(2).getUserId(), 1L, requestDto);
@@ -270,7 +271,7 @@ public class FeedbackReviewServiceTest {
 			new FeedbackWriteRequestDto(1L, null, RejectReason.ETC, "OO일 부로 사직함.");
 
 		long start = System.currentTimeMillis();
-		FeedbackRejectResponseDto response
+		ApiResponseDto response
 			= feedbackService .rejectFeedback(tutors.get(2).getUserId(),1L,feedbackWriteRequestDto);
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
