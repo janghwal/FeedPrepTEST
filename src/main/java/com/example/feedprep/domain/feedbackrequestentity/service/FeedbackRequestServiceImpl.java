@@ -1,7 +1,9 @@
 package com.example.feedprep.domain.feedbackrequestentity.service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
 
@@ -126,11 +128,12 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 			throw new CustomException(ErrorCode.CANNOT_EDIT_COMPLETED_REQUEST);
 		}
 		request.updateRequestState(RequestState.CANCELED);
-
+		Map<String ,Object> data = new HashMap<>();
+		data.put("modifiedsAt", request.getModifiedAt());
 
 		return new ApiResponseDto(
 			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.getHttpStatus().value(),
 			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.getMessage(),
-		SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.name());
+			data);
 	}
 }
