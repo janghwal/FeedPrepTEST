@@ -18,6 +18,7 @@ public class FeedbackReviewResponseDto {
 	private int Rating;
 
 	private  String Content;
+	private String modifiedAt;
 
 	public FeedbackReviewResponseDto(FeedbackReview feedbackReview) {
 		this.id = feedbackReview.getId();
@@ -25,5 +26,6 @@ public class FeedbackReviewResponseDto {
 		this.tutorId =feedbackReview.getTutorId();
 		this.Rating = feedbackReview.getRating();
 		this.Content = feedbackReview.getContent();
+	    this.modifiedAt = feedbackReview.getModifiedAt().toString();
 	}
 }
