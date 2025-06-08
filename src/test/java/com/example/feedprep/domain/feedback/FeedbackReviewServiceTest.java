@@ -266,13 +266,14 @@ public class FeedbackReviewServiceTest {
 		//유저가 튜터4에게 피드백을 요청한다.
 		FeedbackRequestDto testRequestDto = new FeedbackRequestDto(tutors.get(2).getUserId(), 1L, "Text");
 		feedbackRequestService.createRequest( users.get(1).getUserId(), testRequestDto);
+        //튜터는 특정 피드백 요청에 대해 거절 사유등록해서 거절을 승인한다.
 
 		FeedbackWriteRequestDto feedbackWriteRequestDto =
-			new FeedbackWriteRequestDto(1L, null, RejectReason.ETC, "OO일 부로 사직함.");
+			new FeedbackWriteRequestDto(1L, null, RejectReason.ETC, "OO 사유로 거절함.");
 
 		long start = System.currentTimeMillis();
 		ApiResponseDto response
-			= feedbackService .rejectFeedback(tutors.get(2).getUserId(),1L,feedbackWriteRequestDto);
+			= feedbackService .rejectFeedbackRequest(tutors.get(2).getUserId(),1L,feedbackWriteRequestDto);
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
