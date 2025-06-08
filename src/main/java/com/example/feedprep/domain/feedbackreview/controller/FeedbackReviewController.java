@@ -32,14 +32,14 @@ public class FeedbackReviewController {
 		@RequestBody FeedbackReviewRequestDto dto){
 		return  new ResponseEntity<>(feedbackReviewService.createReview(userId, feedbackId, dto), HttpStatus.OK);
 	}
-	@GetMapping("reviews/students")
+	@GetMapping("users/me/reviews")
 	public ResponseEntity<List<FeedbackReviewResponseDto>> getWrittenReviewsByStudent(
 		@AuthUser Long userId,
 		@RequestParam(defaultValue= "0") int page,
 		@RequestParam(defaultValue = "20") int size){
 		return new ResponseEntity<>(feedbackReviewService.getWrittenReviewsByStudent(userId, page, size), HttpStatus.OK);
 	}
-	@GetMapping("reviews/tutors")
+	@GetMapping("users/me/reviews/received")
 	public ResponseEntity<List<FeedbackReviewResponseDto>> getReceivedReviewsForTutor(
 		@AuthUser Long tutorId,
 		@RequestParam(defaultValue= "0") int page,
@@ -47,18 +47,18 @@ public class FeedbackReviewController {
 		return new ResponseEntity<>(feedbackReviewService.getReceivedReviewsForTutor(tutorId, page, size), HttpStatus.OK);
 	}
 
-	@PatchMapping("reviews/{reviewsId}")
+	@PatchMapping("reviews/{reviewId}")
 	public ResponseEntity<FeedbackReviewResponseDto> updateReview(
 		@AuthUser Long userId,
-		@PathVariable Long feedbackId,
+		@PathVariable Long reviewId,
 		@RequestBody FeedbackReviewRequestDto dto){
-		return  new ResponseEntity<>(feedbackReviewService.updateReview(userId, feedbackId, dto), HttpStatus.OK);
+		return  new ResponseEntity<>(feedbackReviewService.updateReview(userId, reviewId, dto), HttpStatus.OK);
 	}
-	@DeleteMapping("reviews/{reviewsId}")
+	@DeleteMapping("reviews/{reviewId}")
 	public ResponseEntity<ApiResponseDto> deleteReview(
 		@AuthUser Long userId,
 		@PathVariable Long reviewId
 	){
-	return  new ResponseEntity<>(feedbackReviewService.deleteReview(userId, reviewId ), HttpStatus.OK);
+	return  new ResponseEntity<>(feedbackReviewService.deleteReview(userId, reviewId), HttpStatus.OK);
 	}
 }
