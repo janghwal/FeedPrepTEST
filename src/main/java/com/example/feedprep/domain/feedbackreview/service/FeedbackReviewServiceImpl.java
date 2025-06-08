@@ -109,7 +109,7 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 	}
 
 	@Override
-	public ApiResponseDto deleteReview(Long userId, Long feedbackId, Long reviewId) {
+	public ApiResponseDto deleteReview(Long userId, Long reviewId) {
 		User user = userRepository.findByIdOrElseThrow(userId);
 		if(!user.getUserId().equals(userId)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);

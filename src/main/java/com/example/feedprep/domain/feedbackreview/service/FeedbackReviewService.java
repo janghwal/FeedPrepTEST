@@ -22,5 +22,5 @@ public interface FeedbackReviewService {
 	//리뷰 수정
 	FeedbackReviewResponseDto updateReview( Long userId, Long reviewId, FeedbackReviewRequestDto dto);
 	//리뷰의 삭제
-	ApiResponseDto deleteReview(Long userId, Long feedbackId, Long reviewId);
+	ApiResponseDto deleteReview(Long userId, Long reviewId);
 }

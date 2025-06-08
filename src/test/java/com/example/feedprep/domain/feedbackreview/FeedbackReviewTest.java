@@ -179,7 +179,7 @@ public class FeedbackReviewTest {
 
 		long start = System.currentTimeMillis();
 		ApiResponseDto FeedbackReviewDeleteResponse =
-			feedbackReviewService.deleteReview(users.get(0).getUserId(),1L,1L);
+			feedbackReviewService.deleteReview(users.get(0).getUserId(),1L);
 		long end= System.currentTimeMillis();
 		System.out.println("첫 실행 시간: " + (end - start) + "ms"); // DB 조회
 
