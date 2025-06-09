@@ -18,4 +18,8 @@ public class TutorResponseDto {
     private UserRole role;
     private Double rating;
     private List<UserTechStack> userTechStacks;
+
+    public TutorResponseDto(UserRole role) {
+        this.role = role;
+    }
 }

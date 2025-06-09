@@ -44,7 +44,10 @@ public enum SuccessCode {
     TECH_STACK_DELETED(HttpStatus.OK, "기술 스택을 삭제하였습니다."),
     TECH_STACK_LISTED(HttpStatus.OK, "기술 스택 목록입니다."),
     ADD_MY_TECH_STACK(HttpStatus.CREATED, "관심 기술 스택을 추가하였습니다."),
-    REMOVE_MY_TECH_STACK(HttpStatus.OK, "관심 기술 스택을 삭제하였습니다.")
+    REMOVE_MY_TECH_STACK(HttpStatus.OK, "관심 기술 스택을 삭제하였습니다."),
+
+    // 관리자
+    APPROVE_TUTOR(HttpStatus.OK, "튜터 활동을 승인하였습니다.")
 
     ;
 
