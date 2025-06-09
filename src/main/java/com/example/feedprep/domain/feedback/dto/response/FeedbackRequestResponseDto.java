@@ -1,6 +1,7 @@
 package com.example.feedprep.domain.feedback.dto.response;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
 import com.example.feedprep.domain.feedbackrequestentity.entity.FeedbackRequestEntity;
 import com.example.feedprep.domain.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Getter
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class FeedbackRequestResponseDto {
 		this.fileUrl =  requests.getDocument().getFileUrl();
 		this.content =  requests.getContent();
 		this.requestState = requests.getRequestState();
-		this.ModifiedAt = requests.getModifiedAt().toString();
+		this.ModifiedAt = requests.getModifiedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 	}
 
 }
