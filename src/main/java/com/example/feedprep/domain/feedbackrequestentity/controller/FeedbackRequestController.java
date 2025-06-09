@@ -25,7 +25,7 @@ import com.example.feedprep.domain.feedbackrequestentity.dto.response.FeedbackRe
 import com.example.feedprep.domain.feedbackrequestentity.service.FeedbackRequestService;
 
 @RestController
-@RequestMapping("requests")
+@RequestMapping("/feedback-requests")
 @RequiredArgsConstructor
 public class FeedbackRequestController {
     private final FeedbackRequestService feedbackRequestService;
@@ -57,7 +57,7 @@ public class FeedbackRequestController {
 		return new ResponseEntity<>(feedbackRequestService.getRequests(userId, tutorId, documentId,  month, page, size), HttpStatus.OK);
 	}
 
-	@PutMapping("{requestId}/update")
+	@PutMapping("/{requestId}")
 	public ResponseEntity<FeedbackRequestEntityResponseDto> updateRequest(
 		@AuthUser Long userId,
 		@PathVariable Long requestId,
@@ -65,7 +65,7 @@ public class FeedbackRequestController {
 	){
 		return new ResponseEntity<>(feedbackRequestService.updateRequest(userId,requestId, dto), HttpStatus.OK);
 	}
-	@DeleteMapping("{requestId}/cancel")
+	@DeleteMapping("/{requestId}")
 	public ResponseEntity<ApiResponseDto> cancelRequest(
 		@AuthUser Long userId,
 		@PathVariable Long requestId

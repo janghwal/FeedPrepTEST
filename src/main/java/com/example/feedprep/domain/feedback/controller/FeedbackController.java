@@ -1,12 +1,9 @@
 package com.example.feedprep.domain.feedback.controller;
 
-import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,19 +21,19 @@ import com.example.feedprep.domain.feedback.dto.response.FeedbackResponseDto;
 import com.example.feedprep.domain.feedback.service.FeedbackService;
 
 @RestController
-@RequestMapping("/feedback")
+@RequestMapping
 @RequiredArgsConstructor
 public class FeedbackController {
 	private final FeedbackService feedbackService;
 
-	@GetMapping("/requests/{requestId}")
+	@GetMapping("/feedback/requests/{requestId}")
 	public ResponseEntity<FeedbackRequestResponseDto>  getFeedbackRequest(
 		@AuthUser Long tutorId,
 		@PathVariable  Long requestId
 	){
 		return  new ResponseEntity<>(feedbackService.getFeedbackRequest(tutorId, requestId), HttpStatus.OK);
 	}
-	@GetMapping("/requests")
+	@GetMapping("/feedback/requests/{requestId}")
 	public ResponseEntity<FeedbackRequestListResponseDto> getFeedbackRequests(
 		@AuthUser Long tutorId,
 		@RequestParam(defaultValue = "0") int page,
@@ -45,7 +42,7 @@ public class FeedbackController {
 		return new ResponseEntity<>(feedbackService.getFeedbackRequests(tutorId, page, size), HttpStatus.OK);
 	}
 
-	@PatchMapping ("/requests/{requestId}/reject")
+	@PatchMapping ("/feedback/requests/{requestId}/reject")
 	public ResponseEntity<ApiResponseDto> rejectFeedbackRequest(
 		@AuthUser Long tutorId,
 		@PathVariable Long requestId,
@@ -53,17 +50,17 @@ public class FeedbackController {
 		return  new ResponseEntity<>(feedbackService.rejectFeedbackRequest(tutorId, requestId, dto), HttpStatus.OK);
 	}
 
-	@PostMapping("/requests/{requestId}/feedback")
+	@PostMapping("/feedback")
 	public ResponseEntity<FeedbackResponseDto> createFeedback(
 		@AuthUser Long tutorId,
-		@PathVariable Long requestId,
+		@RequestParam Long requestId,
 		@RequestBody FeedbackWriteRequestDto dto
 	){
 
 		return new ResponseEntity<>(feedbackService.createFeedback(tutorId, requestId,dto),HttpStatus.CREATED);
 	}
 
-	@PatchMapping("/{feedbackId}")
+	@PatchMapping("/feedback/{feedbackId}")
 	public ResponseEntity<FeedbackResponseDto> updateFeedback (
 		@AuthUser Long tutorId,
 		@PathVariable Long feedbackId,
