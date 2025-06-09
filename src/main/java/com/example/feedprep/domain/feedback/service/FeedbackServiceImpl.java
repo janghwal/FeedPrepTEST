@@ -17,6 +17,7 @@ import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.common.exception.enums.SuccessCode;
 import com.example.feedprep.common.response.ApiResponseDto;
+import com.example.feedprep.domain.feedback.dto.request.FeedbackRejectRequestDto;
 import com.example.feedprep.domain.feedback.dto.request.FeedbackWriteRequestDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestListResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestResponseDto;
@@ -131,7 +132,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 
 	@Transactional
 	@Override
-	public ApiResponseDto rejectFeedbackRequest(Long tutorId, Long requestId, FeedbackWriteRequestDto dto) {
+	public ApiResponseDto rejectFeedbackRequest(Long tutorId, Long requestId, FeedbackRejectRequestDto dto) {
 		// 1. 튜터 본인 확인
 		User tutor = userRepository.findByIdOrElseThrow(tutorId, ErrorCode.NOT_FOUND_TUTOR);
 		if(!tutor.getRole().equals(UserRole.APPROVED_TUTOR)){

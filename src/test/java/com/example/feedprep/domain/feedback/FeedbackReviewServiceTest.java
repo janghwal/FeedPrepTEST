@@ -12,6 +12,7 @@ import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.document.entity.Document;
 import com.example.feedprep.domain.document.repository.DocumentRepository;
 import com.example.feedprep.domain.feedback.common.RejectReason;
+import com.example.feedprep.domain.feedback.dto.request.FeedbackRejectRequestDto;
 import com.example.feedprep.domain.feedback.dto.request.FeedbackWriteRequestDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestListResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestResponseDto;
@@ -156,7 +157,7 @@ public class FeedbackReviewServiceTest {
 		feedbackRequestService.createRequest( users.get(0).getUserId(), testRequestDto);
 
 		FeedbackWriteRequestDto requestDto
-			= new FeedbackWriteRequestDto(1L,"내용", null, null);
+			= new FeedbackWriteRequestDto(1L,"내용");
 
 		long start = System.currentTimeMillis();
 		FeedbackResponseDto response = feedbackService.createFeedback(tutors.get(2).getUserId(), 1L, requestDto);
@@ -192,7 +193,7 @@ public class FeedbackReviewServiceTest {
 
 		//피드백 작성 하기
 		FeedbackWriteRequestDto requestDto =
-			new FeedbackWriteRequestDto(1L,"직성 완료했습니다.", null, null);
+			new FeedbackWriteRequestDto(1L,"직성 완료했습니다.");
 
 		//피드백 작성 완료 저장
 		long start = System.currentTimeMillis();
@@ -233,7 +234,7 @@ public class FeedbackReviewServiceTest {
 		//피드백 작성 하기
 
 		FeedbackWriteRequestDto requestDto = new FeedbackWriteRequestDto(alreadyExistRequest.getId(),
-			"직성 완료했습니다.", null, null);
+			"직성 완료했습니다.");
 
 		//피드백 작성 완료 저장
 		long start = System.currentTimeMillis();
@@ -267,12 +268,12 @@ public class FeedbackReviewServiceTest {
 		feedbackRequestService.createRequest( users.get(1).getUserId(), testRequestDto);
         //튜터는 특정 피드백 요청에 대해 거절 사유등록해서 거절을 승인한다.
 
-		FeedbackWriteRequestDto feedbackWriteRequestDto =
-			new FeedbackWriteRequestDto(1L, null, RejectReason.ETC, "OO 사유로 거절함.");
+		FeedbackRejectRequestDto feedbackRejectRequestDto =
+			new FeedbackRejectRequestDto(1L, null, RejectReason.ETC, "OO 사유로 거절함.");
 
 		long start = System.currentTimeMillis();
 		ApiResponseDto response
-			= feedbackService .rejectFeedbackRequest(tutors.get(2).getUserId(),1L,feedbackWriteRequestDto);
+			= feedbackService .rejectFeedbackRequest(tutors.get(2).getUserId(),1L,feedbackRejectRequestDto);
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 

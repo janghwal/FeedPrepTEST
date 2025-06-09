@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.common.security.annotation.AuthUser;
+import com.example.feedprep.domain.feedback.dto.request.FeedbackRejectRequestDto;
 import com.example.feedprep.domain.feedback.dto.request.FeedbackWriteRequestDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestListResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestResponseDto;
@@ -46,7 +47,7 @@ public class FeedbackController {
 	public ResponseEntity<ApiResponseDto> rejectFeedbackRequest(
 		@AuthUser Long tutorId,
 		@PathVariable Long requestId,
-		@RequestBody FeedbackWriteRequestDto dto){
+		@RequestBody FeedbackRejectRequestDto dto){
 		return  new ResponseEntity<>(feedbackService.rejectFeedbackRequest(tutorId, requestId, dto), HttpStatus.OK);
 	}
 
