@@ -2,6 +2,7 @@ package com.example.feedprep.domain.user.entity;
 
 import com.example.feedprep.common.entity.BaseTimeEntity;
 import com.example.feedprep.domain.document.entity.Document;
+import com.example.feedprep.domain.techstack.entity.UserTechStack;
 import com.example.feedprep.domain.user.enums.UserRole;
 import jakarta.persistence.*;
 
@@ -52,11 +53,16 @@ public class User extends BaseTimeEntity {
 
     private Long point;
 
+    private Double rating;
+
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
     @OneToMany(mappedBy = "user")
     private List<Document> documents = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<UserTechStack> userTechStacks = new ArrayList<>();
 
     public User(String name, String email, String password, String address, String introduction,
         UserRole role) {
