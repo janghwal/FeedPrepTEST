@@ -54,7 +54,7 @@ public class MatchingQueryImpl implements MatchingQuery{
 			.from(user)
 			.leftJoin(feedbackRequest).on(user.eq(feedbackRequest.tutor))
 			.leftJoin(feedback).on(feedbackRequest.eq(feedback.feedbackRequestEntity))
-			.leftJoin(review).on(feedback.eq(review.feedback))
+			.leftJoin(review).on(user.userId.eq(review.tutorId))
 			.where(
 				user.userId.in(
 						JPAExpressions
@@ -75,7 +75,7 @@ public class MatchingQueryImpl implements MatchingQuery{
 			.orderBy(
 				pendingOrApprovedCount.asc(),
 				review.rating.avg().desc(),
-				Expressions.numberTemplate(Long.class, "TIMESTAMPDIFF(SECOND, {0}, {1})", feedback.createdAt, feedbackRequest.createdAt).asc()
+				Expressions.numberTemplate(Long.class, "TIMESTAMPDIFF(SECOND, {0}, {1})", feedback.createdAt, feedbackRequest.createdAt).avg().asc()
 			)
 			.offset(page)
 			.limit(4)
