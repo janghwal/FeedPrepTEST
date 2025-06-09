@@ -1,8 +1,10 @@
 package com.example.feedprep.domain.user.dto.response;
 
+import com.example.feedprep.domain.techstack.entity.UserTechStack;
 import com.example.feedprep.domain.user.entity.User;
 import com.example.feedprep.domain.user.enums.UserRole;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,6 +21,8 @@ public class UserResponseDto {
     private String address;
     private String introduction;
     private UserRole role;
+    private Double rating;
+    private List<UserTechStack> userTechStacks;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -29,6 +33,8 @@ public class UserResponseDto {
         this.address = user.getAddress();
         this.introduction = user.getIntroduction();
         this.role = user.getRole();
+        this.rating = user.getRating();
+        this.userTechStacks = user.getUserTechStacks();
         this.createdAt = user.getCreatedAt();
         this.modifiedAt = user.getModifiedAt();
     }
