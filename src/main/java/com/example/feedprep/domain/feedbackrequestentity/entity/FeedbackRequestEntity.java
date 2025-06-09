@@ -8,14 +8,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import lombok.Getter;
 
 import com.example.feedprep.common.entity.BaseTimeEntity;
 import com.example.feedprep.domain.document.entity.Document;
-import com.example.feedprep.domain.feedback.entity.Feedback;
+import com.example.feedprep.domain.feedbackrequestentity.common.RejectReason;
 import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
 import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRequestDto;
 import com.example.feedprep.domain.user.entity.User;
@@ -46,6 +45,10 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 	@Column(nullable = false)
 	private RequestState requestState;
 
+	private RejectReason rejectReason;
+
+	private String etcContent;
+
 	//생성자
 	public FeedbackRequestEntity(){}
 
@@ -55,21 +58,19 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 		this.document = document;
 		this.content = dto.getContent();
 	}
-
 	public FeedbackRequestEntity(User user, Document document, RequestState requestState) {
 		this.user = user;
 		this.document = document;
 		this.requestState = requestState;
 	}
-
 	//변경
 	public void updateRequestState(RequestState requestState){
 		this.requestState = requestState;
 	}
-
 	public void updateFeedbackRequestEntity(FeedbackRequestDto dto, User tutor, Document document){
 		this.tutor = tutor;
 		this.document = document;
 		this.content = dto.getContent();
 	}
+
 }
