@@ -1,6 +1,7 @@
 package com.example.feedprep.domain.feedbackrequestentity.dto.response;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +32,7 @@ public class FeedbackRequestEntityResponseDto {
 		this.content = entity.getContent();
 		this.requestState = entity.getRequestState();
 		this.state = requestState.getDescription();
-		this.modifiedAt = entity.getModifiedAt().toString();
+		this.modifiedAt = entity.getModifiedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 	}
 
 

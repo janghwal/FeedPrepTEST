@@ -56,8 +56,10 @@ class UserServiceImplTest {
         List<TutorResponseDto> result = userServiceImpl.getTutorList();
 
         // then
-        TutorResponseDto tutor1 = new TutorResponseDto(user1.getUserId(),null,null,user1.getRole());
-        TutorResponseDto tutor2 = new TutorResponseDto(user2.getUserId(),null,null,user2.getRole());
+        TutorResponseDto tutor1 = new TutorResponseDto(
+            user1.getUserId(),null,null,user1.getRole(), user1.getRating(), null);
+        TutorResponseDto tutor2 = new TutorResponseDto(
+            user2.getUserId(),null,null,user2.getRole(), user2.getRating(),null);
 
         assertThat(result)
             .isNotNull()
@@ -104,6 +106,8 @@ class UserServiceImplTest {
             user.getAddress(),
             user.getIntroduction(),
             user.getRole(),
+            user.getRating(),
+            user.getUserTechStacks(),
             null,
             null
         );
@@ -136,6 +140,8 @@ class UserServiceImplTest {
             updateMyInfoRequestDto.getAddress(),
             updateMyInfoRequestDto.getIntroduction(),
             user.getRole(),
+            user.getRating(),
+            user.getUserTechStacks(),
             user.getCreatedAt(),
             user.getModifiedAt()
         );

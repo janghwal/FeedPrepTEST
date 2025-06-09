@@ -61,22 +61,23 @@ public enum ErrorCode {
     EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
 
 
-    // 피드백 요청 에러코드
+
     // 사용자 인증 관련
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "이메일 또는 비밀번호가 일치하지 않습니다. " ),
     TUTOR_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 튜터를 찾을 수 없습니다."),
     INVALID_DOCUMENT(HttpStatus.NOT_FOUND, "존재하지 않는 문서입니다."),
-    FEEDBACK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 피드백 요청을 찾을 수 없습니다."),
 
-    UNAUTHORIZED_ACCESS(HttpStatus.FORBIDDEN, "이 피드백에 접근할 수 없습니다."),
+    // 피드백 요청 에러코드
+    NOT_FOUND_FEEDBACK_REQUEST(HttpStatus.NOT_FOUND, "해당 피드백 요청을 찾을 수 없습니다."),
+    NOT_FOUND_FEEDBACK(HttpStatus.NOT_FOUND, "해당 피드백을 찾을 수 없습니다."),
+    NOT_FOUND_FEEDBACK_REVIEW(HttpStatus.NOT_FOUND, "해당 리뷰를 찾을 수 없습니다."),
+
     UNAUTHORIZED_REQUESTER_ACCESS(HttpStatus.FORBIDDEN, "해당 요청을 수행할 권한이 없습니다."),
-    UNAUTHORIZED_CANCEL(HttpStatus.FORBIDDEN, "이 피드백 요청을 취소할 권한이 없습니다."),
 
     SELF_FEEDBACK_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "자신에게는 피드백을 요청할 수 없습니다."),
     CANNOT_EDIT_COMPLETED_REQUEST(HttpStatus.BAD_REQUEST, "이미 완료된 피드백은 수정할 수 없습니다."),
     CANNOT_CANCEL_COMPLETED(HttpStatus.BAD_REQUEST, "이미 완료된 피드백은 취소할 수 없습니다."),
-
-    // 일반 오류
+    DUPLICATE_FEEDBACK_REQUEST(HttpStatus.CONFLICT, "이미 같은 튜터님께 신청 대기 중입니다."),
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "피드백 처리 중 내부 오류가 발생했습니다."),
 
     //피드백 작성  에러코드
