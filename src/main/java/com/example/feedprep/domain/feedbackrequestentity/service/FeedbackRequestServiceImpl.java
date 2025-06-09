@@ -1,7 +1,9 @@
 package com.example.feedprep.domain.feedbackrequestentity.service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,9 +37,9 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 
 	@Transactional
 	@Override
-	public FeedbackRequestEntityResponseDto saveRequest(FeedbackRequestDto dto, Long userId) {
+	public FeedbackRequestEntityResponseDto createRequest(Long userId, FeedbackRequestDto dto) {
 		User user = userRepository.findByIdOrElseThrow(userId);
-		User tutor = userRepository.findByIdOrElseThrow(dto.getTutorId(), ErrorCode.TUTOR_NOT_FOUND);
+		User tutor = userRepository.findByIdOrElseThrow(dto.getTutorId(), ErrorCode.NOT_FOUND_TUTOR);
 
 		Document document = documentRepository.findById(dto.getDocumentId())
 			.orElseThrow(()-> new CustomException(ErrorCode.INVALID_DOCUMENT));
@@ -50,7 +52,7 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 				 .orElse(null);
 
         if(feedbackRequestEntity != null){
-			throw new RuntimeException("이미 같은 튜터님께 신청 대기 중입니다.");
+			throw new CustomException(ErrorCode.DUPLICATE_FEEDBACK_REQUEST);
 		}
 
 		FeedbackRequestEntity request = new FeedbackRequestEntity(dto, user, tutor, document);
@@ -61,14 +63,14 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<FeedbackRequestEntityResponseDto> getRequest(
-		Long userId,
-		Long tutorId,
-		Long documentId,
-		LocalDateTime month,
+	public List<FeedbackRequestEntityResponseDto> getRequests(
+		Long userId,         // 신청자 or 튜터
+		Long tutorId,        // 피드백 받을 대상
+		Long documentId,     // 문서
+		LocalDateTime month, // 월별 필터
 		int page,
 		int size
-		)
+	)
 	{
 		//유저 본인 확인
 		User user = userRepository.findByIdOrElseThrow(userId);
@@ -88,11 +90,11 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 
 	@Transactional
 	@Override
-	public FeedbackRequestEntityResponseDto updateRequest(FeedbackRequestDto dto,Long feedbackId, Long userId) {
+	public FeedbackRequestEntityResponseDto updateRequest(Long userId, Long feedbackRequestId, FeedbackRequestDto dto) {
 
 		//요청이 존재하는 가?
-		FeedbackRequestEntity request = feedbackRequestEntityRepository.findById(feedbackId)
-			.orElseThrow(()->new CustomException(ErrorCode.FEEDBACK_NOT_FOUND));
+		FeedbackRequestEntity request = feedbackRequestEntityRepository.findById(feedbackRequestId)
+			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REQUEST));
 		if(!request.getUser().getUserId().equals(userId)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
@@ -114,10 +116,10 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 
 	@Transactional
 	@Override
-	public ApiResponseDto cancleRequest(Long RequestId, Long userId) {
+	public ApiResponseDto cancelRequest(Long userId, Long feedbackRequestId) {
 		//요청이 존재하는 가?
-		FeedbackRequestEntity request = feedbackRequestEntityRepository.findById(RequestId)
-			.orElseThrow(()->new CustomException(ErrorCode.FEEDBACK_NOT_FOUND));
+		FeedbackRequestEntity request = feedbackRequestEntityRepository.findById(feedbackRequestId)
+			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REQUEST));
 		if(!request.getUser().getUserId().equals(userId))
 		{
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
@@ -126,11 +128,12 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 			throw new CustomException(ErrorCode.CANNOT_EDIT_COMPLETED_REQUEST);
 		}
 		request.updateRequestState(RequestState.CANCELED);
-
+		Map<String ,Object> data = new HashMap<>();
+		data.put("modifiedAt", request.getModifiedAt().toString());
 
 		return new ApiResponseDto(
 			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.getHttpStatus().value(),
 			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.getMessage(),
-		SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.name());
+			data);
 	}
 }

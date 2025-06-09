@@ -8,19 +8,22 @@ import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackReq
 import com.example.feedprep.domain.feedbackrequestentity.dto.response.FeedbackRequestEntityResponseDto;
 
 public interface FeedbackRequestService {
-	 //피드백 신청
-     FeedbackRequestEntityResponseDto saveRequest(FeedbackRequestDto dto, Long userId);
-	 //피드백 신청 조회
-	 List<FeedbackRequestEntityResponseDto> getRequest(
-		Long userId,
-		Long tutorId,
-		Long documentId,
-		LocalDateTime month,
+	// 피드백 신청 생성
+	FeedbackRequestEntityResponseDto createRequest(Long userId, FeedbackRequestDto dto);
+
+	// 피드백 신청 조회
+	List<FeedbackRequestEntityResponseDto> getRequests(
+		Long userId,         // 신청자 or 튜터
+		Long tutorId,        // 피드백 받을 대상
+		Long documentId,     // 문서
+		LocalDateTime month, // 월별 필터
 		int page,
 		int size
-	 );
-	 //피드백 신청 수정
-	 FeedbackRequestEntityResponseDto updateRequest(FeedbackRequestDto dto,Long feedbackId, Long userId);
-	 //피드백 신청 취소
-	 ApiResponseDto cancleRequest(Long RequestId, Long userId);
+	);
+
+	// 피드백 신청 수정
+	FeedbackRequestEntityResponseDto updateRequest(Long userId, Long feedbackRequestId, FeedbackRequestDto dto);
+
+	// 피드백 신청 취소
+	ApiResponseDto cancelRequest(Long userId, Long feedbackRequestId);
 }
