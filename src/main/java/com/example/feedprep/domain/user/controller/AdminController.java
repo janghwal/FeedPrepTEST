@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admins")
 @RequiredArgsConstructor
-public class AdminContoller {
+public class AdminController {
 
     private AdminService adminService;
 
