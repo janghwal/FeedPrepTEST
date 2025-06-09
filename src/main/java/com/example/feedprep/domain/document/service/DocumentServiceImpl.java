@@ -28,13 +28,13 @@ public class DocumentServiceImpl implements DocumentService{
 
     @Override
     @Transactional
-    public DocumentResponseDto createDocument(MultipartFile file, String resume, Long tokenMyId) {
+    public DocumentResponseDto createDocument(MultipartFile file, String resume, Long userId) {
 
         if(file.isEmpty()) {
             throw new CustomException(ErrorCode.NOT_FOUND_FILE);
         }
 
-        User user = userRepository.findByIdOrElseThrow(tokenMyId);
+        User user = userRepository.findByIdOrElseThrow(userId);
 
         // user의 이력서는 최대 5개까지 생성 제한
         long cntDocument = documentRepository.countByUser(user);
@@ -60,9 +60,9 @@ public class DocumentServiceImpl implements DocumentService{
     }
 
     @Override
-    public List<DocumentListResponseDto> getMyDocumentList(Long tokenMyId) {
+    public List<DocumentListResponseDto> getMyDocumentList(Long userId) {
 
-        List<Document> documentList = documentRepository.findAllByUserUserId(tokenMyId);
+        List<Document> documentList = documentRepository.findAllByUserUserId(userId);
 
         List<DocumentListResponseDto> documentListResponseDtos =
             documentList.stream().map(document -> new DocumentListResponseDto(
@@ -75,12 +75,12 @@ public class DocumentServiceImpl implements DocumentService{
     }
 
     @Override
-    public DocumentResponseDto getMyDocument(Long documentId, Long tokenMyId) {
+    public DocumentResponseDto getMyDocument(Long documentId, Long userId) {
 
         Document document = documentRepository.findByIdOrElseThrow(documentId);
 
         // 본인 문서가 아니면 접근 권한 없음
-        if(!document.getUser().getUserId().equals(tokenMyId)){
+        if(!document.getUser().getUserId().equals(userId)){
             throw new CustomException(ErrorCode.FOREIGN_DOCUMENT_ACCESS);
         }
 
@@ -89,11 +89,11 @@ public class DocumentServiceImpl implements DocumentService{
 
     @Override
     @Transactional
-    public void deleteDocument(Long documentId, Long tokenMyId) {
+    public void deleteDocument(Long documentId, Long userId) {
         Document document = documentRepository.findByIdOrElseThrow(documentId);
 
         // 본인 문서가 아니면 접근 권한 없음
-        if(!document.getUser().getUserId().equals(tokenMyId)){
+        if(!document.getUser().getUserId().equals(userId)){
             throw new CustomException(ErrorCode.FOREIGN_DOCUMENT_ACCESS);
         }
 

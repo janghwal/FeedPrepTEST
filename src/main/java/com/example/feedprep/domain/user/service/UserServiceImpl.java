@@ -40,7 +40,9 @@ public class UserServiceImpl implements UserService {
                 user.getUserId(),
                 user.getName(),
                 user.getEmail(),
-                user.getRole()
+                user.getRole(),
+                user.getRating(),
+                user.getUserTechStacks()
             )).toList();
 
         return responseDtoList;
