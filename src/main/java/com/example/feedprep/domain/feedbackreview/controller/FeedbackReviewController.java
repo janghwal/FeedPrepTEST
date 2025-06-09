@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,7 +30,7 @@ public class FeedbackReviewController {
 	public ResponseEntity<FeedbackReviewResponseDto> createReview(
 		@AuthUser Long userId,
 		@PathVariable Long feedbackId,
-		@RequestBody FeedbackReviewRequestDto dto){
+		@Validated @RequestBody FeedbackReviewRequestDto dto){
 		return  new ResponseEntity<>(feedbackReviewService.createReview(userId, feedbackId, dto), HttpStatus.CREATED);
 	}
 
@@ -37,7 +38,7 @@ public class FeedbackReviewController {
 	public ResponseEntity<List<FeedbackReviewResponseDto>> getWrittenReviewsByStudent(
 		@AuthUser Long userId,
 		@RequestParam(defaultValue= "0") int page,
-		@RequestParam(defaultValue = "20") int size){
+		@Validated @RequestParam(defaultValue = "20") int size){
 		return new ResponseEntity<>(feedbackReviewService.getReviews(userId, page, size), HttpStatus.OK);
 	}
 
@@ -45,7 +46,7 @@ public class FeedbackReviewController {
 	public ResponseEntity<FeedbackReviewResponseDto> updateReview(
 		@AuthUser Long userId,
 		@PathVariable Long reviewId,
-		@RequestBody FeedbackReviewRequestDto dto){
+		@Validated @RequestBody FeedbackReviewRequestDto dto){
 		return new ResponseEntity<>(feedbackReviewService.updateReview(userId, reviewId, dto), HttpStatus.OK);
 	}
 	@DeleteMapping("/feedback/{feedbackId}/review/{reviewId}")

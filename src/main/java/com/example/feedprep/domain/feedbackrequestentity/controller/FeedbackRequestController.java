@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,10 +34,9 @@ public class FeedbackRequestController {
 	@PostMapping
 	public ResponseEntity<FeedbackRequestEntityResponseDto> createRequest(
 		@AuthUser Long userId,
-		@RequestBody FeedbackRequestDto dto){
+		@Validated @RequestBody FeedbackRequestDto dto){
 
 		return new ResponseEntity<>(feedbackRequestService.createRequest(userId, dto), HttpStatus.CREATED);
-
 	}
 
 	@GetMapping
@@ -61,14 +61,14 @@ public class FeedbackRequestController {
 	public ResponseEntity<FeedbackRequestEntityResponseDto> updateRequest(
 		@AuthUser Long userId,
 		@PathVariable Long requestId,
-		@RequestBody FeedbackRequestDto dto
+		@Validated @RequestBody FeedbackRequestDto dto
 	){
 		return new ResponseEntity<>(feedbackRequestService.updateRequest(userId,requestId, dto), HttpStatus.OK);
 	}
 	@DeleteMapping("/{requestId}")
 	public ResponseEntity<ApiResponseDto> cancelRequest(
 		@AuthUser Long userId,
-		@PathVariable Long requestId
+		@Validated @PathVariable Long requestId
 	){
 		return new ResponseEntity<>(feedbackRequestService.cancelRequest(userId,requestId), HttpStatus.OK);
 	}

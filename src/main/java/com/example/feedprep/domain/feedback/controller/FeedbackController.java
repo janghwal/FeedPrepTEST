@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,7 +48,7 @@ public class FeedbackController {
 	public ResponseEntity<ApiResponseDto> rejectFeedbackRequest(
 		@AuthUser Long tutorId,
 		@PathVariable Long requestId,
-		@RequestBody FeedbackRejectRequestDto dto){
+		@Validated @RequestBody FeedbackRejectRequestDto dto){
 		return  new ResponseEntity<>(feedbackService.rejectFeedbackRequest(tutorId, requestId, dto), HttpStatus.OK);
 	}
 
@@ -55,7 +56,7 @@ public class FeedbackController {
 	public ResponseEntity<FeedbackResponseDto> createFeedback(
 		@AuthUser Long tutorId,
 		@RequestParam Long requestId,
-		@RequestBody FeedbackWriteRequestDto dto
+		@Validated @RequestBody FeedbackWriteRequestDto dto
 	){
 
 		return new ResponseEntity<>(feedbackService.createFeedback(tutorId, requestId,dto),HttpStatus.CREATED);
@@ -65,10 +66,8 @@ public class FeedbackController {
 	public ResponseEntity<FeedbackResponseDto> updateFeedback (
 		@AuthUser Long tutorId,
 		@PathVariable Long feedbackId,
-		@RequestBody FeedbackWriteRequestDto dto
+		@Validated @RequestBody FeedbackWriteRequestDto dto
 	){
 		return new ResponseEntity<>(feedbackService.updateFeedback(tutorId, feedbackId, dto), HttpStatus.OK);
 	}
-
-
 }
