@@ -20,7 +20,7 @@ public class AdminContoller {
 
     private AdminService adminService;
 
-    @PostMapping()
+    @PostMapping("/tutor")
     public ResponseEntity<ApiResponseDto<TutorResponseDto>> approveTutor(
         @PathVariable Long tutorId
     ) {
