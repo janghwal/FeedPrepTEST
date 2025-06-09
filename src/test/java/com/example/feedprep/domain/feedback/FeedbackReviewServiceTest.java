@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.document.entity.Document;
 import com.example.feedprep.domain.document.repository.DocumentRepository;
 import com.example.feedprep.domain.feedback.common.RejectReason;
@@ -33,7 +34,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 @ActiveProfiles("local")
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class FeedbackServiceTest {
+public class FeedbackReviewServiceTest {
 
 	@Autowired
 	private FeedbackRequestEntityRepository feedbackRequestEntityRepository;
@@ -83,7 +84,7 @@ public class FeedbackServiceTest {
 
 		);
 		for(int  i =0; i <requestDtos.size(); i++){
-			feedbackRequestService.saveRequest(requestDtos.get(i), users.get(1).getUserId());
+			feedbackRequestService.createRequest( users.get(1).getUserId(), requestDtos.get(i));
 		}
 		long start = System.currentTimeMillis();
         FeedbackRequestResponseDto getRequest =  feedbackService.getFeedbackRequest(tutors.get(1).getUserId(),1L);
@@ -119,13 +120,14 @@ public class FeedbackServiceTest {
 
 		);
 
-		feedbackRequestService.saveRequest(requestDtos.get(3), users.get(0).getUserId());
-		feedbackRequestService.saveRequest(requestDtos.get(3), users.get(1).getUserId());
-		feedbackRequestService.saveRequest(requestDtos.get(3), users.get(2).getUserId());
-		feedbackRequestService.saveRequest(requestDtos.get(3), users.get(3).getUserId());
-		feedbackRequestService.saveRequest(requestDtos.get(3), users.get(4).getUserId());
+
+		feedbackRequestService.createRequest( users.get(0).getUserId(), requestDtos.get(3));
+		feedbackRequestService.createRequest( users.get(1).getUserId(), requestDtos.get(3));
+		feedbackRequestService.createRequest( users.get(2).getUserId(), requestDtos.get(3));
+		feedbackRequestService.createRequest( users.get(3).getUserId(), requestDtos.get(3));
+		feedbackRequestService.createRequest( users.get(4).getUserId(), requestDtos.get(3));
 		long start = System.currentTimeMillis();
-		FeedbackRequestListResponseDto getRequests =  feedbackService.getFeedbackRequestList(tutors.get(3).getUserId(),0, 20);
+		FeedbackRequestListResponseDto getRequests =  feedbackService.getFeedbackRequests(tutors.get(3).getUserId(),0, 20);
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
@@ -150,11 +152,13 @@ public class FeedbackServiceTest {
 
 		Document doc = new Document(users.get(1), "api/ef/?");
 		documentRepository.save(doc);
-	    FeedbackRequestDto testRequestDto = new FeedbackRequestDto(tutors.get(2).getUserId(), 1L, "Text");
-		feedbackRequestService.saveRequest(testRequestDto, users.get(1).getUserId());
+
+		FeedbackRequestDto testRequestDto = new FeedbackRequestDto(tutors.get(2).getUserId(), 1L, "Text");
+		feedbackRequestService.createRequest( users.get(0).getUserId(), testRequestDto);
 
 		FeedbackWriteRequestDto requestDto
-			= new FeedbackWriteRequestDto(1L,"날먹잼", null, null);
+			= new FeedbackWriteRequestDto(1L,"내용", null, null);
+
 		long start = System.currentTimeMillis();
 		FeedbackResponseDto response = feedbackService.createFeedback(tutors.get(2).getUserId(), 1L, requestDto);
 		long end= System.currentTimeMillis();
@@ -185,7 +189,7 @@ public class FeedbackServiceTest {
 		FeedbackRequestDto testRequestDto =
 			new FeedbackRequestDto(tutors.get(2).getUserId(), 1L, "Text");
 
-		feedbackRequestService.saveRequest(testRequestDto, users.get(1).getUserId());
+		feedbackRequestService.createRequest( users.get(1).getUserId(), testRequestDto);
 
 		//피드백 작성 하기
 		FeedbackWriteRequestDto requestDto =
@@ -221,7 +225,7 @@ public class FeedbackServiceTest {
 
 		//유저가 튜터4에게 피드백을 요청한다.
 		FeedbackRequestDto testRequestDto = new FeedbackRequestDto(tutors.get(2).getUserId(), 1L, "Text");
-		feedbackRequestService.saveRequest(testRequestDto, users.get(1).getUserId());
+		feedbackRequestService.createRequest( users.get(1).getUserId(), testRequestDto);
 
 		//강제 Error 셋팅.
 		FeedbackRequestEntity alreadyExistRequest = feedbackRequestEntityRepository.findById(1L).orElseThrow();
@@ -261,14 +265,15 @@ public class FeedbackServiceTest {
 
 		//유저가 튜터4에게 피드백을 요청한다.
 		FeedbackRequestDto testRequestDto = new FeedbackRequestDto(tutors.get(2).getUserId(), 1L, "Text");
-		feedbackRequestService.saveRequest(testRequestDto, users.get(1).getUserId());
+		feedbackRequestService.createRequest( users.get(1).getUserId(), testRequestDto);
+        //튜터는 특정 피드백 요청에 대해 거절 사유등록해서 거절을 승인한다.
 
 		FeedbackWriteRequestDto feedbackWriteRequestDto =
-			new FeedbackWriteRequestDto(1L, null, RejectReason.ETC, "OO일 부로 사직함.");
+			new FeedbackWriteRequestDto(1L, null, RejectReason.ETC, "OO 사유로 거절함.");
 
 		long start = System.currentTimeMillis();
-		FeedbackRejectResponseDto response
-			= feedbackService.rejectFeedback(tutors.get(2).getUserId(),1L,feedbackWriteRequestDto);
+		ApiResponseDto response
+			= feedbackService .rejectFeedbackRequest(tutors.get(2).getUserId(),1L,feedbackWriteRequestDto);
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
