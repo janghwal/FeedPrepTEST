@@ -13,7 +13,6 @@ import com.example.feedprep.domain.document.entity.Document;
 import com.example.feedprep.domain.document.repository.DocumentRepository;
 import com.example.feedprep.domain.feedback.common.RejectReason;
 import com.example.feedprep.domain.feedback.dto.request.FeedbackWriteRequestDto;
-import com.example.feedprep.domain.feedback.dto.response.FeedbackRejectResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestListResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackResponseDto;

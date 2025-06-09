@@ -39,7 +39,6 @@ public class FeedbackRequestServiceTest {
 
 	public List<User> UserSetting (){
 		return List.of(
-			 new User("Test", "Test@naver.com", "tester1234", UserRole.ADMIN),
 			 new User("Astra1", "Test1@naver.com", "tester1234", UserRole.APPROVED_TUTOR),
 			 new User("Astra2", "Test2@naver.com", "tester1234", UserRole.APPROVED_TUTOR),
 			 new User("Astra3", "Test3@naver.com", "tester1234", UserRole.APPROVED_TUTOR),
@@ -169,7 +168,7 @@ public class FeedbackRequestServiceTest {
 		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
 
 		try {
-			String json = json = mapper.writeValueAsString(getRequests);
+			String json = mapper.writeValueAsString(getRequests);
 			System.out.println(json);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
@@ -205,7 +204,7 @@ public class FeedbackRequestServiceTest {
 		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
 
 		try {
-			String json = json = mapper.writeValueAsString(getRequests);
+			String json = mapper.writeValueAsString(getRequests);
 			System.out.println(json);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
@@ -241,7 +240,7 @@ public class FeedbackRequestServiceTest {
 		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
 
 		try {
-			String json = json = mapper.writeValueAsString(getRequests);
+			String json  = mapper.writeValueAsString(getRequests);
 			System.out.println(json);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
@@ -283,7 +282,7 @@ public class FeedbackRequestServiceTest {
 		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
 
 		try {
-			String json = json = mapper.writeValueAsString(getRequests);
+			String json = mapper.writeValueAsString(getRequests);
 			System.out.println(json);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();

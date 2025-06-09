@@ -41,10 +41,6 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 	@JoinColumn(name = "document_id",nullable = false)
 	private Document document;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "feedback_id")
-	private Feedback feedback;
-
 	private String content;
 
 	@Column(nullable = false)
@@ -70,13 +66,10 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 	public void updateRequestState(RequestState requestState){
 		this.requestState = requestState;
 	}
+
 	public void updateFeedbackRequestEntity(FeedbackRequestDto dto, User tutor, Document document){
 		this.tutor = tutor;
 		this.document = document;
 		this.content = dto.getContent();
 	}
-
-	// public void updateFeedback(FeedBack feedBack) {
-	// 	this.feedBack=  feedBack;
-	// }
 }
