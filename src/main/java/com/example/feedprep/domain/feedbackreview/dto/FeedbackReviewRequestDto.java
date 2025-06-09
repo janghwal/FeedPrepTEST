@@ -12,9 +12,9 @@ public class FeedbackReviewRequestDto {
 
 	private Long feedbackId;
 
-	@Min(value = 0)
-	@Max(value = 5)
-	private int rating;
+	@Min(value = 0L)
+	@Max(value = 5L)
+	private Long rating;
 
 	private String content;
 }
