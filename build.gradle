@@ -33,8 +33,8 @@ dependencies {
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
     implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
 
-    // H2
-    implementation 'com.h2database:h2'
+    // H2 - 테스트용 DB
+    testImplementation 'com.h2database:h2'
 
     // S3
     implementation platform('software.amazon.awssdk:bom:2.20.90')
@@ -69,7 +69,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
 }
 
 tasks.named('test') {
