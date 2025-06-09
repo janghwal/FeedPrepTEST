@@ -74,7 +74,7 @@ public class FeedbackReviewTest {
 
 		//피드백 요청에 대한 피드백 작성
 		FeedbackWriteRequestDto feedbackWriteRequestDto
-			= new FeedbackWriteRequestDto(1L,"날먹잼", null, null);
+			= new FeedbackWriteRequestDto(1L,"날먹잼");
 
 		feedbackService.createFeedback(users.get(0).getUserId(), 1L, feedbackWriteRequestDto);
 
@@ -118,7 +118,7 @@ public class FeedbackReviewTest {
 
 		//피드백 요청에 대한 피드백 작성
 		FeedbackWriteRequestDto feedbackWriteRequestDto
-			= new FeedbackWriteRequestDto(1L,"날먹잼", null, null);
+			= new FeedbackWriteRequestDto(1L,"날먹잼");
 
 		feedbackService.createFeedback(users.get(0).getUserId(), 1L, feedbackWriteRequestDto);
 		//리뷰 작성 완료하기.
@@ -165,7 +165,7 @@ public class FeedbackReviewTest {
 
 		//피드백 요청에 대한 피드백 작성
 		FeedbackWriteRequestDto feedbackWriteRequestDto
-			= new FeedbackWriteRequestDto(1L,"날먹잼", null, null);
+			= new FeedbackWriteRequestDto(1L,"날먹잼");
 
 		feedbackService.createFeedback(users.get(0).getUserId(), 1L, feedbackWriteRequestDto);
 		//리뷰 작성 완료하기.
@@ -210,7 +210,7 @@ public class FeedbackReviewTest {
 
 		//피드백 요청에 대한 피드백 작성
 		FeedbackWriteRequestDto feedbackWriteRequestDto
-			= new FeedbackWriteRequestDto(1L,"날먹잼", null, null);
+			= new FeedbackWriteRequestDto(1L,"날먹잼");
 
 		feedbackService.createFeedback(users.get(0).getUserId(), 1L, feedbackWriteRequestDto);
 		//리뷰 작성 완료하기.
@@ -265,9 +265,9 @@ public class FeedbackReviewTest {
 		feedbackRequestService.createRequest(users.get(2).getUserId(), requestDtoTutor3);
 
 		List<FeedbackWriteRequestDto> testFedbackWriteRequestDtos = List.of(
-			new FeedbackWriteRequestDto(1L, "~이런점을 수정하면 좋을것 같습니다.", null, null),
-			new FeedbackWriteRequestDto(2L, "~이런점을 수정하면 좋을것 같습니다.", null, null),
-			new FeedbackWriteRequestDto(3L, "~이런점을 수정하면 좋을것 같습니다.", null, null)
+			new FeedbackWriteRequestDto(1L, "~이런점을 수정하면 좋을것 같습니다."),
+			new FeedbackWriteRequestDto(2L, "~이런점을 수정하면 좋을것 같습니다."),
+			new FeedbackWriteRequestDto(3L, "~이런점을 수정하면 좋을것 같습니다.")
 		);
 		feedbackService.createFeedback(users.get(0).getUserId(), 1L, testFedbackWriteRequestDtos.get(0));
 		feedbackService.createFeedback(tutors.get(0).getUserId(), 2L, testFedbackWriteRequestDtos.get(1));
@@ -324,7 +324,7 @@ public class FeedbackReviewTest {
 		//피드백 요청에 대한 피드백 작성
 		for (Long i = 0L; i < users.size()-1; i++) {
 			FeedbackWriteRequestDto testfeedbackWriteRequestDto =
-				new FeedbackWriteRequestDto(i, "~이런점을 수정하면 좋을것 같습니다.", null, null);
+				new FeedbackWriteRequestDto(i, "~이런점을 수정하면 좋을것 같습니다.");
 
 			feedbackService.createFeedback(users.get(0).getUserId(), i + 1, testfeedbackWriteRequestDto);
 		}
@@ -377,7 +377,7 @@ public class FeedbackReviewTest {
 		//피드백 요청에 대한 피드백 작성
 		for(Long i = 1L; i < users.size(); i++) {
 			FeedbackWriteRequestDto testfeedbackWriteRequestDto =
-				new FeedbackWriteRequestDto(i, "~이런점을 수정하면 좋을것 같습니다.", null, null);
+				new FeedbackWriteRequestDto(i, "~이런점을 수정하면 좋을것 같습니다.");
 
 			feedbackService.createFeedback(users.get(0).getUserId(), i, testfeedbackWriteRequestDto);
 		}
