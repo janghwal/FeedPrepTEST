@@ -1,6 +1,7 @@
 package com.example.feedprep.domain.board.entity;
 
 import com.example.feedprep.domain.board.dto.BoardRequestDto;
+import com.example.feedprep.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,23 +28,27 @@ public class Board {
     private String tag; // 예: "질문", "후기", "정보"
 
     @Column(nullable = false)
-    private boolean secret; // 비밀글 여부 (튜터만 조회 가능)
+    private boolean secret; // 비밀글 여부
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user; // 작성자 (User와 연관관계 설정)
 
     @Column(nullable = false)
-    private Long userId; // 작성자 ID (User 테이블 FK로 연결 예정)
+    private int recommendCount = 0;
 
     private int viewCount = 0;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static Board of(BoardRequestDto dto) {
+    public static Board of(BoardRequestDto dto, User user) {
         return Board.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .tag(dto.getTag())
                 .secret(dto.isSecret())
-                .userId(dto.getUserId())
+                .user(user)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
@@ -59,5 +64,13 @@ public class Board {
 
     public void increaseViewCount() {
         this.viewCount++;
+    }
+
+    public void increaseRecommendCount() {
+        this.recommendCount++;
+    }
+
+    public int getRecommendCount() {
+        return this.recommendCount;
     }
 }

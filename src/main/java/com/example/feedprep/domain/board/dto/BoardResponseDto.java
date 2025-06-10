@@ -27,7 +27,7 @@ public class BoardResponseDto {
                 .content(board.getContent())
                 .tag(board.getTag())
                 .secret(board.isSecret())
-                .userId(board.getUserId())
+                .userId(board.getUser().getUserId())
                 .viewCount(board.getViewCount())
                 .createdAt(board.getCreatedAt())
                 .updatedAt(board.getUpdatedAt())

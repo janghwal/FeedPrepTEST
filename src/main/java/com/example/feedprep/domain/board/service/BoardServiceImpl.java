@@ -1,10 +1,15 @@
 package com.example.feedprep.domain.board.service;
 
+import com.example.feedprep.common.security.util.SecurityUtil;
 import com.example.feedprep.domain.board.dto.BoardRequestDto;
 import com.example.feedprep.domain.board.dto.BoardResponseDto;
 import com.example.feedprep.domain.board.dto.BoardSearchCondition;
 import com.example.feedprep.domain.board.entity.Board;
 import com.example.feedprep.domain.board.repository.BoardRepository;
+import com.example.feedprep.domain.scrap.entity.Scrap;
+import com.example.feedprep.domain.scrap.repository.ScrapRepository;
+import com.example.feedprep.domain.user.entity.User;
+import com.example.feedprep.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +21,22 @@ import java.util.stream.Collectors;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final ScrapRepository scrapRepository;
+    private final UserRepository userRepository;
 
     @Override
     public BoardResponseDto createBoard(BoardRequestDto requestDto) {
-        Board board = Board.of(requestDto);
+        Long userId = SecurityUtil.getCurrentUserId();
+        User user = userRepository.findByIdOrElseThrow(userId);
+
+        Board board = Board.of(requestDto, user); // 수정된 Board.of() 사용
         boardRepository.save(board);
         return BoardResponseDto.from(board);
     }
 
+    // 이하 동일
     @Override
     public List<BoardResponseDto> getBoards(BoardSearchCondition condition) {
-        // 기본 목록 조회만 일단 처리
         return boardRepository.findAll().stream()
                 .map(BoardResponseDto::from)
                 .collect(Collectors.toList());
@@ -53,13 +63,56 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public int recommendBoard(Long boardId) {
-        // 추천 수 증가 로직은 이후 구현
-        return 0;
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+        board.increaseRecommendCount();
+        return board.getRecommendCount();
     }
 
     @Override
     public boolean scrapBoard(Long boardId) {
-        // 스크랩 처리 로직은 이후 구현
+        Long userId = SecurityUtil.getCurrentUserId();
+        User user = userRepository.findByIdOrElseThrow(userId);
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+
+        boolean exists = scrapRepository.existsByUserAndBoard(user, board);
+        if (exists) return false;
+
+        Scrap scrap = Scrap.of(user, board);
+        scrapRepository.save(scrap);
         return true;
+    }
+
+    @Override
+    public boolean unscrapBoard(Long boardId) {
+        Long userId = SecurityUtil.getCurrentUserId();
+        User user = userRepository.findByIdOrElseThrow(userId);
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+
+        Scrap scrap = scrapRepository.findByUserAndBoard(user, board)
+                .orElseThrow(() -> new IllegalArgumentException("스크랩되지 않은 게시글입니다."));
+        scrapRepository.delete(scrap);
+        return true;
+    }
+
+    @Override
+    public List<BoardResponseDto> getMyScrapList() {
+        Long userId = SecurityUtil.getCurrentUserId();
+        User user = userRepository.findByIdOrElseThrow(userId);
+        List<Scrap> scraps = scrapRepository.findAllByUser(user);
+        return scraps.stream()
+                .map(scrap -> BoardResponseDto.from(scrap.getBoard()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean isBoardScrapped(Long boardId) {
+        Long userId = SecurityUtil.getCurrentUserId();
+        User user = userRepository.findByIdOrElseThrow(userId);
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+        return scrapRepository.findByUserAndBoard(user, board).isPresent();
     }
 }

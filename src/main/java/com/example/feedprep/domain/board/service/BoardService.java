@@ -8,6 +8,12 @@ import java.util.List;
 
 public interface BoardService {
 
+    boolean unscrapBoard(Long boardId);
+
+    List<BoardResponseDto> getMyScrapList();
+
+    boolean isBoardScrapped(Long boardId);
+
     BoardResponseDto createBoard(BoardRequestDto requestDto);
 
     List<BoardResponseDto> getBoards(BoardSearchCondition condition);
