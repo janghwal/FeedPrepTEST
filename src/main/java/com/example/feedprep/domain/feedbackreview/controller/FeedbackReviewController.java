@@ -42,14 +42,14 @@ public class FeedbackReviewController {
 		return new ResponseEntity<>(feedbackReviewService.getReviews(userId, page, size), HttpStatus.OK);
 	}
 
-	@PatchMapping("/feedback/{feedbackId}/review/{reviewId}")
+	@PatchMapping("/feedback/{feedbackId}/review")
 	public ResponseEntity<FeedbackReviewResponseDto> updateReview(
 		@AuthUser Long userId,
 		@PathVariable Long reviewId,
 		@Validated @RequestBody FeedbackReviewRequestDto dto){
 		return new ResponseEntity<>(feedbackReviewService.updateReview(userId, reviewId, dto), HttpStatus.OK);
 	}
-	@DeleteMapping("/feedback/{feedbackId}/review/{reviewId}")
+	@DeleteMapping("/feedback/{feedbackId}/review")
 	public ResponseEntity<ApiResponseDto> deleteReview(
 		@AuthUser Long userId,
 		@PathVariable Long reviewId
