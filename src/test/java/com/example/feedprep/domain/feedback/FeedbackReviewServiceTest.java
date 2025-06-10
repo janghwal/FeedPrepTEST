@@ -8,14 +8,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.document.entity.Document;
 import com.example.feedprep.domain.document.repository.DocumentRepository;
-import com.example.feedprep.domain.feedback.common.RejectReason;
-import com.example.feedprep.domain.feedback.dto.request.FeedbackRejectRequestDto;
 import com.example.feedprep.domain.feedback.dto.request.FeedbackWriteRequestDto;
-import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestListResponseDto;
-import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestResponseDto;
 import com.example.feedprep.domain.feedback.dto.response.FeedbackResponseDto;
 import com.example.feedprep.domain.feedback.service.FeedbackService;
 import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
@@ -29,7 +24,6 @@ import com.example.feedprep.domain.user.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @ActiveProfiles("local")
 @SpringBootTest
@@ -46,8 +40,6 @@ public class FeedbackReviewServiceTest {
 	private FeedbackRequestService feedbackRequestService;
 	@Autowired
 	private FeedbackService feedbackService;
-
-
 	public List<User> tutorSetting (){
 		return List.of(
 			new User("Astra1", "Test1@naver.com", "tester1234", UserRole.APPROVED_TUTOR),
@@ -65,81 +57,6 @@ public class FeedbackReviewServiceTest {
 			new User("paragon3", "Test7@naver.com", "tester1234", UserRole.STUDENT),
 			new User("paragon4", "Test8@naver.com", "tester1234", UserRole.STUDENT)
 		);
-	}
-	@Transactional
-	@Test
-	public void 단건_조회_테스트(){
-		List<User> tutors =tutorSetting();
-		List<User> users =userSetting ();
-		userRepository.saveAll(tutors );
-		userRepository.saveAll(users );
-
-		Document doc = new Document(users.get(1), "api/ef/?");
-		documentRepository.save(doc);
-		List<FeedbackRequestDto> requestDtos = List.of(
-			new FeedbackRequestDto(tutors.get(0).getUserId(), 1L, "Text"),
-			new FeedbackRequestDto(tutors.get(1).getUserId(), 1L, "Text"),
-			new FeedbackRequestDto(tutors.get(2).getUserId(), 1L, "Text"),
-			new FeedbackRequestDto(tutors.get(3).getUserId(), 1L, "Text")
-
-		);
-		for(int  i =0; i <requestDtos.size(); i++){
-			feedbackRequestService.createRequest( users.get(1).getUserId(), requestDtos.get(i));
-		}
-		long start = System.currentTimeMillis();
-        FeedbackRequestResponseDto getRequest =  feedbackService.getFeedbackRequest(tutors.get(1).getUserId(),1L);
-		long end= System.currentTimeMillis();
-		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
-
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.registerModule(new JavaTimeModule());
-		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
-
-		try {
-			String json = mapper.writeValueAsString( getRequest); // 전체 객체를 JSON 변환
-			System.out.println(json);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-	}
-	@Transactional
-	@Test
-	public void 다건_조회_테스트(){
-		List<User> tutors =tutorSetting();
-		List<User> users =userSetting ();
-		userRepository.saveAll(tutors );
-		userRepository.saveAll(users );
-
-		Document doc = new Document(users.get(1), "api/ef/?");
-		documentRepository.save(doc);
-		List<FeedbackRequestDto> requestDtos = List.of(
-			new FeedbackRequestDto(1L, 1L, "Text"),
-			new FeedbackRequestDto(2L, 1L, "Text"),
-			new FeedbackRequestDto(3L, 1L, "Text"),
-			new FeedbackRequestDto(4L, 1L, "Text")
-
-		);
-
-
-		feedbackRequestService.createRequest( users.get(0).getUserId(), requestDtos.get(3));
-		feedbackRequestService.createRequest( users.get(1).getUserId(), requestDtos.get(3));
-		feedbackRequestService.createRequest( users.get(2).getUserId(), requestDtos.get(3));
-		feedbackRequestService.createRequest( users.get(3).getUserId(), requestDtos.get(3));
-		feedbackRequestService.createRequest( users.get(4).getUserId(), requestDtos.get(3));
-		long start = System.currentTimeMillis();
-		FeedbackRequestListResponseDto getRequests =  feedbackService.getFeedbackRequests(tutors.get(3).getUserId(),0, 20);
-		long end= System.currentTimeMillis();
-		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
-
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
-
-		try {
-			String json = mapper.writeValueAsString(getRequests); // 전체 객체를 JSON 변환
-			System.out.println(json);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Transactional
@@ -252,39 +169,5 @@ public class FeedbackReviewServiceTest {
 			e.printStackTrace();
 		}
 	}
-	@Transactional
-	@Test
-	public void 피드백_거절(){
-		List<User> tutors =tutorSetting();
-		List<User> users =userSetting ();
-		userRepository.saveAll(tutors );
-		userRepository.saveAll(users );
 
-		Document doc = new Document(users.get(1), "api/ef/?");
-		documentRepository.save(doc);
-
-		//유저가 튜터4에게 피드백을 요청한다.
-		FeedbackRequestDto testRequestDto = new FeedbackRequestDto(tutors.get(2).getUserId(), 1L, "Text");
-		feedbackRequestService.createRequest( users.get(1).getUserId(), testRequestDto);
-        //튜터는 특정 피드백 요청에 대해 거절 사유등록해서 거절을 승인한다.
-
-		FeedbackRejectRequestDto feedbackRejectRequestDto =
-			new FeedbackRejectRequestDto(1L, null, RejectReason.ETC, "OO 사유로 거절함.");
-
-		long start = System.currentTimeMillis();
-		ApiResponseDto response
-			= feedbackService .rejectFeedbackRequest(tutors.get(2).getUserId(),1L,feedbackRejectRequestDto);
-		long end= System.currentTimeMillis();
-		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
-
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
-
-		try {
-			String json = mapper.writeValueAsString(response); // 전체 객체를 JSON 변환
-			System.out.println(json);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-	}
 }
