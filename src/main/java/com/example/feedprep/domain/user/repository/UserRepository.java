@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 
-    Optional<User>  findByIdAndDeletedAtIsNull(Long userId);
+    Optional<User>  findByUserIdAndDeletedAtIsNull(Long userId);
     //피드백 요청용 조회 문
     Optional<User> getUserByEmail(String email);
 
@@ -27,14 +27,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByRole(UserRole role);
 
     default User findByIdOrElseThrow(Long id) {
-        return findByIdAndDeletedAtIsNull(id).orElseThrow(
+        return findByUserIdAndDeletedAtIsNull(id).orElseThrow(
             () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
     }
 
     //피드백 요청용 조회 문
     default User findByIdOrElseThrow(Long id, ErrorCode errorCode) {
-        return findByIdAndDeletedAtIsNull(id).orElseThrow(
+        return findByUserIdAndDeletedAtIsNull(id).orElseThrow(
             () -> new CustomException(errorCode)
         );
     }
