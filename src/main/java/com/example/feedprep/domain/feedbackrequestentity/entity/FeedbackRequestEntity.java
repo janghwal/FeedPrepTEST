@@ -72,5 +72,9 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 		this.document = document;
 		this.content = dto.getContent();
 	}
+	public void updateFeedbackRequestRejectDto(RejectReason rejectReason, String etcContent){
+		this.rejectReason = rejectReason;
+		this.etcContent = etcContent;
+	}
 
 }

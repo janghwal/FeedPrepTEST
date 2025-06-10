@@ -99,7 +99,7 @@ public class FeedbackRequestController {
 	){
 		return  new ResponseEntity<>(feedbackRequestService.getFeedbackRequest(tutorId, requestId), HttpStatus.OK);
 	}
-	@GetMapping("/tutor}")
+	@GetMapping("/tutor")
 	public ResponseEntity<List<TutorSideFeedbackRequestDto>> getFeedbackRequests(
 		@AuthUser Long tutorId,
 		@RequestParam(defaultValue = "0") int page,
