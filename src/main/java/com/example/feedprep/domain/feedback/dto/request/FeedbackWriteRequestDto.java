@@ -6,8 +6,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import com.example.feedprep.domain.feedback.common.RejectReason;
-
 @Getter
 @AllArgsConstructor
 public class FeedbackWriteRequestDto {
