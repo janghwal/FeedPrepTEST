@@ -37,8 +37,8 @@ public class FeedbackReviewController {
 	@GetMapping("/feedback/review")
 	public ResponseEntity<List<FeedbackReviewResponseDto>> getWrittenReviewsByStudent(
 		@AuthUser Long userId,
-		@RequestParam(defaultValue= "0") int page,
-		@Validated @RequestParam(defaultValue = "20") int size){
+		@RequestParam(defaultValue= "0") Integer page,
+		@Validated @RequestParam(defaultValue = "20") Integer size){
 		return new ResponseEntity<>(feedbackReviewService.getReviews(userId, page, size), HttpStatus.OK);
 	}
 

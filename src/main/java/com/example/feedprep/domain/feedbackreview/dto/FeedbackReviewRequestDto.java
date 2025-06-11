@@ -14,7 +14,7 @@ public class FeedbackReviewRequestDto {
 
 	@Min(value = 0L)
 	@Max(value = 5L)
-	private Long rating;
+	private Integer rating;
 
 	private String content;
 }

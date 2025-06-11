@@ -63,7 +63,7 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 	}
 	@Transactional(readOnly = true)
 	@Override
-	public List<FeedbackReviewResponseDto> getReviews(Long userId, int page, int size) {
+	public List<FeedbackReviewResponseDto> getReviews(Long userId, Integer page, Integer size) {
 
 		User user = userRepository.findByIdOrElseThrow(userId);
 

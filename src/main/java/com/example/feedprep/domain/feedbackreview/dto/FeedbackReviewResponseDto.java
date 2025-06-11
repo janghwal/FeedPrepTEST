@@ -18,7 +18,7 @@ public class FeedbackReviewResponseDto {
 
 	private Long tutorId;
 
-	private Long rating;
+	private Integer rating;
 
 	private  String content;
 

@@ -28,7 +28,7 @@ public interface FeedbackRequestService {
 	TutorSideFeedbackRequestDto getFeedbackRequest(Long tutorId, Long requestId);
 
 	// 피드백 요청 다건 조회 (튜터)
-	List<TutorSideFeedbackRequestDto> getFeedbackRequests(Long tutorId, int page, int size);
+	List<TutorSideFeedbackRequestDto> getFeedbackRequests(Long tutorId, Integer page, Integer size);
 
 	// 피드백 신청 수정
 	FeedbackRequestEntityResponseDto updateRequest(Long userId, Long feedbackRequestId, FeedbackRequestDto dto);
@@ -37,5 +37,5 @@ public interface FeedbackRequestService {
 	ApiResponseDto cancelRequest(Long userId, Long feedbackRequestId);
 
 	// 피드백 요청 거절(튜터)
-	ApiResponseDto rejectFeedbackRequest(Long tutorId, Long requestId, int rejectNumber,  FeedbackRejectRequestDto dto);
+	ApiResponseDto rejectFeedbackRequest(Long tutorId, Long requestId, Integer rejectNumber,  FeedbackRejectRequestDto dto);
 }

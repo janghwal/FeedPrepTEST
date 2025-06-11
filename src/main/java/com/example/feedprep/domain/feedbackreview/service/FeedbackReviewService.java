@@ -14,7 +14,7 @@ public interface FeedbackReviewService {
 	//리뷰 단건 조회
 	FeedbackReviewResponseDto getReview(Long userId, Long reviewId);
 
-	List<FeedbackReviewResponseDto> getReviews(Long userId, int page, int size);
+	List<FeedbackReviewResponseDto> getReviews(Long userId, Integer page, Integer size);
 
 	//튜터 평점 조회
 	Double getAverageRating(Long tutorId);

@@ -108,7 +108,7 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<TutorSideFeedbackRequestDto> getFeedbackRequests(Long tutorId, int page, int size){
+	public List<TutorSideFeedbackRequestDto> getFeedbackRequests(Long tutorId, Integer page, Integer size){
 		User tutor = userRepository.findByIdOrElseThrow(tutorId, ErrorCode.NOT_FOUND_TUTOR);
 		if(!tutor.getRole().equals(UserRole.APPROVED_TUTOR)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
@@ -182,7 +182,7 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	public ApiResponseDto rejectFeedbackRequest(
 		Long tutorId,
 		Long requestId,
-		int rejectNumber,
+		Integer rejectNumber,
 		FeedbackRejectRequestDto dto){
 
 		// 1. 튜터 본인 확인

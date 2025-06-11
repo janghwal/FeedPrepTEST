@@ -49,9 +49,9 @@ public class FeedbackRequestController {
 		@RequestParam(required = false) Long tutorId,
 		@RequestParam(required = false) Long documentId,
 		@RequestParam(required = false) String inputMonth,
-		@RequestParam(required = false) int stateNumber,
-		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "20") int size
+		@RequestParam(required = false) Integer stateNumber,
+		@RequestParam(defaultValue = "0") Integer page,
+		@RequestParam(defaultValue = "20") Integer size
 	){
 		LocalDateTime month = null;
 		if(inputMonth != null){
@@ -102,8 +102,8 @@ public class FeedbackRequestController {
 	@GetMapping("/tutor")
 	public ResponseEntity<List<TutorSideFeedbackRequestDto>> getFeedbackRequests(
 		@AuthUser Long tutorId,
-		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "20") int size
+		@RequestParam(defaultValue = "0") Integer page,
+		@RequestParam(defaultValue = "20") Integer size
 	){
 		return new ResponseEntity<>(feedbackRequestService.getFeedbackRequests(tutorId, page, size), HttpStatus.OK);
 	}
@@ -112,7 +112,7 @@ public class FeedbackRequestController {
 	public ResponseEntity<ApiResponseDto> rejectFeedbackRequest(
 		@AuthUser Long tutorId,
 		@PathVariable Long requestId,
-		@RequestParam int rejectNumber,
+		@RequestParam Integer rejectNumber,
 		@Validated @RequestBody FeedbackRejectRequestDto dto){
 		return  new ResponseEntity<>(feedbackRequestService.rejectFeedbackRequest(tutorId, requestId, rejectNumber, dto), HttpStatus.OK);
 	}
