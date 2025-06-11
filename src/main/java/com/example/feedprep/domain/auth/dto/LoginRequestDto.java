@@ -1,6 +1,5 @@
 package com.example.feedprep.domain.auth.dto;
 
-import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
