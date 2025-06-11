@@ -42,6 +42,7 @@ http-client.env.json
 application-test.properties
 application-*.yml
 application-*.properties
+src/main/resources/application.properties
 
 .DS_Store
 Thumbs.db
