@@ -7,7 +7,7 @@ import java.util.Set;
 public interface AuthService {
     SignupResponseDto signup(SignupRequestDto requestDto);
 
-    TokenResponseDto login(LoginRequestDto requestDto, Set<String> admin);
+    TokenResponseDto login(LoginRequestDto requestDto, Set<String> allowedRoles);
 
     SignupResponseDto adminSignup(AdminSignupRequestDto requestDto);
 
