@@ -14,7 +14,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import com.example.feedprep.common.entity.BaseTimeEntity;
-import com.example.feedprep.domain.feedback.common.RejectReason;
 import com.example.feedprep.domain.feedback.dto.request.FeedbackWriteRequestDto;
 import com.example.feedprep.domain.feedbackrequestentity.entity.FeedbackRequestEntity;
 import com.example.feedprep.domain.user.entity.User;
@@ -39,23 +38,17 @@ public class Feedback extends BaseTimeEntity{
 
 	private String content;
 
-	private RejectReason rejectReason;
-
-	private String etcContent;
-
 	public Feedback(FeedbackWriteRequestDto requestDto, User tutor){
 		this.content = requestDto.getContent();
-		this.rejectReason = requestDto.getRejectReason();
-		this.etcContent = requestDto.getEtcContent();
 		this.tutor =tutor;
 	}
 
 	public void updateFeedback(FeedbackWriteRequestDto requestDto){
 		this.content = requestDto.getContent();
-		this.rejectReason = requestDto.getRejectReason();
-		this.etcContent = requestDto.getEtcContent();
 	}
-
+	public void updateRejectFeedback(FeedbackWriteRequestDto requestDto){
+		this.content = requestDto.getContent();
+	}
 	public void updateFeedbackRequest(FeedbackRequestEntity entity){
 		this.feedbackRequestEntity = entity;
 	}

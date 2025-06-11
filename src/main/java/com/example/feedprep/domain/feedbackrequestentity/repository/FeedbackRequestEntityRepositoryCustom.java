@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import com.example.feedprep.domain.feedbackrequestentity.common.RejectReason;
+import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
 import com.example.feedprep.domain.feedbackrequestentity.entity.FeedbackRequestEntity;
 
 public interface FeedbackRequestEntityRepositoryCustom {
@@ -13,5 +15,6 @@ public interface FeedbackRequestEntityRepositoryCustom {
 		Long tutorId,
 		Long documentId,
 		LocalDateTime month,
+		RequestState state,
 		PageRequest pageRequest);
 }
