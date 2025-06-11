@@ -73,4 +73,14 @@ public class Board {
     public int getRecommendCount() {
         return this.recommendCount;
     }
+
+    public boolean isOwner(User user) {
+        return this.user.getUserId().equals(user.getUserId());
+    }
+
+    public void decreaseRecommendCount() {
+        if (this.recommendCount > 0) {
+            this.recommendCount--;
+        }
+    }
 }
