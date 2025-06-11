@@ -18,9 +18,9 @@ public class FeedbackReviewResponseDto {
 
 	private Long tutorId;
 
-	private int Rating;
+	private Integer rating;
 
-	private  String Content;
+	private  String content;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private String modifiedAt;
@@ -29,8 +29,8 @@ public class FeedbackReviewResponseDto {
 		this.id = feedbackReview.getId();
 		this.userId = feedbackReview.getUserId();
 		this.tutorId =feedbackReview.getTutorId();
-		this.Rating = feedbackReview.getRating();
-		this.Content = feedbackReview.getContent();
+		this.rating = feedbackReview.getRating();
+		this.content = feedbackReview.getContent();
 	    this.modifiedAt = feedbackReview.getModifiedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 	}
 }

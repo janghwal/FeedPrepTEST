@@ -13,10 +13,9 @@ public interface FeedbackReviewService {
 	FeedbackReviewResponseDto createReview( Long userId, Long feedbackId, FeedbackReviewRequestDto dto);
 	//리뷰 단건 조회
 	FeedbackReviewResponseDto getReview(Long userId, Long reviewId);
-	//학생이 직접 작성한 리뷰 모음
-	List<FeedbackReviewResponseDto> getWrittenReviewsByStudent(Long userId, int page, int size);
-	//튜터가 학생들에게 받은 리뷰를 확인
-	List<FeedbackReviewResponseDto> getReceivedReviewsForTutor(Long tutorId, int page, int size);
+
+	List<FeedbackReviewResponseDto> getReviews(Long userId, Integer page, Integer size);
+
 	//튜터 평점 조회
 	Double getAverageRating(Long tutorId);
 	//리뷰 수정

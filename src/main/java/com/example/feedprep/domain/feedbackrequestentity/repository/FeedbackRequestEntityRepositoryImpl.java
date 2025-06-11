@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import com.example.feedprep.domain.feedbackrequestentity.common.RejectReason;
 import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
 import com.example.feedprep.domain.feedbackrequestentity.entity.FeedbackRequestEntity;
 import com.example.feedprep.domain.feedbackrequestentity.entity.QFeedbackRequestEntity;
@@ -28,14 +29,14 @@ public class FeedbackRequestEntityRepositoryImpl implements FeedbackRequestEntit
 		Long tutorId,
 		Long documentId,
 		LocalDateTime month,
+		RequestState state,
 		PageRequest pageRequest) {
 		//필수 고정
-		BooleanExpression fixed = feedbackRequestEntity .user.userId.eq(userId)
-			.and(feedbackRequestEntity.requestState.eq(RequestState.PENDING));
+		BooleanExpression fixed = feedbackRequestEntity.user.userId.eq(userId);
 
 		BooleanBuilder dynamic= new BooleanBuilder();
 		if (tutorId != null) {
-			dynamic.and(feedbackRequestEntity .tutor.userId.eq(tutorId));
+			dynamic.and(feedbackRequestEntity.tutor.userId.eq(tutorId));
 		}
 		if (documentId != null) {
 			dynamic.and(feedbackRequestEntity.document.documentId.eq(documentId));
@@ -45,6 +46,9 @@ public class FeedbackRequestEntityRepositoryImpl implements FeedbackRequestEntit
 			LocalDateTime start = ym.atDay(1).atStartOfDay();
 			LocalDateTime end = ym.atEndOfMonth().atTime(23, 59, 59);
 			dynamic.and(feedbackRequestEntity.createdAt.between(start, end));
+		}
+		if(state !=null){
+			dynamic.and(feedbackRequestEntity.requestState.eq(state));
 		}
 		List<FeedbackRequestEntity> content = queryFactory
 			.selectFrom(feedbackRequestEntity)
