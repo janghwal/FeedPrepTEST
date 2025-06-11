@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.example.feedprep.common.exception.enums.SuccessCode;
 import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.common.security.annotation.AuthUser;
 import com.example.feedprep.domain.feedbackreview.dto.FeedbackReviewRequestDto;
@@ -27,27 +28,36 @@ public class FeedbackReviewController {
 	private final FeedbackReviewService feedbackReviewService;
 
 	@PostMapping("/feedback/{feedbackId}/review")
-	public ResponseEntity<FeedbackReviewResponseDto> createReview(
+	public ResponseEntity<ApiResponseDto<FeedbackReviewResponseDto>> createReview(
 		@AuthUser Long userId,
 		@PathVariable Long feedbackId,
 		@Validated @RequestBody FeedbackReviewRequestDto dto){
-		return  new ResponseEntity<>(feedbackReviewService.createReview(userId, feedbackId, dto), HttpStatus.CREATED);
+		return ResponseEntity.status(HttpStatus.CREATED)
+			.body(ApiResponseDto.success(
+				SuccessCode.OK_SUCCESS_FEEDBACK_REVIEW_CREATED,
+				feedbackReviewService.createReview(userId, feedbackId, dto)));
 	}
 
 	@GetMapping("/feedback/review")
-	public ResponseEntity<List<FeedbackReviewResponseDto>> getWrittenReviewsByStudent(
+	public ResponseEntity<ApiResponseDto<List<FeedbackReviewResponseDto>>> getWrittenReviewsByStudent(
 		@AuthUser Long userId,
 		@RequestParam(defaultValue= "0") Integer page,
 		@Validated @RequestParam(defaultValue = "20") Integer size){
-		return new ResponseEntity<>(feedbackReviewService.getReviews(userId, page, size), HttpStatus.OK);
+		return  ResponseEntity.status(HttpStatus.OK)
+			.body(ApiResponseDto.success(
+				SuccessCode.OK_SUCCESS_FEEDBACK_REVIEW,
+				feedbackReviewService.getReviews(userId, page, size)));
 	}
 
 	@PatchMapping("/feedback/{feedbackId}/review")
-	public ResponseEntity<FeedbackReviewResponseDto> updateReview(
+	public ResponseEntity<ApiResponseDto<FeedbackReviewResponseDto>> updateReview(
 		@AuthUser Long userId,
 		@PathVariable Long reviewId,
 		@Validated @RequestBody FeedbackReviewRequestDto dto){
-		return new ResponseEntity<>(feedbackReviewService.updateReview(userId, reviewId, dto), HttpStatus.OK);
+		return  ResponseEntity.status(HttpStatus.OK)
+			    .body(ApiResponseDto.success(
+				SuccessCode.OK_SUCCESS_FEEDBACK_REVIEW_UPDATE,
+				feedbackReviewService.updateReview(userId, reviewId, dto)));
 	}
 	@DeleteMapping("/feedback/{feedbackId}/review")
 	public ResponseEntity<ApiResponseDto> deleteReview(
