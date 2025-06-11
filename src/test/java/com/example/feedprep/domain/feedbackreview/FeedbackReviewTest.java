@@ -81,7 +81,7 @@ public class FeedbackReviewTest {
 		//리뷰 작성 완료하기.
 
 		FeedbackReviewRequestDto feedbackReviewRequestDto
-			=new FeedbackReviewRequestDto(1L, 5L, "튜터님 좋은 조언 감사합니다." );
+			=new FeedbackReviewRequestDto(1L, 5, "튜터님 좋은 조언 감사합니다." );
 
 		long start = System.currentTimeMillis();
 		FeedbackReviewResponseDto feedbackReviewResponseDto =
@@ -124,14 +124,14 @@ public class FeedbackReviewTest {
 		//리뷰 작성 완료하기.
 
 		FeedbackReviewRequestDto feedbackReviewRequestDto
-			=new FeedbackReviewRequestDto(1L, 5L, "같이 좀..." );
+			=new FeedbackReviewRequestDto(1L, 5, "같이 좀..." );
 
 		feedbackReviewService.createReview(users.get(0).getUserId(),1L , feedbackReviewRequestDto);
 
 
 		//리뷰 수정하기
 		FeedbackReviewRequestDto feedbackReviewUpdateRequestDto
-			=new FeedbackReviewRequestDto(1L, 5L, "정직하게 리뷰 하겠습니다." );
+			=new FeedbackReviewRequestDto(1L, 5, "정직하게 리뷰 하겠습니다." );
 		long start = System.currentTimeMillis();
 		FeedbackReviewResponseDto feedbackReviewUpdateResponseDto =
 			feedbackReviewService.updateReview( users.get(0).getUserId(),1L , feedbackReviewUpdateRequestDto);
@@ -171,7 +171,7 @@ public class FeedbackReviewTest {
 		//리뷰 작성 완료하기.
 
 		FeedbackReviewRequestDto feedbackReviewRequestDto
-			=new FeedbackReviewRequestDto(1L, 5L, "같이 좀..." );
+			=new FeedbackReviewRequestDto(1L, 5, "같이 좀..." );
 
 		feedbackReviewService.createReview( users.get(0).getUserId(),1L , feedbackReviewRequestDto);
 
@@ -216,7 +216,7 @@ public class FeedbackReviewTest {
 		//리뷰 작성 완료하기.
 
 		FeedbackReviewRequestDto feedbackReviewRequestDto
-			=new FeedbackReviewRequestDto(1L, 5L, "좋은 피드백이었습니다." );
+			=new FeedbackReviewRequestDto(1L, 5, "좋은 피드백이었습니다." );
 
 		feedbackReviewService.createReview( users.get(0).getUserId(),1L , feedbackReviewRequestDto);
 		//리뷰 조회하기
@@ -280,7 +280,7 @@ public class FeedbackReviewTest {
 
 		for(Long i = 1L; i <4L; i++) {
 			FeedbackReviewRequestDto feedbackReviewRequestDto
-				= new FeedbackReviewRequestDto(i ,5L, "좋은 피드백이었습니다.");
+				= new FeedbackReviewRequestDto(i ,5, "좋은 피드백이었습니다.");
 
 			feedbackReviewService.createReview(users.get(2).getUserId(), i , feedbackReviewRequestDto);
 
@@ -334,7 +334,7 @@ public class FeedbackReviewTest {
 		int sid = 1;
 		for (Long i = 1L; i < users.size(); i++) {
 			FeedbackReviewRequestDto feedbackReviewRequestDto
-				= new FeedbackReviewRequestDto(i, 5L, "좋은 피드백이었습니다.");
+				= new FeedbackReviewRequestDto(i, 5, "좋은 피드백이었습니다.");
 
 			feedbackReviewService.createReview( users.get(sid).getUserId(), i, feedbackReviewRequestDto);
 			sid++;
@@ -386,8 +386,9 @@ public class FeedbackReviewTest {
 
 		//리뷰 작성 완료하기.
 		int student =1;
+		int rat = 0;
 		for(Long i = 1L; i < users.size(); i++) {
-		    Long rat = random.nextLong(0L,5L);
+			rat = random.nextInt(0,5);
 			FeedbackReviewRequestDto feedbackReviewRequestDto
 				= new FeedbackReviewRequestDto(i ,rat, "좋은 피드백이었습니다.");
 
