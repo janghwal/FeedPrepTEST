@@ -27,9 +27,12 @@ public class Comment {
     @Column(nullable = false)
     private String content;
 
-    // 소프트 삭제
+    // 소프트 삭제 여부
     @Column(nullable = false)
     private boolean isDeleted = false;
+
+    @Column(nullable = false)
+    private int likeCount = 0; // 댓글 추천 수
 
     private LocalDateTime createdAt;
 
@@ -73,9 +76,17 @@ public class Comment {
         this.isDeleted = true;
     }
 
-    // 대댓글 추가 시 사용
     public void addChild(Comment child) {
         this.children.add(child);
         child.parent = this;
+    }
+
+    // 추천 수 증가/감소 메서드
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        this.likeCount = Math.max(0, this.likeCount - 1);
     }
 }
