@@ -168,12 +168,12 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 		}
 
 		request.updateRequestState(RequestState.CANCELED);
-		Map<String ,Object> data = new LinkedHashMap<>();
-		data.put("modifiedAt", request.getModifiedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
+		Map<String, Object> data =  new LinkedHashMap<>();
+		data.put("modifiedAt ", request.getModifiedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		return new ApiResponseDto(
-			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.getHttpStatus().value(),
-			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.getMessage(),
+			SuccessCode.OK_SUCCESS_FEEDBACK_REQUEST_CANCELED.getHttpStatus().value(),
+			SuccessCode.OK_SUCCESS_FEEDBACK_REQUEST_CANCELED.getMessage(),
 			data);
 	}
 
@@ -217,8 +217,8 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 		}
 		data.put("modifiedAt ", request.getModifiedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		return new ApiResponseDto(
-			SuccessCode.OK_SUCCESS_FEEDBACK_REJECTED.getHttpStatus().value(),
-			SuccessCode.OK_SUCCESS_FEEDBACK_REJECTED.getMessage(),
+			SuccessCode.OK_SUCCESS_FEEDBACK_REQUEST_REJECTED.getHttpStatus().value(),
+			SuccessCode.OK_SUCCESS_FEEDBACK_REQUEST_REJECTED.getMessage(),
 			data
 		);
 	}
