@@ -8,14 +8,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import lombok.Getter;
 
 import com.example.feedprep.common.entity.BaseTimeEntity;
 import com.example.feedprep.domain.document.entity.Document;
-import com.example.feedprep.domain.feedback.entity.Feedback;
+import com.example.feedprep.domain.feedbackrequestentity.common.RejectReason;
 import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
 import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRequestDto;
 import com.example.feedprep.domain.user.entity.User;
@@ -41,14 +40,14 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 	@JoinColumn(name = "document_id",nullable = false)
 	private Document document;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "feedback_id")
-	private Feedback feedback;
-
 	private String content;
 
 	@Column(nullable = false)
 	private RequestState requestState;
+
+	private RejectReason rejectReason;
+
+	private String etcContent;
 
 	//생성자
 	public FeedbackRequestEntity(){}
@@ -59,13 +58,11 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 		this.document = document;
 		this.content = dto.getContent();
 	}
-
 	public FeedbackRequestEntity(User user, Document document, RequestState requestState) {
 		this.user = user;
 		this.document = document;
 		this.requestState = requestState;
 	}
-
 	//변경
 	public void updateRequestState(RequestState requestState){
 		this.requestState = requestState;
@@ -75,8 +72,9 @@ public class FeedbackRequestEntity extends BaseTimeEntity {
 		this.document = document;
 		this.content = dto.getContent();
 	}
+	public void updateFeedbackRequestRejectDto(RejectReason rejectReason, String etcContent){
+		this.rejectReason = rejectReason;
+		this.etcContent = etcContent;
+	}
 
-	// public void updateFeedback(FeedBack feedBack) {
-	// 	this.feedBack=  feedBack;
-	// }
 }

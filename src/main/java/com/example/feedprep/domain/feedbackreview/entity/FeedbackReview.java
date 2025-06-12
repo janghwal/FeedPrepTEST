@@ -35,7 +35,7 @@ public class FeedbackReview  extends  BaseTimeEntity{
 
 		private Long tutorId;
 
-		private int rating;
+		private Integer rating;
 
 		private  String content;
 

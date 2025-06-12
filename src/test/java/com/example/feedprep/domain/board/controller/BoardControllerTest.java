@@ -122,11 +122,11 @@ class BoardControllerTest {
     @Test
     @WithMockUser
     void 게시글_추천() throws Exception {
-        when(boardService.recommendBoard(1L)).thenReturn(5);
+        when(boardService.recommendBoard(1L)).thenReturn(true);
 
         mockMvc.perform(post("/boards/{boardId}/recommend", 1L))
                 .andExpect(status().isOk())
-                .andExpect(content().string("추천 완료. 총 추천 수: 5"));
+                .andExpect(content().string("추천 완료"));
     }
 
     @Test

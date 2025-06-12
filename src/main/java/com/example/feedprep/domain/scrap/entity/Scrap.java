@@ -1,6 +1,6 @@
-package com.example.feedprep.domain.commentlike.entity;
+package com.example.feedprep.domain.scrap.entity;
 
-import com.example.feedprep.domain.comment.entity.Comment;
+import com.example.feedprep.domain.board.entity.Board;
 import com.example.feedprep.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class CommentLike {
+public class Scrap {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,13 +21,13 @@ public class CommentLike {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id", nullable = false)
-    private Comment comment;
+    @JoinColumn(name = "board_id", nullable = false)
+    private Board board;
 
-    public static CommentLike of(User user, Comment comment) {
-        return CommentLike.builder()
+    public static Scrap of(User user, Board board) {
+        return Scrap.builder()
                 .user(user)
-                .comment(comment)
+                .board(board)
                 .build();
     }
 }
