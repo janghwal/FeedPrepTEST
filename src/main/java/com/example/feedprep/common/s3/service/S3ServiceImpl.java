@@ -41,7 +41,7 @@ public class S3ServiceImpl implements S3Service{
             .bucket(bucket)
             .key(fileName)
             .contentType(file.getContentType())
-            .acl(ObjectCannedACL.PRIVATE).build();
+            .acl(ObjectCannedACL.BUCKET_OWNER_FULL_CONTROL).build();
 
         try {
             s3Client.putObject(putObjectRequest,
