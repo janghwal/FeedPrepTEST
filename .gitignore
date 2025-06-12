@@ -40,3 +40,17 @@ out/
 http-client.env.json
 
 application-test.properties
+application-*.yml
+application-*.properties
+src/main/resources/application.properties
+
+.DS_Store
+Thumbs.db
+
+*.log
+*.db
+*.h2.db
+*.sqlite
+*.mv.db
+
+test-output/
