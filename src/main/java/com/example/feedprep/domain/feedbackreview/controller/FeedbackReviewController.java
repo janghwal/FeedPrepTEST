@@ -49,7 +49,7 @@ public class FeedbackReviewController {
 				feedbackReviewService.getReviews(userId, page, size)));
 	}
 
-	@PatchMapping("/feedback/{feedbackId}/review")
+	@PatchMapping("/feedback/{feedbackId}/review/{reviewId}")
 	public ResponseEntity<ApiResponseDto<FeedbackReviewResponseDto>> updateReview(
 		@AuthUser Long userId,
 		@PathVariable Long reviewId,
@@ -59,7 +59,7 @@ public class FeedbackReviewController {
 				SuccessCode.OK_SUCCESS_FEEDBACK_REVIEW_UPDATE,
 				feedbackReviewService.updateReview(userId, reviewId, dto)));
 	}
-	@DeleteMapping("/feedback/{feedbackId}/review")
+	@DeleteMapping("/feedback/{feedbackId}/review/{reviewId}")
 	public ResponseEntity<ApiResponseDto> deleteReview(
 		@AuthUser Long userId,
 		@PathVariable Long reviewId
