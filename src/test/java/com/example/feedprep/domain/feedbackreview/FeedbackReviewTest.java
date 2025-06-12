@@ -386,8 +386,9 @@ public class FeedbackReviewTest {
 
 		//리뷰 작성 완료하기.
 		int student =1;
+		int rat = 0;
 		for(Long i = 1L; i < users.size(); i++) {
-		    Integer rat = random.nextInt(0,5);
+			rat = random.nextInt(0,5);
 			FeedbackReviewRequestDto feedbackReviewRequestDto
 				= new FeedbackReviewRequestDto(i ,rat, "좋은 피드백이었습니다.");
 
