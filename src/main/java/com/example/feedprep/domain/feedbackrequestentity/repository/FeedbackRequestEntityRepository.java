@@ -1,6 +1,5 @@
 package com.example.feedprep.domain.feedbackrequestentity.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -11,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
-import com.example.feedprep.domain.feedback.dto.response.FeedbackRequestResponseDto;
 import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
 import com.example.feedprep.domain.feedbackrequestentity.entity.FeedbackRequestEntity;
 

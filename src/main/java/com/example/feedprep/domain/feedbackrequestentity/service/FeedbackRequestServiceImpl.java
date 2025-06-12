@@ -1,9 +1,11 @@
 package com.example.feedprep.domain.feedbackrequestentity.service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,12 +21,16 @@ import com.example.feedprep.common.exception.enums.SuccessCode;
 import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.document.entity.Document;
 import com.example.feedprep.domain.document.repository.DocumentRepository;
+import com.example.feedprep.domain.feedbackrequestentity.common.RejectReason;
 import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
+import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRejectRequestDto;
 import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRequestDto;
 import com.example.feedprep.domain.feedbackrequestentity.dto.response.FeedbackRequestEntityResponseDto;
+import com.example.feedprep.domain.feedbackrequestentity.dto.response.TutorSideFeedbackRequestDto;
 import com.example.feedprep.domain.feedbackrequestentity.entity.FeedbackRequestEntity;
 import com.example.feedprep.domain.feedbackrequestentity.repository.FeedbackRequestEntityRepository;
 import com.example.feedprep.domain.user.entity.User;
+import com.example.feedprep.domain.user.enums.UserRole;
 import com.example.feedprep.domain.user.repository.UserRepository;
 
 @Service
@@ -64,10 +70,11 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	@Transactional(readOnly = true)
 	@Override
 	public List<FeedbackRequestEntityResponseDto> getRequests(
-		Long userId,         // 신청자 or 튜터
+		Long userId,         // 신청자
 		Long tutorId,        // 피드백 받을 대상
 		Long documentId,     // 문서
 		LocalDateTime month, // 월별 필터
+		RequestState requestState,
 		int page,
 		int size
 	)
@@ -77,15 +84,47 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 		if(!user.getUserId().equals(userId)){
 			throw  new CustomException(ErrorCode. UNAUTHORIZED_REQUESTER_ACCESS);
 		}
-		PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
 		Page<FeedbackRequestEntity> pages =
-			feedbackRequestEntityRepository.findByRequest(userId,tutorId,documentId,month, pageable);
+			feedbackRequestEntityRepository.findByRequest(userId, tutorId, documentId,month, requestState, pageRequest);
 
 		List<FeedbackRequestEntityResponseDto> result =
 			pages.stream().map(FeedbackRequestEntityResponseDto::new).toList();
 		return result;
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public TutorSideFeedbackRequestDto getFeedbackRequest(Long tutorId, Long requestId) {
+		//튜터 확인.
+		User tutor = userRepository.findByIdOrElseThrow(tutorId, ErrorCode.NOT_FOUND_TUTOR);
+		FeedbackRequestEntity request =feedbackRequestEntityRepository
+			.findById(requestId)
+			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REQUEST));
+
+		return new TutorSideFeedbackRequestDto(request);
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public List<TutorSideFeedbackRequestDto> getFeedbackRequests(Long tutorId, Integer page, Integer size){
+		User tutor = userRepository.findByIdOrElseThrow(tutorId, ErrorCode.NOT_FOUND_TUTOR);
+		if(!tutor.getRole().equals(UserRole.APPROVED_TUTOR)){
+			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
+		}
+		PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+		Page<FeedbackRequestEntity> requests = feedbackRequestEntityRepository.getPagedRequestsForTutor(
+			tutor.getUserId(),
+			RequestState.PENDING,
+			pageable
+		);
+		List<TutorSideFeedbackRequestDto> getRequestList =
+			requests.stream()
+				.map(TutorSideFeedbackRequestDto:: new)
+				.collect(Collectors.toList());
+
+		return getRequestList;
 	}
 
 	@Transactional
@@ -127,13 +166,60 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 		if (request.getRequestState() != RequestState.PENDING){
 			throw new CustomException(ErrorCode.CANNOT_EDIT_COMPLETED_REQUEST);
 		}
+
 		request.updateRequestState(RequestState.CANCELED);
-		Map<String ,Object> data = new HashMap<>();
-		data.put("modifiedAt", request.getModifiedAt().toString());
+		Map<String ,Object> data = new LinkedHashMap<>();
+		data.put("modifiedAt", request.getModifiedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
 		return new ApiResponseDto(
 			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.getHttpStatus().value(),
 			SuccessCode.OK_FEEDBACK_REQUEST_CANCELED.getMessage(),
 			data);
+	}
+
+	@Transactional
+	@Override
+	public ApiResponseDto rejectFeedbackRequest(
+		Long tutorId,
+		Long requestId,
+		Integer rejectNumber,
+		FeedbackRejectRequestDto dto){
+
+		// 1. 튜터 본인 확인
+		User tutor = userRepository.findByIdOrElseThrow(tutorId, ErrorCode.NOT_FOUND_TUTOR);
+		if(!tutor.getRole().equals(UserRole.APPROVED_TUTOR)){
+			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
+		}
+
+		// 2. 피드백 요청 존재 여부 확인
+		FeedbackRequestEntity request =feedbackRequestEntityRepository
+			.findById(requestId)
+			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REQUEST));
+
+		// 2. 피드백 존재 여부 확인(Pendding 상태 거절)
+		if(!request.getRequestState().equals(RequestState.PENDING)){
+			throw new CustomException(ErrorCode.CANNOT_REJECT_NON_PENDING_FEEDBACK);
+		}
+		//3. 본인에게 신청한 피드백인지 검사
+		if(!request.getTutor().getUserId().equals(tutor.getUserId())){
+			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
+		}
+
+		RejectReason rejectReason = RejectReason.fromNumber(rejectNumber);
+
+		request.updateRequestState(RequestState.REJECTED);
+		request.updateFeedbackRequestRejectDto(rejectReason, dto.getEtcReason());
+		Map<String, Object> data =  new LinkedHashMap<>();
+		data.put("requestId ", request.getId());
+		data.put("rejectReason ", RejectReason.fromNumber(rejectNumber).getDescription());
+		if(dto.getEtcReason() !=null){
+			data.put("etcReason ", dto.getEtcReason());
+		}
+		data.put("modifiedAt ", request.getModifiedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		return new ApiResponseDto(
+			SuccessCode.OK_SUCCESS_FEEDBACK_REJECTED.getHttpStatus().value(),
+			SuccessCode.OK_SUCCESS_FEEDBACK_REJECTED.getMessage(),
+			data
+		);
 	}
 }

@@ -8,10 +8,11 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum SuccessCode {
 
-    // 회원가입 및 로그인 / 로그아웃 성공
+    // 회원가입, 로그인, 로그아웃, 탈퇴 성공
     SIGNUP_SUCCESS(HttpStatus.CREATED,"회원가입에 성공하였습니다." ),
     LOGIN_SUCCESS(HttpStatus.OK, "로그인에 성공하였습니다."),
     LOGOUT_SUCCESS(HttpStatus.OK, "로그아웃에 성공하였습니다."),
+    WITHDRAW_SUCCESS(HttpStatus.OK, "회원 탈퇴에 성공하였습니다."),
 
     // 회원 정보
     GET_TUTORLIST_SUCCESS(HttpStatus.OK, "튜터 목록 조회를 성공하였습니다."),

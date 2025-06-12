@@ -15,7 +15,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,5 +83,7 @@ public class User extends BaseTimeEntity {
         this.point = 0L;
     }
 
-    // 탈퇴 메서드 추가함
+    public void withdraw() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }

@@ -15,6 +15,7 @@ public enum ErrorCode {
     INVALID_ROLE_REQUEST(HttpStatus.FORBIDDEN, "해당 역할로 가입할 수 없습니다."),
     UNAUTHORIZED_ROLE_LOGIN(HttpStatus.FORBIDDEN, "요청하신 로그인 경로에서는 해당 역할의 계정으로 로그인할 수 없습니다."),
     FORBIDDEN_LOGOUT_ATTEMPT(HttpStatus.FORBIDDEN, "다른 사용자의 로그아웃 요청은 허용되지 않습니다."),
+    WITHDRAWN_USER(HttpStatus.FORBIDDEN, "탈퇴 처리된 사용자입니다."),
 
     //인증
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증이 필요합니다."),
@@ -24,6 +25,7 @@ public enum ErrorCode {
     INVALID_SECRET_CODE(HttpStatus.UNAUTHORIZED, "유효하지 않은 시크릿 코드입니다." ),
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED,"이미 만료된 토큰입니다."),
     UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED,"지원하지 않는 토큰입니다."),
+
 
     NOT_MATCH_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 틀렸습니다."),
 
@@ -74,8 +76,8 @@ public enum ErrorCode {
     NOT_FOUND_FEEDBACK_REQUEST(HttpStatus.NOT_FOUND, "해당 피드백 요청을 찾을 수 없습니다."),
     NOT_FOUND_FEEDBACK(HttpStatus.NOT_FOUND, "해당 피드백을 찾을 수 없습니다."),
     NOT_FOUND_FEEDBACK_REVIEW(HttpStatus.NOT_FOUND, "해당 리뷰를 찾을 수 없습니다."),
-
     UNAUTHORIZED_REQUESTER_ACCESS(HttpStatus.FORBIDDEN, "해당 요청을 수행할 권한이 없습니다."),
+    BAD_REQUEST_STATE(HttpStatus.BAD_REQUEST, "유효하지 않은 상태 번호입니다"),
 
     SELF_FEEDBACK_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "자신에게는 피드백을 요청할 수 없습니다."),
     CANNOT_EDIT_COMPLETED_REQUEST(HttpStatus.BAD_REQUEST, "이미 완료된 피드백은 수정할 수 없습니다."),
@@ -86,9 +88,9 @@ public enum ErrorCode {
     //피드백 작성  에러코드
     INVALID_REQUEST_STATE(HttpStatus.BAD_REQUEST, "요청이 취소되었거나 완료된 상태입니다."),
     CANNOT_EDIT_PENDING_FEEDBACK(HttpStatus.CONFLICT, "작성 대기중인 피드백은 수정이 불가합니다."),
-    CANNOT_REJECT_NON_PENDING_FEEDBACK(HttpStatus.CONFLICT, "작성 대기중인 피드백만 거절할 수 있습니다.")
-    ;
+    CANNOT_REJECT_NON_PENDING_FEEDBACK(HttpStatus.CONFLICT, "작성 대기중인 피드백만 거절할 수 있습니다."),
 
+    ;
 
     private final HttpStatus httpStatus;
     private final String message;
