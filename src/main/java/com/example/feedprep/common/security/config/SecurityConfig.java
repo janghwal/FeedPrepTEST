@@ -34,8 +34,9 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/admin/tech-stacks").hasRole("ADMIN")
+
+                        .requestMatchers("/auth/login", "/auth/signup", "/admin/signup", "/admin/login").permitAll()
+                        .requestMatchers("/admin/authority").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )
