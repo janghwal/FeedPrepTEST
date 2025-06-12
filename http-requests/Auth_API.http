@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 > {%
-  client.global.set("accessToken", response.body.data.accessToken)
+  client.global.set("studentAccessToken", response.body.data.accessToken)
 %}
 
 ### 튜터 회원가입
@@ -43,7 +43,7 @@ Content-Type: application/json
 }
 
 > {%
-  client.global.set("accessToken", response.body.data.accessToken)
+  client.global.set("tutorAccessToken", response.body.data.accessToken)
 %}
 
 ### 관리자 회원가입
@@ -69,13 +69,13 @@ Content-Type: application/json
 }
 
 > {%
-  client.global.set("accessToken", response.body.data.accessToken)
+  client.global.set("adminAccessToken", response.body.data.accessToken)
 %}
 
 ### 로그아웃
 POST localhost:8080/auth/logout
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{studentAccessToken}}
 
 ### 회원탈퇴
 DELETE localhost:8080/auth/withdraw
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{studentAccessToken}}
