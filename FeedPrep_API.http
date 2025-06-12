@@ -76,3 +76,121 @@ Content-Type: application/json
 ### 로그아웃
 POST localhost:8080/auth/logout
 Authorization: Bearer {{accessToken}}
+
+
+###피드백 신청
+POST localhost:8080/feedback-requests
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "tutorId": 2,
+  "documentId": 4,
+  "content":"이력서 검토를 받고 싶습니다."
+}
+
+###피드백 신청 조회
+GET localhost:8080/feedback-requests
+Authorization: Bearer {{accessToken}}
+
+###피드백 신청 수정
+PUT localhost:8080/feedback-requests/1
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "tutorId": 2,
+  "documentId": 1,
+  "content":"이러한 이유로 이력서를 수정했습니다."
+}
+
+###피드백 신청 취소
+DELETE localhost:8080/feedback-requests/1
+Authorization: Bearer {{accessToken}}
+
+
+###피드백 상세 조회 (튜터, 유저)
+GET localhost:8080/feedback-requests/1
+Authorization: Bearer {{accessToken}}
+
+###피드백 전체 조회 (튜터)
+GET localhost:8080/feedback-requests/tutor
+Authorization: Bearer {{accessToken}}
+
+###피드백 신청 거절 (튜터)
+PATCH localhost:8080/feedback-requests/1?rejectNumber=1
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "etcReason": "null이여도 상관없음."
+}
+
+###피드백 작성 (튜터)
+POST localhost:8080/feedback
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "feedbackRequestEntityId": 1,
+  "content": "10자 이상 입력하세요"
+}
+
+
+###피드백 수정 (튜터)
+POST localhost:8080/feedback/{feedbackId}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "feedbackRequestEntityId": 1,
+  "content": "10자 이상 입력하세요"
+}
+
+
+
+###피드백 리뷰 작성 (유저)
+/feedback/{feedbackId}/review
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "feedbackId" : 1,
+  "rating": 5,
+  "content" : "유익한 리뷰 였습니다!"
+}
+
+
+###피드백 리뷰 조회 (유저, 튜터)
+Post localhost:8080/feedback/review
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "feedbackId" : 1,
+  "rating": 5,
+  "content" : "유익한 리뷰 였습니다!"
+}
+
+###피드백 리뷰 수정 (유저)
+PATCH localhost:8080/feedback/{feedbackId}/review
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "feedbackId" : 1,
+  "rating": 5,
+  "content" : "유익한 리뷰이였습니다!"
+}
+
+
+###피드백 리뷰 수정 (유저)
+Delete localhost:8080/feedback/{feedbackId}/review
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "feedbackId" : 1,
+  "rating": 5,
+  "content" : "유익한 리뷰이였습니다!"
+}
