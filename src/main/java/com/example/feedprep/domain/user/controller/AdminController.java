@@ -23,11 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AdminController {
 
-    private AdminService adminService;
+    private final AdminService adminService;
 
     private final TechStackService techStackService;
 
-    @PostMapping("/tutor")
+    @PostMapping("/tutor/{tutorId}")
     public ResponseEntity<ApiResponseDto<TutorResponseDto>> approveTutor(
         @PathVariable Long tutorId
     ) {
