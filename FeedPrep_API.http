@@ -77,6 +77,11 @@ Content-Type: application/json
 POST localhost:8080/auth/logout
 Authorization: Bearer {{accessToken}}
 
+### 회원탈퇴
+DELETE localhost:8080/auth/withdraw
+Authorization: Bearer {{accessToken}}
+
+
 
 ###피드백 신청
 POST localhost:8080/feedback-requests
