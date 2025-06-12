@@ -5,7 +5,7 @@ Content-Type: application/json
 
 {
   "name": "윤경모",
-  "email": "user123@naver.com",
+  "email": "user1234@naver.com",
   "password": "asdasdjkDF23",
   "role": "STUDENT"
 }
@@ -15,7 +15,7 @@ POST localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "email": "user123@naver.com",
+  "email": "user1234@naver.com",
   "password": "asdasdjkDF23"
 }
 
@@ -94,5 +94,49 @@ GET localhost:8080/subscriptions?getType=SUBSCRIPTIONS
 Authorization: Bearer {{accessToken}}
 # SUBSCRIBERS, SUBSCRIPTIONS
 
-###
+### 기술 스택 종류 추가 (관리자)
+POST localhost:8080/admins/tech-stacks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "techStack": "Java3"
+}
+
+### 기술 스택 종류 삭제 (관리자)
+DELETE localhost:8080/admins/tech-stacks/1
+Authorization: Bearer {{accessToken}}
+
+### 기술 스택 추가 (튜터, 학생)
+POST localhost:8080/tech-stacks?techId=1
+Authorization: Bearer {{accessToken}}
+
+### 기술 스택 삭제 (튜터, 학생)
+DELETE localhost:8080/tech-stacks/1
+Authorization: Bearer {{accessToken}}
+
+### 기술 스택 종류 조회
+GET localhost:8080/tech-stacks
+Authorization: Bearer {{accessToken}}
+
+### 내 기술 스택 조회 (튜터, 학생)
+GET localhost:8080/tech-stacks/me
+Authorization: Bearer {{accessToken}}
+
+### 매칭
+GET localhost:8080/tutor
+Authorization: Bearer {{accessToken}}
+
+###피드백 신청
+POST localhost:8080/feedback-requests
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "tutorId": 3,
+  "documentId": 1,
+  "content":"이력서 검토를 받고 싶습니다."
+}
+
+
 
