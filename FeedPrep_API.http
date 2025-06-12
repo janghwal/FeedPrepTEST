@@ -134,3 +134,20 @@ Authorization: Bearer {{accessToken}}
 ### 문서 단건 삭제
 DELETE localhost:8080/documents/1
 Authorization: Bearer {{accessToken}}
+
+### 튜터 승인
+POST localhost:8080/admin/authority/tutor/1
+Authorization: Bearer {{accessToken}}
+
+### 기술 스택 생성
+POST localhost:8080/admin/authority/tech-stacks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "techStack" : "스프링-부트"
+}
+
+### 기술 스택 삭제
+DELETE localhost:8080/admin/authority/tech-stacks/1
+Authorization: Bearer {{accessToken}}
