@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.common.exception.enums.SuccessCode;
@@ -21,6 +22,7 @@ import com.example.feedprep.domain.feedbackreview.dto.FeedbackReviewResponseDto;
 import com.example.feedprep.domain.feedbackreview.entity.FeedbackReview;
 import com.example.feedprep.domain.feedbackreview.repository.FeedBackReviewRepository;
 import com.example.feedprep.domain.user.entity.User;
+import com.example.feedprep.domain.user.enums.UserRole;
 import com.example.feedprep.domain.user.repository.UserRepository;
 
 @Service
@@ -29,6 +31,7 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 	private final FeedBackReviewRepository feedBackReviewRepository;
 	private final FeedBackRepository feedBackRepository;
     private final UserRepository userRepository;
+	@Transactional
 	@Override
 	public FeedbackReviewResponseDto createReview( Long userId, Long feedbackId, FeedbackReviewRequestDto dto) {
 		User user = userRepository.findByIdOrElseThrow(userId);
@@ -44,6 +47,8 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 	    return new FeedbackReviewResponseDto(saveReview);
 	}
 
+
+	@Transactional(readOnly = true)
 	@Override
 	public FeedbackReviewResponseDto getReview(Long reviewId, Long userId) {
 		User user = userRepository.findByIdOrElseThrow(userId);
@@ -56,44 +61,36 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 
 		return  new FeedbackReviewResponseDto(feedbackReview);
 	}
-
+	@Transactional(readOnly = true)
 	@Override
-	public List<FeedbackReviewResponseDto> getWrittenReviewsByStudent(Long userId, int page, int size) {
+	public List<FeedbackReviewResponseDto> getReviews(Long userId, Integer page, Integer size) {
+
 		User user = userRepository.findByIdOrElseThrow(userId);
-		if(!user.getUserId().equals(userId)){
-			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
-		}
+
 		PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-		Page<FeedbackReview> reviews = feedBackReviewRepository.findByUserIdAndDeletedAtIsNull(user.getUserId(),pageable);
-
-
+		Page<FeedbackReview> reviews = null;
+		if(!user.getRole().equals(UserRole.APPROVED_TUTOR))
+		{
+			if(!user.getUserId().equals(userId)){
+				throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
+			}
+			reviews =  feedBackReviewRepository.findByUserIdAndDeletedAtIsNull(user.getUserId(),pageable);
+		}
+        else {
+			reviews = feedBackReviewRepository.findByTutorIdAndDeletedAtIsNull(user.getUserId(),pageable);
+		}
 		return reviews.stream()
 			.map(FeedbackReviewResponseDto ::new)
 			.collect(Collectors.toList());
 	}
-
-	@Override
-	public List<FeedbackReviewResponseDto> getReceivedReviewsForTutor(Long tutorId, int page, int size) {
-		User tutor = userRepository.findByIdOrElseThrow(tutorId);
-		if(!tutor.getUserId().equals(tutorId)){
-			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
-		}
-		PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-		Page<FeedbackReview> reviews = feedBackReviewRepository.findByTutorIdAndDeletedAtIsNull(tutor.getUserId(),pageable);
-
-
-		return reviews.stream()
-			.map(FeedbackReviewResponseDto ::new)
-			.collect(Collectors.toList());
-	}
-
+	@Transactional
 	@Override
 	public Double getAverageRating(Long tutorId) {
 		User tutor = userRepository.findByIdOrElseThrow(tutorId);
 		feedBackReviewRepository.getAverageRating(tutor.getUserId());
 		return feedBackReviewRepository.getAverageRating(tutor.getUserId());
 	}
-
+	@Transactional
 	@Override
 	public FeedbackReviewResponseDto updateReview(Long userId, Long reviewId, FeedbackReviewRequestDto dto) {
 		User user = userRepository.findByIdOrElseThrow(userId);
@@ -107,7 +104,7 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 		FeedbackReview saveReview = feedBackReviewRepository.save(feedbackReview);
 		return new FeedbackReviewResponseDto(saveReview);
 	}
-
+	@Transactional
 	@Override
 	public ApiResponseDto deleteReview(Long userId, Long reviewId) {
 		User user = userRepository.findByIdOrElseThrow(userId);

@@ -39,13 +39,19 @@ public class AuthController {
                 .body(ApiResponseDto.success(SuccessCode.LOGIN_SUCCESS, responseDto));
     }
 
-    // 로그아웃
+    // 로그아웃 (일반, 관리자 포함)
     @PostMapping("/logout")
     ResponseEntity<ApiResponseDto<Void>> logout(@RequestHeader("Authorization") String authHeader) {
         authService.logout(authHeader);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponseDto.success(SuccessCode.LOGOUT_SUCCESS));
     }
+
+//    // 회원 탈퇴
+//    @PostMapping("/withdraw")
+//    ResponseEntity<ApiResponseDto<Void>> withdraw(@RequestHeader("Authorization") String authHeader) {
+//
+//    }
 
 
 }
