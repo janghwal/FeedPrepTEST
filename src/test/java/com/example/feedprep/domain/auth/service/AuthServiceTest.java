@@ -196,7 +196,20 @@ public class AuthServiceTest {
 
     @Test
     void 성공_회원_탈퇴() {
+        // given - 회원 가입 및 로그인
+        SignupRequestDto request = new SignupRequestDto("name1", "email1@example.com", "passworDd12", "STUDENT");
+        authService.signup(request);
 
+        LoginRequestDto loginRequest = new LoginRequestDto("email1@example.com", "passworDd12");
+        TokenResponseDto tokenResponse = authService.login(loginRequest, Set.of("STUDENT"));
+
+        String accessToken = tokenResponse.getAccessToken();
+        String bearerToken = "Bearer " + accessToken;
+        User user = userRepository.getUserByEmailOrElseThrow("email1@example.com");
+        Long userId = user.getUserId();
+
+        // when & then - 탈퇴 시도
+        assertThatCode(()-> authService.withdraw(bearerToken, userId)).doesNotThrowAnyException();
     }
 
 
