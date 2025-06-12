@@ -1,0 +1,23 @@
+### 문서 등록
+POST localhost:8080/documents
+Authorization: Bearer {{accessToken}}
+Content-Type: multipart/form-data; boundary=my-upload-boundary
+
+--my-upload-boundary
+Content-Disposition: form-data; name="file"; filename="test-image-20.png"
+Content-Type: application/png
+
+< C:/Users/COX/Desktop/test-image-20.png
+--my-upload-boundary--
+
+### 문서 목록 조회
+GET localhost:8080/documents
+Authorization: Bearer {{accessToken}}
+
+### 문서 단건 조회
+GET localhost:8080/documents/1
+Authorization: Bearer {{accessToken}}
+
+### 문서 단건 삭제
+DELETE localhost:8080/documents/1
+Authorization: Bearer {{accessToken}}
