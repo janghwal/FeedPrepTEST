@@ -12,15 +12,13 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.feedprep.common.response.ApiResponseDto;
 import com.example.feedprep.domain.document.entity.Document;
 import com.example.feedprep.domain.document.repository.DocumentRepository;
-import com.example.feedprep.domain.feedbackrequestentity.common.RejectReason;
 import com.example.feedprep.domain.feedbackrequestentity.common.RequestState;
 import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRejectRequestDto;
 import com.example.feedprep.domain.feedbackrequestentity.dto.request.FeedbackRequestDto;
 import com.example.feedprep.domain.feedbackrequestentity.dto.response.FeedbackRequestEntityResponseDto;
-import com.example.feedprep.domain.feedbackrequestentity.dto.response.TutorSideFeedbackRequestDto;
+import com.example.feedprep.domain.feedbackrequestentity.dto.response.FeedbackResponseDetailsDto;
 import com.example.feedprep.domain.feedbackrequestentity.entity.FeedbackRequestEntity;
 import com.example.feedprep.domain.feedbackrequestentity.repository.FeedbackRequestEntityRepository;
 import com.example.feedprep.domain.feedbackrequestentity.service.FeedbackRequestService;
@@ -336,14 +334,15 @@ public class FeedbackRequestServiceTest {
 		List<User> users =UserSetting ();
 		userRepository.saveAll(users);
 
-		Document doc = new Document(users.get(5), "api/ef/?");
+		Document doc = new Document(users.get(4), "api/ef/?");
 		documentRepository.save(doc);
 
 		FeedbackRequestDto requestDto = new FeedbackRequestDto(1L, 1L, "Text");
-		feedbackRequestService.createRequest(users.get(5).getUserId(), requestDto);
+		feedbackRequestService.createRequest(users.get(4).getUserId(), requestDto);
 
 		long start = System.currentTimeMillis();
-		ApiResponseDto canceleResponseDto =  feedbackRequestService.cancelRequest(users.get(5).getUserId(),1L);
+		FeedbackRequestEntityResponseDto feedbackRequestEntityResponseDto
+			=  feedbackRequestService.cancelRequest(users.get(4).getUserId(),1L);
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
@@ -351,7 +350,7 @@ public class FeedbackRequestServiceTest {
 		mapper.enable(SerializationFeature.INDENT_OUTPUT); // 예쁘게 출력
 
 		try {
-			String json = mapper.writeValueAsString(canceleResponseDto);
+			String json = mapper.writeValueAsString(feedbackRequestEntityResponseDto);
 			System.out.println(json);
 		} catch (com.fasterxml.jackson.core.JsonProcessingException e) {
 			throw new RuntimeException(e);
@@ -399,7 +398,7 @@ public class FeedbackRequestServiceTest {
 			feedbackRequestService.createRequest( users.get(1).getUserId(), requestDtos.get(i));
 		}
 		long start = System.currentTimeMillis();
-		TutorSideFeedbackRequestDto getRequest =  feedbackRequestService.getFeedbackRequest(tutors.get(1).getUserId(),1L);
+		FeedbackResponseDetailsDto getRequest =  feedbackRequestService.getFeedbackRequest(tutors.get(1).getUserId(),1L);
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
@@ -440,7 +439,7 @@ public class FeedbackRequestServiceTest {
 		feedbackRequestService.createRequest( users.get(4).getUserId(), requestDtos.get(3));
 
 		long start = System.currentTimeMillis();
-		List<TutorSideFeedbackRequestDto> getRequests =  feedbackRequestService.getFeedbackRequests(tutors.get(3).getUserId(),0, 20);
+		List<FeedbackResponseDetailsDto> getRequests =  feedbackRequestService.getFeedbackRequests(tutors.get(3).getUserId(),0, 20);
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 
@@ -474,8 +473,8 @@ public class FeedbackRequestServiceTest {
 			new FeedbackRejectRequestDto("OO 사유로 거절함.");
 
 		long start = System.currentTimeMillis();
-		ApiResponseDto response
-			= feedbackRequestService .rejectFeedbackRequest(tutors.get(2).getUserId(),1L,5, feedbackRejectRequestDto);
+		FeedbackRequestEntityResponseDto response =
+			feedbackRequestService .rejectFeedbackRequest(tutors.get(2).getUserId(),1L,5, feedbackRejectRequestDto);
 		long end= System.currentTimeMillis();
 		System.out.println("수정 작업 실행 시간: " + (end - start) + "ms"); // DB 조회
 

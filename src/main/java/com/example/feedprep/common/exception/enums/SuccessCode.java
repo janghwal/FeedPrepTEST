@@ -33,11 +33,21 @@ public enum SuccessCode {
     SUBSCRIPTION_LIST(HttpStatus.OK, "구독 목록입니다."),
     SUBSCRIBER_LIST(HttpStatus.OK, "구독자 목록입니다."),
 
-    //피드백 요청 취소
-    OK_FEEDBACK_REQUEST_CANCELED(HttpStatus.OK, "정상적으로 취소 되었습니다."),
-    //피드백 거절
-    OK_SUCCESS_FEEDBACK_REJECTED(HttpStatus.OK, "피드백 요청이 거절되었습니다."),
-    //피드백 리뷰 삭제
+    //피드백
+    OK_SUCCESS_FEEDBACK_CREATED(HttpStatus.CREATED,"피드백 작성을 완료했습니다."),
+    OK_SUCCESS_FEEDBACK_UPDATE(HttpStatus.OK,"피드백 수정을 완료했습니다."),
+
+    //피브백 신청
+    OK_SUCCESS_FEEDBACK_REQUEST_CREATED(HttpStatus.CREATED,"정상적으로 요청 신청이 완료 되었습니다."),
+    OK_SUCCESS_FEEDBACK_REQUEST(HttpStatus.CREATED,"정상적으로 조회 되었습니다."),
+    OK_SUCCESS_FEEDBACK_REQUEST_UPDATE(HttpStatus.CREATED,"정상적으로 요청이 수정 되었습니다."),
+    OK_SUCCESS_FEEDBACK_REQUEST_REJECTED(HttpStatus.OK, "피드백 요청이 거절되었습니다."),
+    OK_SUCCESS_FEEDBACK_REQUEST_CANCELED(HttpStatus.OK, "정상적으로 요청이 취소 되었습니다."),
+
+    //피드백 리뷰
+    OK_SUCCESS_FEEDBACK_REVIEW_CREATED(HttpStatus.CREATED, "작성한 피드백 리뷰가 작성 되었습니다."),
+    OK_SUCCESS_FEEDBACK_REVIEW(HttpStatus.CREATED, "작성한 피드백 리뷰가 조회 되었습니다."),
+    OK_SUCCESS_FEEDBACK_REVIEW_UPDATE(HttpStatus.CREATED, "작성한 피드백 리뷰가 작성 되었습니다."),
     OK_SUCCESS_FEEDBACK_REVIEW_DELETED(HttpStatus.OK, "작성한 피드백 리뷰가 정상적으로 삭제되었습니다."),
 
     // 기술스택
