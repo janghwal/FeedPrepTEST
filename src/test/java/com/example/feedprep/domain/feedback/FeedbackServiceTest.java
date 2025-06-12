@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @ActiveProfiles("local")
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class FeedbackReviewServiceTest {
+public class FeedbackServiceTest {
 
 	@Autowired
 	private FeedbackRequestEntityRepository feedbackRequestEntityRepository;

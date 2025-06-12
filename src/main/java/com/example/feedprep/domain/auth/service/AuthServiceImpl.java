@@ -86,11 +86,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
-
     @Override
     public TokenResponseDto login(LoginRequestDto requestDto, Set<String> allowedRoles) {
 
         User user = userRepository.getUserByEmailOrElseThrow(requestDto.getEmail());
+
+        if (user.getDeletedAt() != null) {
+            throw new CustomException(ErrorCode.WITHDRAWN_USER);
+        }
 
         RefreshToken existingRefreshToken = refreshTokenRepository.findByUser_UserId(user.getUserId());
 
@@ -118,25 +121,25 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void logout(String authHeader) {
-        // Bearer 제거
-        String accessToken = jwtUtil.substringToken(authHeader);
-
-        // Claims 추출 (유효성 검증)
-        Claims claims = jwtUtil.validateToken(accessToken);
-        if (claims == null) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
+    public void logout(String authHeader, Long userId) {
+        Claims claims = validateTokenAndDeleteRefreshToken(authHeader, userId);
 
         // 만료까지 남은 시간 계산 -> 해당 토큰 블랙 리스트 등록
         long remainingMillis = jwtUtil.getRemainingMillis(claims);
 
         if (remainingMillis > 0) {
-           tokenBlacklistService.addTokenToBlacklist(accessToken, remainingMillis);
+            String accessToken = jwtUtil.substringToken(authHeader);
+            tokenBlacklistService.addTokenToBlacklist(accessToken, remainingMillis);
         }
-
     }
 
+    @Override
+    public void withdraw(String authHeader, Long userId) {
+        validateTokenAndDeleteRefreshToken(authHeader, userId);
+
+        User user = userRepository.findByIdOrElseThrow(userId);
+        user.withdraw();
+    }
 
     private SignupResponseDto createUser(String name, String email, String password, UserRole role) {
         String encodedPassword = passwordEncoder.encode(password);
@@ -145,5 +148,21 @@ public class AuthServiceImpl implements AuthService {
         return SignupResponseDto.from(user);
     }
 
+    private Claims validateTokenAndDeleteRefreshToken(String authHeader, Long userId) {
+        // Bearer 제거
+        String accessToken = jwtUtil.substringToken(authHeader);
+
+        // Claims 추출 및 유효성 검증
+        Claims claims = jwtUtil.validateToken(accessToken);
+        if (claims == null) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+
+        // 리프레시 토큰 조회 및 삭제
+        RefreshToken refreshToken = refreshTokenRepository.getByUser_UserIdOrElseThrow(userId);
+        refreshTokenRepository.delete(refreshToken);
+
+        return claims;
+    }
 
 }

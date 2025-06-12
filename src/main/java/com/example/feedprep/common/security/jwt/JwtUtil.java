@@ -59,9 +59,7 @@ public class JwtUtil {
             throw new CustomException(ErrorCode.EXPIRED_TOKEN);
         } catch (UnsupportedJwtException e) {
             throw new CustomException(ErrorCode.UNSUPPORTED_TOKEN);
-        } catch (MalformedJwtException e) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        } catch (JwtException e) {
+        } catch (MalformedJwtException | JwtException e) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
     }
@@ -72,15 +70,6 @@ public class JwtUtil {
             return tokenValue.substring(BEARER_PREFIX.length());
         }
         throw new CustomException(ErrorCode.MISSING_TOKEN);
-    }
-
-    // 토큰에서 Claims(정보) 추출
-    public Claims extractClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
     }
 
     // 남은 기간 반환 메서드

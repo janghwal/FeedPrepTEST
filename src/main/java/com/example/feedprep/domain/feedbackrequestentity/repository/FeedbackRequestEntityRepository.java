@@ -28,7 +28,7 @@ public interface FeedbackRequestEntityRepository extends JpaRepository<FeedbackR
 		,@Param("state") RequestState state);
 
 	@Query("SELECT f FROM FeedbackRequestEntity f where  f.tutor.userId = :tutorId AND f.requestState = :state ")
-	Page<FeedbackRequestEntity>  getPagedRequestsForTutor(Long tutorId,  RequestState state, PageRequest pageable);
+	Page<FeedbackRequestEntity>  getPagedRequestsForTutor(@Param("tutorId")Long tutorId, @Param("state") RequestState state, PageRequest pageable);
 
 	@Query("SELECT f FROM FeedbackRequestEntity f WHERE  f.tutor.userId = :tutorId AND f.id = :requestId")
 	Optional<FeedbackRequestEntity> findPendingByIdAndTutor(@Param("tutorId") Long tutorId, @Param("requestId")Long requestId);

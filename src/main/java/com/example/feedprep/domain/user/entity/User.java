@@ -15,7 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -56,7 +56,7 @@ public class User extends BaseTimeEntity {
     private Double rating;
 
     @Column(name = "deleted_at")
-    private Timestamp deletedAt;
+    private LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "user")
     private List<Document> documents = new ArrayList<>();
@@ -81,5 +81,9 @@ public class User extends BaseTimeEntity {
         this.password = password;
         this.role = role;
         this.point = 0L;
+    }
+
+    public void withdraw() {
+        this.deletedAt = LocalDateTime.now();
     }
 }

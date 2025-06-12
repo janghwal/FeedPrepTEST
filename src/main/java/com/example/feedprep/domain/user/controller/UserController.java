@@ -57,7 +57,7 @@ public class UserController {
             .body(ApiResponseDto.success(UPDATE_MYINFO_SUCCESS,userService.updateMyInfo(userId,requestDto)));
     }
 
-    @PatchMapping("/password-update")
+    @PatchMapping("/me")
     public ResponseEntity<ApiResponseDto<PasswordModifiedAtResponseDto>> changePassword(
         @AuthUser Long userId,
         @Valid @RequestBody NewPasswordRequestDto requestDto

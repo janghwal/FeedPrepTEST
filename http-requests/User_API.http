@@ -1,0 +1,47 @@
+### 튜터 목록조회
+GET localhost:8080/users/tutorList
+Authorization: Bearer {{accessToken}}
+
+### 내 프로필 조회
+GET localhost:8080/users/me
+Authorization: Bearer {{accessToken}}
+
+### 내 프로필 수정
+PUT localhost:8080/users/me
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "학생1",
+  "address": "주소 등록",
+  "introduction": "소개글 등록"
+}
+
+### 비밀번호 수정
+PATCH localhost:8080/users/me
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "oldPassword" : "asdasdjkDF23",
+  "newPassword" : "NEWasdasdjkDF23"
+}
+
+
+
+### 튜터 승인
+POST localhost:8080/admin/authority/tutor/1
+Authorization: Bearer {{accessToken}}
+
+### 기술 스택 생성
+POST localhost:8080/admin/authority/tech-stacks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "techStack" : "스프링-부트"
+}
+
+### 기술 스택 삭제
+DELETE localhost:8080/admin/authority/tech-stacks/1
+Authorization: Bearer {{accessToken}}
