@@ -11,6 +11,9 @@ public enum ErrorCode {
     // 잘못된 요청
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다." ),
 
+    // @Column(unique = true) 값이 중복되는 오류
+    DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "이미 존재하는 값입니다. 중복된 입력을 확인해주세요."),
+
     // Forbidden
     INVALID_ROLE_REQUEST(HttpStatus.FORBIDDEN, "해당 역할로 가입할 수 없습니다."),
     UNAUTHORIZED_ROLE_LOGIN(HttpStatus.FORBIDDEN, "요청하신 로그인 경로에서는 해당 역할의 계정으로 로그인할 수 없습니다."),
