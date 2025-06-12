@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +16,8 @@ import com.example.feedprep.domain.matching.service.TutorMatchingService;
 
 import lombok.RequiredArgsConstructor;
 
-@RestController("/tutor")
+@RestController
+@RequestMapping("/tutor")
 @RequiredArgsConstructor
 public class TutorMatchingController {
 
