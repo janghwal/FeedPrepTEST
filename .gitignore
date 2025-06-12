@@ -37,6 +37,7 @@ out/
 ### VS Code ###
 .vscode/
 
+http-client.private.env.json
 http-client.env.json
 
 application-test.properties
@@ -54,3 +55,4 @@ Thumbs.db
 *.mv.db
 
 test-output/
+
