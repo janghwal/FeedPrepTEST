@@ -48,8 +48,7 @@ public class MatchingQueryImpl implements MatchingQuery{
 				user.userId.as("tutorId"),
 				user.name.as("name"),
 				review.rating.avg().as("rating"),
-				user.introduction.as("introduction"),
-				pendingOrApprovedCount
+				user.introduction.as("introduction")
 			)
 			.from(user)
 			.leftJoin(feedbackRequest).on(user.eq(feedbackRequest.tutor))
