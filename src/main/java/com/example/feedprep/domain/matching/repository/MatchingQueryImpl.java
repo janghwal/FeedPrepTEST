@@ -77,7 +77,7 @@ public class MatchingQueryImpl implements MatchingQuery{
 				review.rating.avg().desc(),
 				Expressions.numberTemplate(Long.class, "TIMESTAMPDIFF(SECOND, {0}, {1})", feedback.createdAt, feedbackRequest.createdAt).avg().asc()
 			)
-			.offset(page)
+			.offset((page-1)* 4L)
 			.limit(4)
 			.fetch();
 	}
