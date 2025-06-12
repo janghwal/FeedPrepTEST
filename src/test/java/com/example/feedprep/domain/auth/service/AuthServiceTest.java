@@ -2,6 +2,7 @@ package com.example.feedprep.domain.auth.service;
 
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
+import com.example.feedprep.common.security.annotation.AuthUser;
 import com.example.feedprep.domain.auth.dto.*;
 import com.example.feedprep.domain.auth.repository.RefreshTokenRepository;
 
@@ -186,9 +187,30 @@ public class AuthServiceTest {
 
         String accessToken = tokenResponse.getAccessToken();
         String bearerToken = "Bearer " + accessToken;
+        User user = userRepository.getUserByEmailOrElseThrow("email1@example.com");
+        Long userId = user.getUserId();
 
         // then - 로그아웃 시 어떤 예외도 발생하지 않고 작동하는지 검증
-        assertThatCode(() -> authService.logout(bearerToken)).doesNotThrowAnyException();
+        assertThatCode(() -> authService.logout(bearerToken, userId)).doesNotThrowAnyException();
     }
+
+    @Test
+    void 성공_회원_탈퇴() {
+        // given - 회원 가입 및 로그인
+        SignupRequestDto request = new SignupRequestDto("name1", "email1@example.com", "passworDd12", "STUDENT");
+        authService.signup(request);
+
+        LoginRequestDto loginRequest = new LoginRequestDto("email1@example.com", "passworDd12");
+        TokenResponseDto tokenResponse = authService.login(loginRequest, Set.of("STUDENT"));
+
+        String accessToken = tokenResponse.getAccessToken();
+        String bearerToken = "Bearer " + accessToken;
+        User user = userRepository.getUserByEmailOrElseThrow("email1@example.com");
+        Long userId = user.getUserId();
+
+        // when & then - 탈퇴 시도
+        assertThatCode(()-> authService.withdraw(bearerToken, userId)).doesNotThrowAnyException();
+    }
+
 
 }
