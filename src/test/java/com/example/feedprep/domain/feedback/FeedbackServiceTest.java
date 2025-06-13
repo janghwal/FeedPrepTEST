@@ -74,7 +74,7 @@ public class FeedbackServiceTest {
 		feedbackRequestService.createRequest( users.get(0).getUserId(), testRequestDto);
 
 		FeedbackWriteRequestDto requestDto
-			= new FeedbackWriteRequestDto(1L,"내용");
+			= new FeedbackWriteRequestDto("내용");
 
 		long start = System.currentTimeMillis();
 		FeedbackResponseDto response = feedbackService.createFeedback(tutors.get(2).getUserId(), 1L, requestDto);
@@ -110,7 +110,7 @@ public class FeedbackServiceTest {
 
 		//피드백 작성 하기
 		FeedbackWriteRequestDto requestDto =
-			new FeedbackWriteRequestDto(1L,"직성 완료했습니다.");
+			new FeedbackWriteRequestDto("직성 완료했습니다.");
 
 		//피드백 작성 완료 저장
 		long start = System.currentTimeMillis();
@@ -150,8 +150,7 @@ public class FeedbackServiceTest {
 
 		//피드백 작성 하기
 
-		FeedbackWriteRequestDto requestDto = new FeedbackWriteRequestDto(alreadyExistRequest.getId(),
-			"직성 완료했습니다.");
+		FeedbackWriteRequestDto requestDto = new FeedbackWriteRequestDto("직성 완료했습니다.");
 
 		//피드백 작성 완료 저장
 		long start = System.currentTimeMillis();

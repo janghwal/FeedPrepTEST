@@ -1,4 +1,4 @@
-### 일반 유저 회원가입
+### 학생 회원가입
 POST localhost:8080/auth/signup
 Content-Type: application/json
 
@@ -9,7 +9,7 @@ Content-Type: application/json
   "role": "STUDENT"
 }
 
-### 일반 유저 로그인
+### 학생 로그인
 POST localhost:8080/auth/login
 Content-Type: application/json
 
@@ -19,34 +19,16 @@ Content-Type: application/json
 }
 
 > {%
-    client.global.set("studentAccessToken", response.body.data.accessToken)
+  client.global.set("studentAccessToken", response.body.data.accessToken)
 %}
 
+### 학생 로그아웃
+POST localhost:8080/auth/logout
+Authorization: Bearer {{studentAccessToken}}
 
-### 일반 유저 2 회원가입 (권한 테스트용)
-POST localhost:8080/auth/signup
-Content-Type: application/json
-
-{
-  "name": "다른유저",
-  "email": "user5678@naver.com",
-  "password": "testUser5678",
-  "role": "STUDENT"
-}
-
-### 일반 유저 2 로그인
-POST localhost:8080/auth/login
-Content-Type: application/json
-
-{
-  "email": "user5678@naver.com",
-  "password": "testUser5678"
-}
-
-> {%
-    client.global.set("student2AccessToken", response.body.data.accessToken)
-%}
-
+### 학생 회원탈퇴
+DELETE localhost:8080/auth/withdraw
+Authorization: Bearer {{studentAccessToken}}
 
 ### 튜터 회원가입
 POST localhost:8080/auth/signup
@@ -69,11 +51,19 @@ Content-Type: application/json
 }
 
 > {%
-    client.global.set("tutorAccessToken", response.body.data.accessToken)
+  client.global.set("tutorAccessToken", response.body.data.accessToken)
 %}
 
+### 튜터 로그아웃
+POST localhost:8080/auth/logout
+Authorization: Bearer {{tutorAccessToken}}
+
+### 튜터 회원탈퇴
+DELETE localhost:8080/auth/withdraw
+Authorization: Bearer {{tutorAccessToken}}
 
 ### 관리자 회원가입
+
 POST localhost:8080/admin/signup
 Content-Type: application/json
 
@@ -86,6 +76,7 @@ Content-Type: application/json
 }
 
 ### 관리자 로그인
+
 POST localhost:8080/admin/login
 Content-Type: application/json
 
@@ -95,14 +86,9 @@ Content-Type: application/json
 }
 
 > {%
-    client.global.set("adminAccessToken", response.body.data.accessToken)
+  client.global.set("adminAccessToken", response.body.data.accessToken)
 %}
 
-
-### 일반 유저 1 로그아웃 (테스트할 경우 마지막에)
+### 관리자 로그아웃
 POST localhost:8080/auth/logout
-Authorization: Bearer {{studentAccessToken}}
-
-### 일반 유저 1 회원탈퇴 (테스트할 경우 마지막에)
-DELETE localhost:8080/auth/withdraw
-Authorization: Bearer {{studentAccessToken}}
+Authorization: Bearer {{adminAccessToken}}
