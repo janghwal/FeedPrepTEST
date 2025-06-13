@@ -57,7 +57,9 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 		}
 		FeedbackReview feedbackReview = feedBackReviewRepository.findById(reviewId)
 			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REVIEW));
-
+		if(!feedbackReview.getUserId().equals(userId)){
+			throw new CustomException(ErrorCode.FOREIGN_REQUESTER_REVIEW_ACCESS);
+		}
 
 		return  new FeedbackReviewResponseDto(feedbackReview);
 	}
@@ -99,8 +101,8 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 		}
 		FeedbackReview feedbackReview = feedBackReviewRepository.findById(reviewId)
 			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REVIEW));
-        if(feedbackReview.getUserId().equals(userId)){
-			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
+        if(!feedbackReview.getUserId().equals(userId)){
+			throw new CustomException(ErrorCode.FOREIGN_REQUESTER_REVIEW_ACCESS);
 		}
 		feedbackReview.updateFeedbackReview(dto);
 		FeedbackReview saveReview = feedBackReviewRepository.save(feedbackReview);
@@ -115,8 +117,8 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 		}
 		FeedbackReview feedbackReview = feedBackReviewRepository.findById(reviewId)
 			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REVIEW));
-		if(feedbackReview.getUserId().equals(userId)){
-			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
+		if(!feedbackReview.getUserId().equals(userId)){
+			throw new CustomException(ErrorCode.FOREIGN_REQUESTER_REVIEW_ACCESS);
 		}
 		feedbackReview.updateDeletedAt(LocalDateTime.now());
 		return new ApiResponseDto(
