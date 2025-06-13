@@ -27,19 +27,6 @@ public class TechStackServiceImpl implements TechStackService{
 	private final UserRepository userRepository;
 
 	@Override
-	public void createTechStack(CreateTechStackRequestDto requestDto) {
-		TechStack techStack = new TechStack(requestDto.getTechStack());
-		techStackRepository.save(techStack);
-	}
-
-	@Transactional
-	@Override
-	public void deleteTechStack(Long techId) {
-		TechStack techStack = techStackRepository.findByIdOrElseThrow(techId);
-		techStackRepository.delete(techStack);
-	}
-
-	@Override
 	public List<TechStackResponseDto> getTechStackList() {
 
 		List<TechStack> allTechStack = techStackRepository.findAll();

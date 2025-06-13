@@ -6,9 +6,6 @@ import com.example.feedprep.domain.techstack.dto.CreateTechStackRequestDto;
 import com.example.feedprep.domain.techstack.dto.TechStackResponseDto;
 
 public interface TechStackService {
-	void createTechStack(CreateTechStackRequestDto requestDto);
-
-	void deleteTechStack(Long techId);
 
 	List<TechStackResponseDto> getTechStackList();
 
