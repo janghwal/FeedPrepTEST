@@ -54,8 +54,8 @@ public class TechStackController {
 	) {
 		List<TechStackResponseDto> myTechStackList = techStackService.getMyTechStackList(requesterId);
 
-		return ResponseEntity.status(SuccessCode.ADD_MY_TECH_STACK.getHttpStatus())
-			.body(ApiResponseDto.success(SuccessCode.ADD_MY_TECH_STACK, myTechStackList));
+		return ResponseEntity.status(SuccessCode.TECH_STACK_LISTED.getHttpStatus())
+			.body(ApiResponseDto.success(SuccessCode.TECH_STACK_LISTED, myTechStackList));
 	}
 
 	@DeleteMapping("/{relationId}")
@@ -64,8 +64,8 @@ public class TechStackController {
 		@PathVariable Long relationId) {
 		techStackService.removeTechStack(requesterId, relationId);
 
-		return ResponseEntity.status(SuccessCode.ADD_MY_TECH_STACK.getHttpStatus())
-			.body(ApiResponseDto.success(SuccessCode.ADD_MY_TECH_STACK));
+		return ResponseEntity.status(SuccessCode.REMOVE_MY_TECH_STACK.getHttpStatus())
+			.body(ApiResponseDto.success(SuccessCode.REMOVE_MY_TECH_STACK));
 	}
 
 }

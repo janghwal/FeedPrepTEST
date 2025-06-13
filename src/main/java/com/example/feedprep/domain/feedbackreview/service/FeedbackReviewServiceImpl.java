@@ -99,7 +99,9 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 		}
 		FeedbackReview feedbackReview = feedBackReviewRepository.findById(reviewId)
 			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REVIEW));
-
+        if(feedbackReview.getUserId().equals(userId)){
+			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
+		}
 		feedbackReview.updateFeedbackReview(dto);
 		FeedbackReview saveReview = feedBackReviewRepository.save(feedbackReview);
 		return new FeedbackReviewResponseDto(saveReview);
@@ -113,14 +115,14 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 		}
 		FeedbackReview feedbackReview = feedBackReviewRepository.findById(reviewId)
 			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REVIEW));
+		if(feedbackReview.getUserId().equals(userId)){
+			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
+		}
 		feedbackReview.updateDeletedAt(LocalDateTime.now());
-
-
 		return new ApiResponseDto(
 			SuccessCode.OK_SUCCESS_FEEDBACK_REVIEW_DELETED.getHttpStatus().value(),
 			SuccessCode.OK_SUCCESS_FEEDBACK_REVIEW_DELETED.getMessage(),
 			SuccessCode.OK_SUCCESS_FEEDBACK_REVIEW_DELETED.getHttpStatus()
-
 			);
 	}
 }

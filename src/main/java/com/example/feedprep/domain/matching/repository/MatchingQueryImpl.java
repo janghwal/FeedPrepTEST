@@ -48,8 +48,7 @@ public class MatchingQueryImpl implements MatchingQuery{
 				user.userId.as("tutorId"),
 				user.name.as("name"),
 				review.rating.avg().as("rating"),
-				user.introduction.as("introduction"),
-				pendingOrApprovedCount
+				user.introduction.as("introduction")
 			)
 			.from(user)
 			.leftJoin(feedbackRequest).on(user.eq(feedbackRequest.tutor))
@@ -77,7 +76,7 @@ public class MatchingQueryImpl implements MatchingQuery{
 				review.rating.avg().desc(),
 				Expressions.numberTemplate(Long.class, "TIMESTAMPDIFF(SECOND, {0}, {1})", feedback.createdAt, feedbackRequest.createdAt).avg().asc()
 			)
-			.offset(page)
+			.offset((page-1)* 4L)
 			.limit(4)
 			.fetch();
 	}

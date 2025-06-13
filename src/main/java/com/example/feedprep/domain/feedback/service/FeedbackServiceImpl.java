@@ -71,7 +71,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 		if(feedback.getFeedbackRequestEntity().getRequestState().equals(RequestState.PENDING)){
 			throw new CustomException(ErrorCode.CANNOT_EDIT_PENDING_FEEDBACK);
 		}
-		if(feedback.getTutor().getUserId().equals(tutor.getUserId())){
+		if(!feedback.getTutor().getUserId().equals(tutor.getUserId())){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
 		// 4. dto 내용으로 feedback 업데이트

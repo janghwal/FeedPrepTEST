@@ -87,9 +87,7 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 		Page<FeedbackRequestEntity> pages =
 			feedbackRequestEntityRepository.findByRequest(userId, tutorId, documentId,month, requestState, pageRequest);
 
-		List<FeedbackRequestEntityResponseDto> result =
-			pages.stream().map(FeedbackRequestEntityResponseDto::new).toList();
-		return result;
+		return pages.stream().map(FeedbackRequestEntityResponseDto::new).toList();
 	}
 
 	@Transactional(readOnly = true)
@@ -117,12 +115,10 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 			RequestState.PENDING,
 			pageable
 		);
-		List<FeedbackResponseDetailsDto> getRequestList =
-			requests.stream()
-				.map(FeedbackResponseDetailsDto:: new)
-				.collect(Collectors.toList());
+		return requests.stream()
+			.map(FeedbackResponseDetailsDto:: new)
+			.collect(Collectors.toList());
 
-		return getRequestList;
 	}
 
 	@Transactional
@@ -139,7 +135,7 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 		if (request.getRequestState() != RequestState.PENDING) {
 			throw new CustomException(ErrorCode.CANNOT_EDIT_COMPLETED_REQUEST);
 		}
-		User tutor = userRepository.findByIdOrElseThrow(userId);
+		User tutor = userRepository.findByIdOrElseThrow(dto.getTutorId());
 
 		//문서 조회
 		Document document = documentRepository.findById(dto.getDocumentId())
