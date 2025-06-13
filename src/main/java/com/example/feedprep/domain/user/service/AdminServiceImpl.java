@@ -9,6 +9,7 @@ import com.example.feedprep.domain.user.dto.response.TutorResponseDto;
 import com.example.feedprep.domain.user.entity.User;
 import com.example.feedprep.domain.user.enums.UserRole;
 import com.example.feedprep.domain.user.repository.UserRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,14 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public void createTechStack(CreateTechStackRequestDto requestDto) {
+
+        Optional<TechStack> isTechStack = techStackRepository.findByTechStack(
+            requestDto.getTechStack());
+
+        if(isTechStack.isPresent()) {
+            throw new CustomException(ErrorCode.ALREADY_REGISTERED_TECHSTACK);
+        }
+
         TechStack techStack = new TechStack(requestDto.getTechStack());
         techStackRepository.save(techStack);
     }
