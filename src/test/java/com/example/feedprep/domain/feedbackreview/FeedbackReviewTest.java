@@ -28,7 +28,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-@ActiveProfiles("local")
+
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class FeedbackReviewTest {
@@ -74,14 +74,14 @@ public class FeedbackReviewTest {
 
 		//피드백 요청에 대한 피드백 작성
 		FeedbackWriteRequestDto feedbackWriteRequestDto
-			= new FeedbackWriteRequestDto(1L,"날먹잼");
+			= new FeedbackWriteRequestDto("날먹잼");
 
 		feedbackService.createFeedback(users.get(0).getUserId(), 1L, feedbackWriteRequestDto);
 
 		//리뷰 작성 완료하기.
 
 		FeedbackReviewRequestDto feedbackReviewRequestDto
-			=new FeedbackReviewRequestDto(1L, 5, "튜터님 좋은 조언 감사합니다." );
+			=new FeedbackReviewRequestDto(5, "튜터님 좋은 조언 감사합니다." );
 
 		long start = System.currentTimeMillis();
 		FeedbackReviewResponseDto feedbackReviewResponseDto =
@@ -118,20 +118,20 @@ public class FeedbackReviewTest {
 
 		//피드백 요청에 대한 피드백 작성
 		FeedbackWriteRequestDto feedbackWriteRequestDto
-			= new FeedbackWriteRequestDto(1L,"날먹잼");
+			= new FeedbackWriteRequestDto("날먹잼");
 
 		feedbackService.createFeedback(users.get(0).getUserId(), 1L, feedbackWriteRequestDto);
 		//리뷰 작성 완료하기.
 
 		FeedbackReviewRequestDto feedbackReviewRequestDto
-			=new FeedbackReviewRequestDto(1L, 5, "같이 좀..." );
+			=new FeedbackReviewRequestDto( 5, "같이 좀..." );
 
 		feedbackReviewService.createReview(users.get(0).getUserId(),1L , feedbackReviewRequestDto);
 
 
 		//리뷰 수정하기
 		FeedbackReviewRequestDto feedbackReviewUpdateRequestDto
-			=new FeedbackReviewRequestDto(1L, 5, "정직하게 리뷰 하겠습니다." );
+			=new FeedbackReviewRequestDto( 5, "정직하게 리뷰 하겠습니다." );
 		long start = System.currentTimeMillis();
 		FeedbackReviewResponseDto feedbackReviewUpdateResponseDto =
 			feedbackReviewService.updateReview( users.get(0).getUserId(),1L , feedbackReviewUpdateRequestDto);
@@ -165,13 +165,13 @@ public class FeedbackReviewTest {
 
 		//피드백 요청에 대한 피드백 작성
 		FeedbackWriteRequestDto feedbackWriteRequestDto
-			= new FeedbackWriteRequestDto(1L,"날먹잼");
+			= new FeedbackWriteRequestDto("날먹잼");
 
 		feedbackService.createFeedback(users.get(0).getUserId(), 1L, feedbackWriteRequestDto);
 		//리뷰 작성 완료하기.
 
 		FeedbackReviewRequestDto feedbackReviewRequestDto
-			=new FeedbackReviewRequestDto(1L, 5, "같이 좀..." );
+			=new FeedbackReviewRequestDto( 5, "같이 좀..." );
 
 		feedbackReviewService.createReview( users.get(0).getUserId(),1L , feedbackReviewRequestDto);
 
@@ -210,13 +210,13 @@ public class FeedbackReviewTest {
 
 		//피드백 요청에 대한 피드백 작성
 		FeedbackWriteRequestDto feedbackWriteRequestDto
-			= new FeedbackWriteRequestDto(1L,"날먹잼");
+			= new FeedbackWriteRequestDto("날먹잼");
 
 		feedbackService.createFeedback(users.get(0).getUserId(), 1L, feedbackWriteRequestDto);
 		//리뷰 작성 완료하기.
 
 		FeedbackReviewRequestDto feedbackReviewRequestDto
-			=new FeedbackReviewRequestDto(1L, 5, "좋은 피드백이었습니다." );
+			=new FeedbackReviewRequestDto( 5, "좋은 피드백이었습니다." );
 
 		feedbackReviewService.createReview( users.get(0).getUserId(),1L , feedbackReviewRequestDto);
 		//리뷰 조회하기
@@ -265,9 +265,9 @@ public class FeedbackReviewTest {
 		feedbackRequestService.createRequest(users.get(2).getUserId(), requestDtoTutor3);
 
 		List<FeedbackWriteRequestDto> testFedbackWriteRequestDtos = List.of(
-			new FeedbackWriteRequestDto(1L, "~이런점을 수정하면 좋을것 같습니다."),
-			new FeedbackWriteRequestDto(2L, "~이런점을 수정하면 좋을것 같습니다."),
-			new FeedbackWriteRequestDto(3L, "~이런점을 수정하면 좋을것 같습니다.")
+			new FeedbackWriteRequestDto( "~이런점을 수정하면 좋을것 같습니다."),
+			new FeedbackWriteRequestDto( "~이런점을 수정하면 좋을것 같습니다."),
+			new FeedbackWriteRequestDto( "~이런점을 수정하면 좋을것 같습니다.")
 		);
 		feedbackService.createFeedback(users.get(0).getUserId(), 1L, testFedbackWriteRequestDtos.get(0));
 		feedbackService.createFeedback(tutors.get(0).getUserId(), 2L, testFedbackWriteRequestDtos.get(1));
@@ -280,7 +280,7 @@ public class FeedbackReviewTest {
 
 		for(Long i = 1L; i <4L; i++) {
 			FeedbackReviewRequestDto feedbackReviewRequestDto
-				= new FeedbackReviewRequestDto(i ,5, "좋은 피드백이었습니다.");
+				= new FeedbackReviewRequestDto(5, "좋은 피드백이었습니다.");
 
 			feedbackReviewService.createReview(users.get(2).getUserId(), i , feedbackReviewRequestDto);
 
@@ -324,7 +324,7 @@ public class FeedbackReviewTest {
 		//피드백 요청에 대한 피드백 작성
 		for (Long i = 0L; i < users.size()-1; i++) {
 			FeedbackWriteRequestDto testfeedbackWriteRequestDto =
-				new FeedbackWriteRequestDto(i, "~이런점을 수정하면 좋을것 같습니다.");
+				new FeedbackWriteRequestDto( "~이런점을 수정하면 좋을것 같습니다.");
 
 			feedbackService.createFeedback(users.get(0).getUserId(), i + 1, testfeedbackWriteRequestDto);
 		}
@@ -334,7 +334,7 @@ public class FeedbackReviewTest {
 		int sid = 1;
 		for (Long i = 1L; i < users.size(); i++) {
 			FeedbackReviewRequestDto feedbackReviewRequestDto
-				= new FeedbackReviewRequestDto(i, 5, "좋은 피드백이었습니다.");
+				= new FeedbackReviewRequestDto( 5, "좋은 피드백이었습니다.");
 
 			feedbackReviewService.createReview( users.get(sid).getUserId(), i, feedbackReviewRequestDto);
 			sid++;
@@ -377,7 +377,7 @@ public class FeedbackReviewTest {
 		//피드백 요청에 대한 피드백 작성
 		for(Long i = 1L; i < users.size(); i++) {
 			FeedbackWriteRequestDto testfeedbackWriteRequestDto =
-				new FeedbackWriteRequestDto(i, "~이런점을 수정하면 좋을것 같습니다.");
+				new FeedbackWriteRequestDto( "~이런점을 수정하면 좋을것 같습니다.");
 
 			feedbackService.createFeedback(users.get(0).getUserId(), i, testfeedbackWriteRequestDto);
 		}
@@ -390,7 +390,7 @@ public class FeedbackReviewTest {
 		for(Long i = 1L; i < users.size(); i++) {
 			rat = random.nextInt(0,5);
 			FeedbackReviewRequestDto feedbackReviewRequestDto
-				= new FeedbackReviewRequestDto(i ,rat, "좋은 피드백이었습니다.");
+				= new FeedbackReviewRequestDto(rat, "좋은 피드백이었습니다.");
 
 			feedbackReviewService.createReview( users.get(student).getUserId(), i ,feedbackReviewRequestDto);
 			student++;
