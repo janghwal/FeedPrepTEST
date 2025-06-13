@@ -43,24 +43,30 @@ public class FeedbackReviewServiceImpl implements FeedbackReviewService {
 
 		FeedbackReview feedbackReview = new FeedbackReview(dto, feedback, user);
 		FeedbackReview saveReview = feedBackReviewRepository.save(feedbackReview);
-
 	    return new FeedbackReviewResponseDto(saveReview);
 	}
 
 
 	@Transactional(readOnly = true)
 	@Override
-	public FeedbackReviewResponseDto getReview(Long reviewId, Long userId) {
+	public FeedbackReviewResponseDto getReview( Long userId, Long reviewId) {
 		User user = userRepository.findByIdOrElseThrow(userId);
 		if(!user.getUserId().equals(userId)){
 			throw new CustomException(ErrorCode.UNAUTHORIZED_REQUESTER_ACCESS);
 		}
 		FeedbackReview feedbackReview = feedBackReviewRepository.findById(reviewId)
 			.orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEEDBACK_REVIEW));
-		if(!feedbackReview.getUserId().equals(userId)){
-			throw new CustomException(ErrorCode.FOREIGN_REQUESTER_REVIEW_ACCESS);
-		}
 
+		if(user.getRole().equals(UserRole.STUDENT)){
+			if(!feedbackReview.getUserId().equals(userId)){
+				throw new CustomException(ErrorCode.FOREIGN_REQUESTER_REVIEW_ACCESS);
+			}
+		}
+		else {
+			if(!feedbackReview.getTutorId().equals(userId)){
+				throw new CustomException(ErrorCode.FOREIGN_REQUESTER_REVIEW_ACCESS);
+			}
+		}
 		return  new FeedbackReviewResponseDto(feedbackReview);
 	}
 	@Transactional(readOnly = true)
