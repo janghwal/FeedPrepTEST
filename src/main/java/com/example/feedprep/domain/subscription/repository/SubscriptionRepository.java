@@ -17,4 +17,6 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
 	List<Subscription> findBySender(User user);
 	List<Subscription> findByReceiver(User user);
+
+	boolean existsByReceiverAndSender(User receiver, User sender);
 }

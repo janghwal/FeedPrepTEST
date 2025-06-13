@@ -6,6 +6,7 @@ import java.util.List;
 import com.example.feedprep.domain.techstack.dto.CreateTechStackRequestDto;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +26,7 @@ public class TechStack {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long techId;
+	@Column(unique = true)
 	private String techStack;
 
 	@OneToMany(mappedBy = "techStack", cascade = CascadeType.ALL, orphanRemoval = true)
