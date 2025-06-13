@@ -12,6 +12,7 @@ import com.example.feedprep.domain.subscription.dto.SubscriptionResponseDto;
 import com.example.feedprep.domain.subscription.entity.Subscription;
 import com.example.feedprep.domain.subscription.repository.SubscriptionRepository;
 import com.example.feedprep.domain.user.entity.User;
+import com.example.feedprep.domain.user.enums.UserRole;
 import com.example.feedprep.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,16 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 
 		User sender = userRepository.findByIdOrElseThrow(senderId);
 		User receiver = userRepository.findByIdOrElseThrow(userId);
+
+		// receiver가 승인된 튜터가 아닐 경우
+		if(receiver.getRole() != UserRole.APPROVED_TUTOR || sender.getRole() != UserRole.STUDENT){
+			throw new CustomException(ErrorCode.BAD_REQUEST);
+		}
+
+		// 중복 구독
+		if(subscriptionRepository.existsByReceiverAndSender(receiver, sender)){
+			throw new CustomException(ErrorCode.DUPLICATE_SUBSCRIPTION);
+		}
 
 		// 구독은 튜터에게만 가능한 것인가? 의사 결정 후 추가 필요.
 		Subscription subscription = new Subscription(sender, receiver);

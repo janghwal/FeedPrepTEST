@@ -1,0 +1,15 @@
+### 구독
+POST localhost:8080/subscriptions?userId=2
+Authorization: Bearer {{studentAccessToken}}
+
+### 구독 취소
+DELETE localhost:8080/subscriptions/1
+Authorization: Bearer {{studentAccessToken}}
+
+### 구독 목록 조회 getType = SUBSCRIBERS or SUBSCRIPTIONS
+GET localhost:8080/subscriptions?getType=SUBSCRIPTIONS
+Authorization: Bearer {{studentAccessToken}}
+
+### 구독 목록 조회 getType = SUBSCRIBERS or SUBSCRIPTIONS
+GET localhost:8080/subscriptions?getType=SUBSCRIBERS
+Authorization: Bearer {{tutorAccessToken}}
