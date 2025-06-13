@@ -5,6 +5,7 @@ import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.domain.techstack.dto.CreateTechStackRequestDto;
 import com.example.feedprep.domain.techstack.entity.TechStack;
 import com.example.feedprep.domain.techstack.repository.TechStackRepository;
+import com.example.feedprep.domain.user.dto.response.ApproveTutorResponseDto;
 import com.example.feedprep.domain.user.dto.response.TutorResponseDto;
 import com.example.feedprep.domain.user.entity.User;
 import com.example.feedprep.domain.user.enums.UserRole;
@@ -23,7 +24,7 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     @Transactional
-    public TutorResponseDto approveTutor(Long tutorId) {
+    public ApproveTutorResponseDto approveTutor(Long tutorId) {
 
         User user = userRepository.findByIdOrElseThrow(tutorId);
 
@@ -33,7 +34,7 @@ public class AdminServiceImpl implements AdminService{
 
         user.setRole(UserRole.APPROVED_TUTOR);
 
-        return new TutorResponseDto(user.getRole());
+        return new ApproveTutorResponseDto(user.getRole());
     }
 
     @Override
