@@ -36,8 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
-http-client.env.json
-
 application-test.properties
 application-*.yml
 application-*.properties

@@ -5,12 +5,12 @@ import jakarta.validation.constraints.Min;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class FeedbackReviewRequestDto {
-
-	private Long feedbackId;
 
 	@Min(value = 0L)
 	@Max(value = 5L)

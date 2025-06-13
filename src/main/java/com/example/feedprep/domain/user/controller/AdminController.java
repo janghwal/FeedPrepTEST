@@ -25,8 +25,6 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    private final TechStackService techStackService;
-
     @PostMapping("/tutor/{tutorId}")
     public ResponseEntity<ApiResponseDto<TutorResponseDto>> approveTutor(
         @PathVariable Long tutorId
@@ -40,7 +38,7 @@ public class AdminController {
         @RequestBody CreateTechStackRequestDto requestDto
     ) {
 
-        techStackService.createTechStack(requestDto);
+        adminService.createTechStack(requestDto);
 
         return ResponseEntity.status(SuccessCode.TECH_STACK_CREATED.getHttpStatus())
             .body(ApiResponseDto.success(SuccessCode.TECH_STACK_CREATED));
@@ -51,7 +49,7 @@ public class AdminController {
         @PathVariable Long techId
     ) {
 
-        techStackService.deleteTechStack(techId);
+        adminService.deleteTechStack(techId);
 
         return ResponseEntity.status(SuccessCode.TECH_STACK_DELETED.getHttpStatus())
             .body(ApiResponseDto.success(SuccessCode.TECH_STACK_DELETED));
