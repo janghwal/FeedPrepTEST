@@ -28,7 +28,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-
+@ActiveProfiles("local")
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class FeedbackReviewTest {
@@ -218,12 +218,12 @@ public class FeedbackReviewTest {
 		FeedbackReviewRequestDto feedbackReviewRequestDto
 			=new FeedbackReviewRequestDto( 5, "좋은 피드백이었습니다." );
 
-		feedbackReviewService.createReview( users.get(0).getUserId(),1L , feedbackReviewRequestDto);
+		feedbackReviewService.createReview( users.get(1).getUserId(),1L , feedbackReviewRequestDto);
 		//리뷰 조회하기
 
 		long start = System.currentTimeMillis();
 		FeedbackReviewResponseDto feedbackReviewResponse
-			=  feedbackReviewService.getReview(1L, users.get(1).getUserId());
+			=  feedbackReviewService.getReview(users.get(1).getUserId() , 1L);
 		long end= System.currentTimeMillis();
 		System.out.println("첫 실행 시간: " + (end - start) + "ms"); // DB 조회
 
