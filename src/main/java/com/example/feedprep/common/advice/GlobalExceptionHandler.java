@@ -5,6 +5,7 @@ import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.common.response.ApiResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,5 +35,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(ApiResponseDto.fail(ErrorCode.INVALID_ENUM_TYPE, httpServletRequest.getRequestURI()));
 
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponseDto<?>> handleDataIntegrityViolationException(DataIntegrityViolationException e, HttpServletRequest httpServletRequest) {
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(ApiResponseDto.fail(ErrorCode.DUPLICATE_RESOURCE, httpServletRequest.getRequestURI()));
     }
 }
