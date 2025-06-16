@@ -20,6 +20,7 @@ import com.example.feedprep.domain.subscription.dto.SubscriptionResponseDto;
 import com.example.feedprep.domain.subscription.entity.Subscription;
 import com.example.feedprep.domain.subscription.repository.SubscriptionRepository;
 import com.example.feedprep.domain.user.entity.User;
+import com.example.feedprep.domain.user.enums.UserRole;
 import com.example.feedprep.domain.user.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,6 +44,8 @@ class SubscriptionServiceImplTest {
 
 		when(userRepository.findByIdOrElseThrow(senderId)).thenReturn(sender);
 		when(userRepository.findByIdOrElseThrow(receiverId)).thenReturn(receiver);
+		when(receiver.getRole()).thenReturn(UserRole.APPROVED_TUTOR);
+		when(sender.getRole()).thenReturn(UserRole.STUDENT);
 
 		assertDoesNotThrow(() -> subscriptionService.subscribe(senderId, receiverId));
 		verify(subscriptionRepository, times(1)).save(any());
