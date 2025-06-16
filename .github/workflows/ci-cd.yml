@@ -97,12 +97,12 @@ jobs:
 
             CONTAINER_NAME=fp-container
 
-            if [ -n "$(docker ps -q -f name=$CONTAINER_NAME)" ]; then
+            if [ -n "$(docker ps -a -q -f name=$CONTAINER_NAME)" ]; then
               docker stop $CONTAINER_NAME
               docker rm $CONTAINER_NAME
             fi
 
-            docker run -d --name $CONTAINER_NAME \
+            docker run -d -p 8080:8080 --name $CONTAINER_NAME \
               -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
               -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
               -e FEEDPREP_ACCESS_KEY="${{ secrets.FEEDPREP_ACCESS_KEY }}" \
