@@ -82,7 +82,7 @@ jobs:
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/feedprep:1.0
 
   deploy:
-    needs: docker-build-push
+    needs: build-test
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && github.base_ref == 'main'
     steps:
