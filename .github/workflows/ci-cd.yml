@@ -93,7 +93,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.SSH_KEY }}
           script: |
-            docker pull juhyeong37/fp:1.0
+            docker pull juhyeong37/feedprep:1.0
 
             CONTAINER_NAME=fp-container
 
