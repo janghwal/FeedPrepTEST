@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 
 import com.example.feedprep.common.config.QueryDslConfig;
 import com.example.feedprep.common.exception.base.CustomException;
@@ -15,7 +14,6 @@ import com.example.feedprep.common.exception.enums.ErrorCode;
 import com.example.feedprep.domain.techstack.entity.TechStack;
 
 @DataJpaTest
-@ActiveProfiles("test")
 @Import(QueryDslConfig.class)
 class TechStackRepositoryTest {
 
