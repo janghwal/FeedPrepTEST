@@ -13,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ActiveProfiles;
 
 import com.example.feedprep.common.exception.base.CustomException;
 import com.example.feedprep.common.exception.enums.ErrorCode;
@@ -21,10 +20,8 @@ import com.example.feedprep.domain.subscription.dto.SubscriptionResponseDto;
 import com.example.feedprep.domain.subscription.entity.Subscription;
 import com.example.feedprep.domain.subscription.repository.SubscriptionRepository;
 import com.example.feedprep.domain.user.entity.User;
-import com.example.feedprep.domain.user.enums.UserRole;
 import com.example.feedprep.domain.user.repository.UserRepository;
 
-@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class SubscriptionServiceImplTest {
 
@@ -46,8 +43,6 @@ class SubscriptionServiceImplTest {
 
 		when(userRepository.findByIdOrElseThrow(senderId)).thenReturn(sender);
 		when(userRepository.findByIdOrElseThrow(receiverId)).thenReturn(receiver);
-		when(receiver.getRole()).thenReturn(UserRole.APPROVED_TUTOR);
-		when(sender.getRole()).thenReturn(UserRole.STUDENT);
 
 		assertDoesNotThrow(() -> subscriptionService.subscribe(senderId, receiverId));
 		verify(subscriptionRepository, times(1)).save(any());
