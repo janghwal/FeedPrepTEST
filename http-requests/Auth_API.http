@@ -1,5 +1,5 @@
 ### 학생 회원가입
-POST localhost:8080/auth/signup
+POST http://ec2-43-201-108-109.ap-northeast-2.compute.amazonaws.com:8080/auth/signup
 Content-Type: application/json
 
 {

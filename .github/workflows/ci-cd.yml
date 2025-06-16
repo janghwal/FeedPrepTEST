@@ -97,7 +97,7 @@ jobs:
 
             CONTAINER_NAME=fp-container
 
-            if [ -n "$(docker ps -q -f name=$CONTAINER_NAME)" ]; then
+            if [ -n "$(docker ps -a -q -f name=$CONTAINER_NAME)" ]; then
               docker stop $CONTAINER_NAME
               docker rm $CONTAINER_NAME
             fi
