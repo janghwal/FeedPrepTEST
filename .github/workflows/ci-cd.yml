@@ -80,7 +80,7 @@ jobs:
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/feedprep:1.0
 
   deploy:
-    needs: build-test
+    needs: docker-build-push
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to EC2
